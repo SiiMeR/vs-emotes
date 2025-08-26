@@ -1,0 +1,14 @@
+{
+  "type": "code",
+  "modid": "emotes",
+  "name": "Emotes",
+  "authors": [
+    "SiiMeR",
+    "W4RD0"
+  ],
+  "description": "Adds more custom emotes to the game.",
+  "version": "1.0.0",
+  "dependencies": {
+    "game": ""
+  }
+}

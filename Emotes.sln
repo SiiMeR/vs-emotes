@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CakeBuild", "CakeBuild\CakeBuild.csproj", "{F0E2C766-E5DD-460B-B75D-62828226EEDD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emotes", "Emotes\Emotes.csproj", "{B872BC4E-91F3-4F37-BA88-C883385C8400}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F0E2C766-E5DD-460B-B75D-62828226EEDD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F0E2C766-E5DD-460B-B75D-62828226EEDD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F0E2C766-E5DD-460B-B75D-62828226EEDD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F0E2C766-E5DD-460B-B75D-62828226EEDD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B872BC4E-91F3-4F37-BA88-C883385C8400}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B872BC4E-91F3-4F37-BA88-C883385C8400}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B872BC4E-91F3-4F37-BA88-C883385C8400}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B872BC4E-91F3-4F37-BA88-C883385C8400}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

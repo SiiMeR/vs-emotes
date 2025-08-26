@@ -1,0 +1,39 @@
+[
+  {
+    "file": "game:entities/humanoid/player.json",
+    "path": "/attributes/emotes",
+    "op": "addmerge",
+    "value": [
+      "seiza"
+    ],
+    "side": "Universal"
+  },
+  {
+    "op": "addmerge",
+    "file": "game:entities/humanoid/player.json",
+    "path": "/client/animations",
+    "value": [
+      {
+        code: "seiza",
+        animation: "Seiza",
+        blendMode: "Add",
+        easeInSpeed: 1,
+        easeOutSpeed: 2,
+        animationSpeed: 1,
+        elementWeight: {
+          "UpperArmR": 30,
+          "LowerArmR": 30,
+          "LowerTorso": 10,
+          "UpperTorso": 10
+        },
+        elementBlendMode: {
+          "UpperArmR": "AddAverage",
+          "LowerArmR": "AddAverage",
+          "LowerTorso": "AddAverage",
+          "UpperTorso": "AddAverage"
+        }
+      }
+    ],
+    "side": "Universal"
+  }
+]
