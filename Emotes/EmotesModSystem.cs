@@ -1,59 +1,87 @@
-﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Vintagestory.API.Common;
-using Vintagestory.API.Config;
+using Vintagestory.API.Common.Entities;
 using Vintagestory.API.Server;
-using Vintagestory.API.Util;
 
 namespace Emotes;
 
 public class EmotesModSystem : ModSystem
 {
+    static readonly Dictionary<string, CustomEmote> Emotes = new()
+    {
+        ["seiza"] = new() { Code = "seiza", Name = "Seiza", Animation = "seiza", StopOnMovement = true,  StopOnDamage = true },
+
+    };
+
+    public static IReadOnlyDictionary<string, CustomEmote> GetEmotes() => Emotes;
+
+    public static void SetEmoteState(EntityPlayer player, string code, bool active)
+    {
+        var tree = player.WatchedAttributes.GetOrAddTreeAttribute("emotes");
+        tree.SetBool(code, active);
+        player.WatchedAttributes.MarkPathDirty("emotes");
+    }
+
+    public static void StopAllEmotes(EntityPlayer player)
+    {
+        var tree = player.WatchedAttributes.GetOrAddTreeAttribute("emotes");
+        foreach (var code in Emotes.Keys)
+            tree.SetBool(code, false);
+        player.WatchedAttributes.MarkPathDirty("emotes");
+    }
+
+    public override void Start(ICoreAPI api)
+    {
+        base.Start(api);
+        api.RegisterEntityBehaviorClass("emotes", typeof(BehaviorEmotes));
+        api.Event.OnEntitySpawn += OnEntitySpawn;
+    }
+
     public override void StartServerSide(ICoreServerAPI api)
     {
-        var chatCommands = api.ChatCommands;
-        var parsers = api.ChatCommands.Parsers;
-        chatCommands.GetOrCreate("emotes").RequiresPrivilege(Privilege.chat)
-            .WithDescription("Execute an emote on your player")
-            .WithArgs(parsers.OptionalWord("emote"))
-            .HandleWith(delegate(TextCommandCallingArgs args)
-            {
-                var entity = args.Caller.Entity;
-                if (entity is not EntityPlayer player)
-                {
-                    return TextCommandResult.Error("Only players can choose emotes");
-                }
+        base.StartServerSide(api);
+        api.ChatCommands
+            .GetOrCreate("emotes")
+            .RequiresPrivilege(Privilege.chat)
+            .WithDescription("Play an emote. Usage: /emotes <name|list|stop>")
+            .WithArgs(api.ChatCommands.Parsers.OptionalWord("action"))
+            .HandleWith(HandleEmoteCommand);
+    }
 
-                if (player.AnimManager.Animator is not ServerAnimator serverAnimator)
-                {
-                    return TextCommandResult.Error("Command not executing on server side");
-                }
+    void OnEntitySpawn(Entity entity)
+    {
+        if (entity is not EntityPlayer) return;
+        if (entity.GetBehavior<BehaviorEmotes>() != null) return;
+        var behavior = new BehaviorEmotes(entity);
+        entity.AddBehavior(behavior);
+        behavior.Initialize(entity.Properties, null);
+    }
 
-                var input = (string)args[0];
+    TextCommandResult HandleEmoteCommand(TextCommandCallingArgs args)
+    {
+        if (args.Caller.Entity is not EntityPlayer player)
+            return TextCommandResult.Error("Only players can use emotes");
 
-                // TODO: optimize and cache beforehand
-                var runningAnimation =
-                    serverAnimator.anims.FirstOrDefault(anim =>
-                        string.Equals(anim.Animation.Name, input, StringComparison.CurrentCultureIgnoreCase));
+        var input = (string)args[0];
 
-                if (input == null || runningAnimation == null)
-                {
-                    return TextCommandResult.Error(Lang.Get("Choose emote: {0}",
-                        string.Join(", ",
-                            serverAnimator.anims.Select(anim => anim.Animation.Name).Order().ToList())));
-                }
+        if (string.IsNullOrEmpty(input) || input.Equals("list", System.StringComparison.OrdinalIgnoreCase))
+            return TextCommandResult.Success("Available emotes: " + string.Join(", ", Emotes.Keys));
 
-                if (input != "shakehead" && !player.RightHandItemSlot.Empty &&
-                    player.RightHandItemSlot.Itemstack.Collectible.GetHeldTpIdleAnimation(player.RightHandItemSlot,
-                        player,
-                        (EnumHand)1) != null)
-                {
-                    return TextCommandResult.Error("Only with free hands");
-                }
+        if (input.Equals("stop", System.StringComparison.OrdinalIgnoreCase) ||
+            input.Equals("stopall", System.StringComparison.OrdinalIgnoreCase))
+        {
+            StopAllEmotes(player);
+            return TextCommandResult.Success("All emotes stopped");
+        }
 
-                api.Network.BroadcastEntityPacket(player.EntityId, 197,
-                    SerializerUtil.Serialize(runningAnimation.Animation.Name));
-                return TextCommandResult.Success();
-            });
+        var key = input.ToLowerInvariant();
+        if (!Emotes.TryGetValue(key, out var emote))
+            return TextCommandResult.Error($"Emote '{input}' not found. Use '/emotes list' to see available emotes.");
+
+        var tree = player.WatchedAttributes.GetOrAddTreeAttribute("emotes");
+        bool isActive = tree.GetBool(emote.Code);
+        SetEmoteState(player, emote.Code, !isActive);
+        return TextCommandResult.Success(isActive ? $"Stopped emote: {emote.Name}" : $"Started emote: {emote.Name}");
     }
 }
