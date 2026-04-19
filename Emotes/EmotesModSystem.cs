@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Vintagestory.API.Client;
 using Vintagestory.API.Common;
 using Vintagestory.API.Common.Entities;
 using Vintagestory.API.Server;
@@ -8,6 +9,8 @@ namespace Emotes;
 
 public class EmotesModSystem : ModSystem
 {
+    const string ChannelName = "emotes";
+
     static readonly Dictionary<string, CustomEmote> Emotes = new()
     {
         ["seiza"] = new() { Code = "seiza", Name = "Seiza", Animation = "seiza", StopOnMovement = true, StopOnDamage = true },
@@ -22,7 +25,20 @@ public class EmotesModSystem : ModSystem
         ["flippingoff"] = new() { Code = "flippingoff", Name = "FlippingOff", Animation = "flippingoff", StopOnMovement = true, StopOnDamage = true },
         ["crossedarmsthinking"] = new() { Code = "crossedarmsthinking", Name = "CrossedArmsThinking", Animation = "crossedarmsthinking", StopOnMovement = true, StopOnDamage = true },
         ["sittingcool"] = new() { Code = "sittingcool", Name = "SittingCool", Animation = "sittingcool", StopOnMovement = true, StopOnDamage = true },
+        ["blowkiss"] = new() { Code = "blowkiss", Name = "Blowkiss", Animation = "blowkiss", StopOnMovement = true, StopOnDamage = true },
+        ["chestthump"] = new() { Code = "chestthump", Name = "ChestThump", Animation = "chestthump", StopOnMovement = true, StopOnDamage = true },
+        ["clapping"] = new() { Code = "clapping", Name = "Clapping", Animation = "clapping", StopOnMovement = true, StopOnDamage = true },
+        ["crossedarms"] = new() { Code = "crossedarms", Name = "CrossedArms", Animation = "crossedarms", StopOnMovement = true, StopOnDamage = true },
+        ["handshake"] = new() { Code = "handshake", Name = "Handshake", Animation = "handshake", StopOnMovement = true, StopOnDamage = true },
+        ["layingback"] = new() { Code = "layingback", Name = "LayingBack", Animation = "layingback", StopOnMovement = true, StopOnDamage = true },
+        ["refinedsalute"] = new() { Code = "refinedsalute", Name = "RefinedSalute", Animation = "refinedsalute", StopOnMovement = true, StopOnDamage = true },
+        ["salute"] = new() { Code = "salute", Name = "Salute", Animation = "salute", StopOnMovement = true, StopOnDamage = true },
+        ["scanning"] = new() { Code = "scanning", Name = "Scanning", Animation = "scanning", StopOnMovement = true, StopOnDamage = true },
+        ["squatting"] = new() { Code = "squatting", Name = "Squatting", Animation = "squatting", StopOnMovement = true, StopOnDamage = true },
+        ["thinkinghard"] = new() { Code = "thinkinghard", Name = "ThinkingHard", Animation = "thinkinghard", StopOnMovement = true, StopOnDamage = true },
     };
+
+    IClientNetworkChannel clientChannel;
 
     public static IReadOnlyDictionary<string, CustomEmote> GetEmotes() => Emotes;
 
@@ -41,6 +57,11 @@ public class EmotesModSystem : ModSystem
         player.WatchedAttributes.MarkPathDirty("emotes");
     }
 
+    public void SendToggleEmote(string code)
+    {
+        clientChannel?.SendPacket(new EmotePacket { Code = code });
+    }
+
     public override void Start(ICoreAPI api)
     {
         base.Start(api);
@@ -48,15 +69,47 @@ public class EmotesModSystem : ModSystem
         api.Event.OnEntitySpawn += OnEntitySpawn;
     }
 
+    public override void StartClientSide(ICoreClientAPI api)
+    {
+        base.StartClientSide(api);
+
+        clientChannel = api.Network.RegisterChannel(ChannelName)
+            .RegisterMessageType<EmotePacket>();
+
+        api.Input.RegisterHotKey("emotepicker", "Open Emote Picker", GlKeys.J, HotkeyType.CharacterControls, shiftPressed: true);
+        var dialog = new GuiDialogEmotePicker(api, this);
+        api.Input.SetHotKeyHandler("emotepicker", _ =>
+        {
+            if (dialog.IsOpened()) dialog.TryClose();
+            else dialog.TryOpen();
+            return true;
+        });
+    }
+
     public override void StartServerSide(ICoreServerAPI api)
     {
         base.StartServerSide(api);
+
+        api.Network.RegisterChannel(ChannelName)
+            .RegisterMessageType<EmotePacket>()
+            .SetMessageHandler<EmotePacket>(OnEmotePacket);
+
         api.ChatCommands
             .GetOrCreate("emotes")
             .RequiresPrivilege(Privilege.chat)
             .WithDescription("Play an emote. Usage: /emotes <name|list|stop>")
             .WithArgs(api.ChatCommands.Parsers.OptionalWord("action"))
             .HandleWith(HandleEmoteCommand);
+    }
+
+    void OnEmotePacket(IServerPlayer fromPlayer, EmotePacket packet)
+    {
+        if (fromPlayer.Entity is not EntityPlayer player) return;
+        if (!Emotes.ContainsKey(packet.Code)) return;
+        var tree = player.WatchedAttributes.GetOrAddTreeAttribute("emotes");
+        bool isActive = tree.GetBool(packet.Code);
+        if (!isActive) StopAllEmotes(player);
+        SetEmoteState(player, packet.Code, !isActive);
     }
 
     void OnEntitySpawn(Entity entity)
@@ -91,8 +144,7 @@ public class EmotesModSystem : ModSystem
 
         var tree = player.WatchedAttributes.GetOrAddTreeAttribute("emotes");
         bool isActive = tree.GetBool(emote.Code);
-        if (!isActive)
-            StopAllEmotes(player);
+        if (!isActive) StopAllEmotes(player);
         SetEmoteState(player, emote.Code, !isActive);
         return TextCommandResult.Success(isActive ? $"Stopped emote: {emote.Name}" : $"Started emote: {emote.Name}");
     }
