@@ -55,7 +55,7 @@ public class BehaviorEmotes : EntityBehavior
         if (entity is not EntityPlayer player) return;
         var controls = (entity as EntityAgent)?.Controls;
         if (controls == null) return;
-        if (!controls.TriesToMove && !controls.Jump && !controls.Sneak && !controls.Sprint) return;
+        if (!controls.TriesToMove && !controls.Jump && !controls.Sneak && !controls.Sprint && !controls.LeftMouseDown && !controls.RightMouseDown) return;
 
         var tree = player.WatchedAttributes.GetTreeAttribute("emotes");
         if (tree == null) return;

@@ -10,8 +10,18 @@ public class EmotesModSystem : ModSystem
 {
     static readonly Dictionary<string, CustomEmote> Emotes = new()
     {
-        ["seiza"] = new() { Code = "seiza", Name = "Seiza", Animation = "seiza", StopOnMovement = true,  StopOnDamage = true },
-
+        ["seiza"] = new() { Code = "seiza", Name = "Seiza", Animation = "seiza", StopOnMovement = true, StopOnDamage = true },
+        ["kneel"] = new() { Code = "kneel", Name = "Kneel", Animation = "kneel", StopOnMovement = true, StopOnDamage = true },
+        ["layingdown"] = new() { Code = "layingdown", Name = "LayingDown", Animation = "layingdown", StopOnMovement = true, StopOnDamage = true },
+        ["surrender"] = new() { Code = "surrender", Name = "Surrender", Animation = "surrender", StopOnMovement = true, StopOnDamage = true },
+        ["atease"] = new() { Code = "atease", Name = "AtEase", Animation = "atease", StopOnMovement = false, StopOnDamage = true },
+        ["pointing"] = new() { Code = "pointing", Name = "Pointing", Animation = "pointing", StopOnMovement = true, StopOnDamage = true },
+        ["leaningcrossed"] = new() { Code = "leaningcrossed", Name = "LeaningCrossed", Animation = "leaningcrossed", StopOnMovement = true, StopOnDamage = true },
+        ["leaninghips"] = new() { Code = "leaninghips", Name = "LeaningHips", Animation = "leaninghips", StopOnMovement = true, StopOnDamage = true },
+        ["crossedarmsleaning2"] = new() { Code = "crossedarmsleaning2", Name = "CrossedArmsLeaning2", Animation = "crossedarmsleaning2", StopOnMovement = true, StopOnDamage = true },
+        ["flippingoff"] = new() { Code = "flippingoff", Name = "FlippingOff", Animation = "flippingoff", StopOnMovement = true, StopOnDamage = true },
+        ["crossedarmsthinking"] = new() { Code = "crossedarmsthinking", Name = "CrossedArmsThinking", Animation = "crossedarmsthinking", StopOnMovement = true, StopOnDamage = true },
+        ["sittingcool"] = new() { Code = "sittingcool", Name = "SittingCool", Animation = "sittingcool", StopOnMovement = true, StopOnDamage = true },
     };
 
     public static IReadOnlyDictionary<string, CustomEmote> GetEmotes() => Emotes;
@@ -81,6 +91,8 @@ public class EmotesModSystem : ModSystem
 
         var tree = player.WatchedAttributes.GetOrAddTreeAttribute("emotes");
         bool isActive = tree.GetBool(emote.Code);
+        if (!isActive)
+            StopAllEmotes(player);
         SetEmoteState(player, emote.Code, !isActive);
         return TextCommandResult.Success(isActive ? $"Stopped emote: {emote.Name}" : $"Started emote: {emote.Name}");
     }
