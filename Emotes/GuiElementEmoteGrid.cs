@@ -39,8 +39,9 @@ public class GuiElementEmoteGrid : GuiElement
     {
         Bounds.CalcWorldBounds();
         double cw = scaled(CellW), ch = scaled(CellH), cp = scaled(CellPad);
+        double edge = scaled(1.5);
 
-        var font = CairoFont.WhiteSmallText().WithFontSize(11);
+        var font = CairoFont.SmallButtonText().WithColor(new double[] { 1, 1, 1, 1 });
         font.SetupContext(ctx);
 
         for (int i = 0; i < names.Count; i++)
@@ -49,10 +50,21 @@ public class GuiElementEmoteGrid : GuiElement
             double x = Bounds.drawX + c * (cw + cp);
             double y = Bounds.drawY + r * (ch + cp);
 
-            ctx.SetSourceRGBA(0, 0, 0, 0.3);
-            RoundRectangle(ctx, x, y, cw, ch, GuiStyle.ElementBGRadius);
+            ctx.SetSourceRGBA(23.0 / 85, 52.0 / 255, 12.0 / 85, 0.8);
+            ctx.Rectangle(x, y, cw, ch);
             ctx.Fill();
-            EmbossRoundRectangleElement(ctx, x, y, cw, ch, inverse: false);
+
+            ctx.SetSourceRGBA(1, 1, 1, 0.15);
+            ctx.Rectangle(x, y, cw - edge, edge);
+            ctx.Fill();
+            ctx.Rectangle(x, y + edge, edge, ch - edge);
+            ctx.Fill();
+
+            ctx.SetSourceRGBA(0, 0, 0, 0.2);
+            ctx.Rectangle(x + edge, y + ch - edge, cw - 2 * edge, edge);
+            ctx.Fill();
+            ctx.Rectangle(x + cw - edge, y, edge, ch);
+            ctx.Fill();
 
             font.SetupContext(ctx);
             DrawNameCentered(ctx, names[i], x, y, cw, ch);
@@ -101,8 +113,8 @@ public class GuiElementEmoteGrid : GuiElement
     {
         var s = new ImageSurface(Format.Argb32, cw, ch);
         var c = genContext(s);
-        c.SetSourceRGBA(1, 1, 1, 0.15);
-        RoundRectangle(c, 1, 1, cw - 2, ch - 2, GuiStyle.ElementBGRadius);
+        c.SetSourceRGBA(1, 1, 1, 0.1);
+        c.Rectangle(0, 0, cw, ch);
         c.Fill();
         generateTexture(s, ref hoverTexture);
         c.Dispose();

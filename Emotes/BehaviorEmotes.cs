@@ -46,6 +46,7 @@ public class BehaviorEmotes : EntityBehavior
         if (!entity.Properties.Client.AnimationsByMetaCode.TryGetValue(emote.Animation, out var meta)) return;
         var clone = meta.Clone();
         clone.ClientSide = true;
+        clone.EaseInSpeed = 999f;
         entity.AnimManager?.StartAnimation(clone);
     }
 

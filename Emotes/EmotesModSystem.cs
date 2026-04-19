@@ -36,6 +36,8 @@ public class EmotesModSystem : ModSystem
         ["scanning"] = new() { Code = "scanning", Name = "Scanning", Animation = "scanning", StopOnMovement = true, StopOnDamage = true },
         ["squatting"] = new() { Code = "squatting", Name = "Squatting", Animation = "squatting", StopOnMovement = true, StopOnDamage = true },
         ["thinkinghard"] = new() { Code = "thinkinghard", Name = "ThinkingHard", Animation = "thinkinghard", StopOnMovement = true, StopOnDamage = true },
+        ["bringiton"] = new() { Code = "bringiton", Name = "BringItOn", Animation = "bringiton", StopOnMovement = true, StopOnDamage = true },
+        ["slitthroat"] = new() { Code = "slitthroat", Name = "SlitThroat", Animation = "slitthroat", StopOnMovement = true, StopOnDamage = true },
     };
 
     IClientNetworkChannel clientChannel;

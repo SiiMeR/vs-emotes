@@ -199,6 +199,22 @@
         "easeInSpeed": 1,
         "easeOutSpeed": 2,
         "animationSpeed": 1
+      },
+      {
+        "code": "bringiton",
+        "animation": "BringItOn",
+        "blendMode": "Add",
+        "easeInSpeed": 1,
+        "easeOutSpeed": 2,
+        "animationSpeed": 1
+      },
+      {
+        "code": "slitthroat",
+        "animation": "SlitThroat",
+        "blendMode": "Add",
+        "easeInSpeed": 1,
+        "easeOutSpeed": 2,
+        "animationSpeed": 1
       }
     ],
     "side": "Universal"
