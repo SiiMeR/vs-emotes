@@ -56,9 +56,9 @@ public class GuiDialogEmotePicker : GuiDialog
         }
         else
         {
-            var emotes = EmotesModSystem.GetEmotes();
-            codes = emotes.Keys.ToArray();
-            names = emotes.Values.Select(e => e.DisplayName).ToArray();
+            var emotes = EmotesModSystem.GetEmotes().Values.OrderBy(e => e.DisplayName).ToArray();
+            codes = emotes.Select(e => e.Code).ToArray();
+            names = emotes.Select(e => e.DisplayName).ToArray();
         }
 
         const double TabGap = 8;

@@ -16,7 +16,7 @@ public class EmotesModSystem : ModSystem
     {
         ["seiza"] = new CustomEmote
         {
-            Code = "seiza", Name = "Seiza", DisplayName = "Seiza", Animation = "seiza", StopOnMovement = true,
+            Code = "seiza", Name = "Seiza", DisplayName = "Sit (Seiza)", Animation = "seiza", StopOnMovement = true,
             StopOnDamage = true
         },
         ["kneel"] = new CustomEmote
@@ -167,6 +167,36 @@ public class EmotesModSystem : ModSystem
         ["dapup"] = new CustomEmote
         {
             Code = "dapup", Name = "DapUp", DisplayName = "Dap Up", Animation = "dapup",
+            StopOnMovement = true, StopOnDamage = true
+        },
+        ["politebow"] = new CustomEmote
+        {
+            Code = "politebow", Name = "PoliteBow", DisplayName = "Polite Bow", Animation = "politebow",
+            StopOnMovement = true, StopOnDamage = true
+        },
+        ["prayerstanding"] = new CustomEmote
+        {
+            Code = "prayerstanding", Name = "PrayerStanding", DisplayName = "Prayer (Standing)", Animation = "prayerstanding",
+            StopOnMovement = true, StopOnDamage = true
+        },
+        ["kisshand"] = new CustomEmote
+        {
+            Code = "kisshand", Name = "KissHand", DisplayName = "Kiss Hand", Animation = "kisshand",
+            StopOnMovement = true, StopOnDamage = true
+        },
+        ["martialarts"] = new CustomEmote
+        {
+            Code = "martialarts", Name = "MartialArts", DisplayName = "Martial Arts", Animation = "martialarts",
+            StopOnMovement = true, StopOnDamage = true
+        },
+        ["crackingknuckles"] = new CustomEmote
+        {
+            Code = "crackingknuckles", Name = "CrackingKnuckles", DisplayName = "Crack Knuckles", Animation = "crackingknuckles",
+            StopOnMovement = true, StopOnDamage = true
+        },
+        ["rubbinghands"] = new CustomEmote
+        {
+            Code = "rubbinghands", Name = "RubbingHands", DisplayName = "Rub Hands", Animation = "rubbinghands",
             StopOnMovement = true, StopOnDamage = true
         }
     };

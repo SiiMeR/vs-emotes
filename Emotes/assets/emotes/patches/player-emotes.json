@@ -5,50 +5,6 @@
     "path": "/client/animations",
     "value": [
       {
-        "code": "seiza",
-        "animation": "Seiza",
-        "blendMode": "Add",
-        "easeInSpeed": 1,
-        "easeOutSpeed": 2,
-        "animationSpeed": 1,
-        "elementWeight": {
-          "UpperArmR": 30,
-          "LowerArmR": 30,
-          "LowerTorso": 10,
-          "UpperTorso": 10
-        },
-        "elementBlendMode": {
-          "UpperArmR": "AddAverage",
-          "LowerArmR": "AddAverage",
-          "LowerTorso": "AddAverage",
-          "UpperTorso": "AddAverage"
-        }
-      },
-      {
-        "code": "kneel",
-        "animation": "Kneel",
-        "blendMode": "Add",
-        "easeInSpeed": 1,
-        "easeOutSpeed": 2,
-        "animationSpeed": 1
-      },
-      {
-        "code": "layingdown",
-        "animation": "LayingDown",
-        "blendMode": "Add",
-        "easeInSpeed": 1,
-        "easeOutSpeed": 2,
-        "animationSpeed": 1
-      },
-      {
-        "code": "surrender",
-        "animation": "Surrender",
-        "blendMode": "Add",
-        "easeInSpeed": 1,
-        "easeOutSpeed": 2,
-        "animationSpeed": 1
-      },
-      {
         "code": "atease",
         "animation": "AtEase",
         "blendMode": "Add",
@@ -57,56 +13,16 @@
         "animationSpeed": 1
       },
       {
-        "code": "pointing",
-        "animation": "Pointing",
-        "blendMode": "Add",
-        "easeInSpeed": 1,
-        "easeOutSpeed": 2,
-        "animationSpeed": 1
-      },
-      {
-        "code": "leaningcrossed",
-        "animation": "LeaningCrossed",
-        "blendMode": "Add",
-        "easeInSpeed": 1,
-        "easeOutSpeed": 2,
-        "animationSpeed": 1
-      },
-      {
-        "code": "leaninghips",
-        "animation": "LeaningHips",
-        "blendMode": "Add",
-        "easeInSpeed": 1,
-        "easeOutSpeed": 2,
-        "animationSpeed": 1
-      },
-      {
-        "code": "flippingoff",
-        "animation": "FlippingOff",
-        "blendMode": "Add",
-        "easeInSpeed": 1,
-        "easeOutSpeed": 2,
-        "animationSpeed": 1
-      },
-      {
-        "code": "crossedarmsthinking",
-        "animation": "CrossedArmsThinking",
-        "blendMode": "Add",
-        "easeInSpeed": 1,
-        "easeOutSpeed": 2,
-        "animationSpeed": 1
-      },
-      {
-        "code": "sittingcool",
-        "animation": "SittingCool",
-        "blendMode": "Add",
-        "easeInSpeed": 1,
-        "easeOutSpeed": 2,
-        "animationSpeed": 1
-      },
-      {
         "code": "blowkiss",
         "animation": "Blowkiss",
+        "blendMode": "Add",
+        "easeInSpeed": 1,
+        "easeOutSpeed": 2,
+        "animationSpeed": 1
+      },
+      {
+        "code": "bringiton",
+        "animation": "BringItOn",
         "blendMode": "Add",
         "easeInSpeed": 1,
         "easeOutSpeed": 2,
@@ -129,8 +45,56 @@
         "animationSpeed": 1
       },
       {
+        "code": "crackingknuckles",
+        "animation": "CrackingKnuckles",
+        "blendMode": "Add",
+        "easeInSpeed": 1,
+        "easeOutSpeed": 2,
+        "animationSpeed": 1
+      },
+      {
         "code": "crossedarms",
         "animation": "CrossedArms",
+        "blendMode": "Add",
+        "easeInSpeed": 1,
+        "easeOutSpeed": 2,
+        "animationSpeed": 1
+      },
+      {
+        "code": "crossedarmsthinking",
+        "animation": "CrossedArmsThinking",
+        "blendMode": "Add",
+        "easeInSpeed": 1,
+        "easeOutSpeed": 2,
+        "animationSpeed": 1
+      },
+      {
+        "code": "dapup",
+        "animation": "DapUp",
+        "blendMode": "Add",
+        "easeInSpeed": 1,
+        "easeOutSpeed": 2,
+        "animationSpeed": 1
+      },
+      {
+        "code": "engarde",
+        "animation": "EnGarde",
+        "blendMode": "Add",
+        "easeInSpeed": 1,
+        "easeOutSpeed": 2,
+        "animationSpeed": 1
+      },
+      {
+        "code": "flippingoff",
+        "animation": "FlippingOff",
+        "blendMode": "Add",
+        "easeInSpeed": 1,
+        "easeOutSpeed": 2,
+        "animationSpeed": 1
+      },
+      {
+        "code": "handrub",
+        "animation": "HandRub",
         "blendMode": "Add",
         "easeInSpeed": 1,
         "easeOutSpeed": 2,
@@ -145,6 +109,30 @@
         "animationSpeed": 1
       },
       {
+        "code": "handup",
+        "animation": "HandUp",
+        "blendMode": "Add",
+        "easeInSpeed": 1,
+        "easeOutSpeed": 2,
+        "animationSpeed": 1
+      },
+      {
+        "code": "kisshand",
+        "animation": "KissHand",
+        "blendMode": "Add",
+        "easeInSpeed": 1,
+        "easeOutSpeed": 2,
+        "animationSpeed": 1
+      },
+      {
+        "code": "kneel",
+        "animation": "Kneel",
+        "blendMode": "Add",
+        "easeInSpeed": 1,
+        "easeOutSpeed": 2,
+        "animationSpeed": 1
+      },
+      {
         "code": "layingback",
         "animation": "Layingback",
         "blendMode": "Add",
@@ -153,8 +141,88 @@
         "animationSpeed": 1
       },
       {
+        "code": "layingdown",
+        "animation": "LayingDown",
+        "blendMode": "Add",
+        "easeInSpeed": 1,
+        "easeOutSpeed": 2,
+        "animationSpeed": 1
+      },
+      {
+        "code": "leaningcrossed",
+        "animation": "LeaningCrossed",
+        "blendMode": "Add",
+        "easeInSpeed": 1,
+        "easeOutSpeed": 2,
+        "animationSpeed": 1
+      },
+      {
+        "code": "leaninghandshead",
+        "animation": "LeaningHandsHead",
+        "blendMode": "Add",
+        "easeInSpeed": 1,
+        "easeOutSpeed": 2,
+        "animationSpeed": 1
+      },
+      {
+        "code": "leaninghips",
+        "animation": "LeaningHips",
+        "blendMode": "Add",
+        "easeInSpeed": 1,
+        "easeOutSpeed": 2,
+        "animationSpeed": 1
+      },
+      {
+        "code": "martialarts",
+        "animation": "MartialArts",
+        "blendMode": "Add",
+        "easeInSpeed": 1,
+        "easeOutSpeed": 2,
+        "animationSpeed": 1
+      },
+      {
+        "code": "pointing",
+        "animation": "Pointing",
+        "blendMode": "Add",
+        "easeInSpeed": 1,
+        "easeOutSpeed": 2,
+        "animationSpeed": 1
+      },
+      {
+        "code": "politebow",
+        "animation": "PoliteBow",
+        "blendMode": "Add",
+        "easeInSpeed": 1,
+        "easeOutSpeed": 2,
+        "animationSpeed": 1
+      },
+      {
+        "code": "prayer",
+        "animation": "Prayer",
+        "blendMode": "Add",
+        "easeInSpeed": 1,
+        "easeOutSpeed": 2,
+        "animationSpeed": 1
+      },
+      {
+        "code": "prayerstanding",
+        "animation": "PrayerStanding",
+        "blendMode": "Add",
+        "easeInSpeed": 1,
+        "easeOutSpeed": 2,
+        "animationSpeed": 1
+      },
+      {
         "code": "refinedsalute",
         "animation": "RefinedSalute",
+        "blendMode": "Add",
+        "easeInSpeed": 1,
+        "easeOutSpeed": 2,
+        "animationSpeed": 1
+      },
+      {
+        "code": "rubbinghands",
+        "animation": "HandRub",
         "blendMode": "Add",
         "easeInSpeed": 1,
         "easeOutSpeed": 2,
@@ -177,24 +245,28 @@
         "animationSpeed": 1
       },
       {
-        "code": "squatting",
-        "animation": "Squatting",
+        "code": "seiza",
+        "animation": "Seiza",
         "blendMode": "Add",
         "easeInSpeed": 1,
         "easeOutSpeed": 2,
-        "animationSpeed": 1
+        "animationSpeed": 1,
+        "elementWeight": {
+          "UpperArmR": 30,
+          "LowerArmR": 30,
+          "LowerTorso": 10,
+          "UpperTorso": 10
+        },
+        "elementBlendMode": {
+          "UpperArmR": "AddAverage",
+          "LowerArmR": "AddAverage",
+          "LowerTorso": "AddAverage",
+          "UpperTorso": "AddAverage"
+        }
       },
       {
-        "code": "thinkinghard",
-        "animation": "ThinkingHARD",
-        "blendMode": "Add",
-        "easeInSpeed": 1,
-        "easeOutSpeed": 2,
-        "animationSpeed": 1
-      },
-      {
-        "code": "bringiton",
-        "animation": "BringItOn",
+        "code": "sittingcool",
+        "animation": "SittingCool",
         "blendMode": "Add",
         "easeInSpeed": 1,
         "easeOutSpeed": 2,
@@ -209,16 +281,24 @@
         "animationSpeed": 1
       },
       {
-        "code": "prayer",
-        "animation": "Prayer",
+        "code": "squatting",
+        "animation": "Squatting",
         "blendMode": "Add",
         "easeInSpeed": 1,
         "easeOutSpeed": 2,
         "animationSpeed": 1
       },
       {
-        "code": "handup",
-        "animation": "HandUp",
+        "code": "surrender",
+        "animation": "Surrender",
+        "blendMode": "Add",
+        "easeInSpeed": 1,
+        "easeOutSpeed": 2,
+        "animationSpeed": 1
+      },
+      {
+        "code": "thinkinghard",
+        "animation": "ThinkingHARD",
         "blendMode": "Add",
         "easeInSpeed": 1,
         "easeOutSpeed": 2,
@@ -227,38 +307,6 @@
       {
         "code": "victory",
         "animation": "Victory",
-        "blendMode": "Add",
-        "easeInSpeed": 1,
-        "easeOutSpeed": 2,
-        "animationSpeed": 1
-      },
-      {
-        "code": "leaninghandshead",
-        "animation": "LeaningHandsHead",
-        "blendMode": "Add",
-        "easeInSpeed": 1,
-        "easeOutSpeed": 2,
-        "animationSpeed": 1
-      },
-      {
-        "code": "handrub",
-        "animation": "HandRub",
-        "blendMode": "Add",
-        "easeInSpeed": 1,
-        "easeOutSpeed": 2,
-        "animationSpeed": 1
-      },
-      {
-        "code": "engarde",
-        "animation": "EnGarde",
-        "blendMode": "Add",
-        "easeInSpeed": 1,
-        "easeOutSpeed": 2,
-        "animationSpeed": 1
-      },
-      {
-        "code": "dapup",
-        "animation": "DapUp",
         "blendMode": "Add",
         "easeInSpeed": 1,
         "easeOutSpeed": 2,
