@@ -215,6 +215,62 @@
         "easeInSpeed": 1,
         "easeOutSpeed": 2,
         "animationSpeed": 1
+      },
+      {
+        "code": "prayer",
+        "animation": "Prayer",
+        "blendMode": "Add",
+        "easeInSpeed": 1,
+        "easeOutSpeed": 2,
+        "animationSpeed": 1
+      },
+      {
+        "code": "handup",
+        "animation": "HandUp",
+        "blendMode": "Add",
+        "easeInSpeed": 1,
+        "easeOutSpeed": 2,
+        "animationSpeed": 1
+      },
+      {
+        "code": "victory",
+        "animation": "Victory",
+        "blendMode": "Add",
+        "easeInSpeed": 1,
+        "easeOutSpeed": 2,
+        "animationSpeed": 1
+      },
+      {
+        "code": "leaninghandshead",
+        "animation": "LeaningHandsHead",
+        "blendMode": "Add",
+        "easeInSpeed": 1,
+        "easeOutSpeed": 2,
+        "animationSpeed": 1
+      },
+      {
+        "code": "handrub",
+        "animation": "HandRub",
+        "blendMode": "Add",
+        "easeInSpeed": 1,
+        "easeOutSpeed": 2,
+        "animationSpeed": 1
+      },
+      {
+        "code": "engarde",
+        "animation": "EnGarde",
+        "blendMode": "Add",
+        "easeInSpeed": 1,
+        "easeOutSpeed": 2,
+        "animationSpeed": 1
+      },
+      {
+        "code": "dapup",
+        "animation": "DapUp",
+        "blendMode": "Add",
+        "easeInSpeed": 1,
+        "easeOutSpeed": 2,
+        "animationSpeed": 1
       }
     ],
     "side": "Universal"

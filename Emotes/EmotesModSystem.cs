@@ -1,48 +1,195 @@
+using System;
 using System.Collections.Generic;
-using System.Linq;
 using Vintagestory.API.Client;
 using Vintagestory.API.Common;
 using Vintagestory.API.Common.Entities;
+using Vintagestory.API.MathTools;
 using Vintagestory.API.Server;
 
 namespace Emotes;
 
 public class EmotesModSystem : ModSystem
 {
-    const string ChannelName = "emotes";
+    private const string ChannelName = "emotes";
 
-    static readonly Dictionary<string, CustomEmote> Emotes = new()
+    private static readonly Dictionary<string, CustomEmote> Emotes = new()
     {
-        ["seiza"] = new() { Code = "seiza", Name = "Seiza", Animation = "seiza", StopOnMovement = true, StopOnDamage = true },
-        ["kneel"] = new() { Code = "kneel", Name = "Kneel", Animation = "kneel", StopOnMovement = true, StopOnDamage = true },
-        ["layingdown"] = new() { Code = "layingdown", Name = "LayingDown", Animation = "layingdown", StopOnMovement = true, StopOnDamage = true },
-        ["surrender"] = new() { Code = "surrender", Name = "Surrender", Animation = "surrender", StopOnMovement = true, StopOnDamage = true },
-        ["atease"] = new() { Code = "atease", Name = "AtEase", Animation = "atease", StopOnMovement = false, StopOnDamage = true },
-        ["pointing"] = new() { Code = "pointing", Name = "Pointing", Animation = "pointing", StopOnMovement = true, StopOnDamage = true },
-        ["leaningcrossed"] = new() { Code = "leaningcrossed", Name = "LeaningCrossed", Animation = "leaningcrossed", StopOnMovement = true, StopOnDamage = true },
-        ["leaninghips"] = new() { Code = "leaninghips", Name = "LeaningHips", Animation = "leaninghips", StopOnMovement = true, StopOnDamage = true },
-        ["crossedarmsleaning2"] = new() { Code = "crossedarmsleaning2", Name = "CrossedArmsLeaning2", Animation = "crossedarmsleaning2", StopOnMovement = true, StopOnDamage = true },
-        ["flippingoff"] = new() { Code = "flippingoff", Name = "FlippingOff", Animation = "flippingoff", StopOnMovement = true, StopOnDamage = true },
-        ["crossedarmsthinking"] = new() { Code = "crossedarmsthinking", Name = "CrossedArmsThinking", Animation = "crossedarmsthinking", StopOnMovement = true, StopOnDamage = true },
-        ["sittingcool"] = new() { Code = "sittingcool", Name = "SittingCool", Animation = "sittingcool", StopOnMovement = true, StopOnDamage = true },
-        ["blowkiss"] = new() { Code = "blowkiss", Name = "Blowkiss", Animation = "blowkiss", StopOnMovement = true, StopOnDamage = true },
-        ["chestthump"] = new() { Code = "chestthump", Name = "ChestThump", Animation = "chestthump", StopOnMovement = true, StopOnDamage = true },
-        ["clapping"] = new() { Code = "clapping", Name = "Clapping", Animation = "clapping", StopOnMovement = true, StopOnDamage = true },
-        ["crossedarms"] = new() { Code = "crossedarms", Name = "CrossedArms", Animation = "crossedarms", StopOnMovement = true, StopOnDamage = true },
-        ["handshake"] = new() { Code = "handshake", Name = "Handshake", Animation = "handshake", StopOnMovement = true, StopOnDamage = true },
-        ["layingback"] = new() { Code = "layingback", Name = "LayingBack", Animation = "layingback", StopOnMovement = true, StopOnDamage = true },
-        ["refinedsalute"] = new() { Code = "refinedsalute", Name = "RefinedSalute", Animation = "refinedsalute", StopOnMovement = true, StopOnDamage = true },
-        ["salute"] = new() { Code = "salute", Name = "Salute", Animation = "salute", StopOnMovement = true, StopOnDamage = true },
-        ["scanning"] = new() { Code = "scanning", Name = "Scanning", Animation = "scanning", StopOnMovement = true, StopOnDamage = true },
-        ["squatting"] = new() { Code = "squatting", Name = "Squatting", Animation = "squatting", StopOnMovement = true, StopOnDamage = true },
-        ["thinkinghard"] = new() { Code = "thinkinghard", Name = "ThinkingHard", Animation = "thinkinghard", StopOnMovement = true, StopOnDamage = true },
-        ["bringiton"] = new() { Code = "bringiton", Name = "BringItOn", Animation = "bringiton", StopOnMovement = true, StopOnDamage = true },
-        ["slitthroat"] = new() { Code = "slitthroat", Name = "SlitThroat", Animation = "slitthroat", StopOnMovement = true, StopOnDamage = true },
+        ["seiza"] = new CustomEmote
+        {
+            Code = "seiza", Name = "Seiza", DisplayName = "Seiza", Animation = "seiza", StopOnMovement = true,
+            StopOnDamage = true
+        },
+        ["kneel"] = new CustomEmote
+        {
+            Code = "kneel", Name = "Kneel", DisplayName = "Kneel", Animation = "kneel", StopOnMovement = true,
+            StopOnDamage = true
+        },
+        ["layingdown"] = new CustomEmote
+        {
+            Code = "layingdown", Name = "LayingDown", DisplayName = "Lay Down", Animation = "layingdown",
+            StopOnMovement = true, StopOnDamage = true
+        },
+        ["surrender"] = new CustomEmote
+        {
+            Code = "surrender", Name = "Surrender", DisplayName = "Surrender", Animation = "surrender",
+            StopOnMovement = true, StopOnDamage = true
+        },
+        ["atease"] = new CustomEmote
+        {
+            Code = "atease", Name = "AtEase", DisplayName = "At Ease", Animation = "atease", StopOnMovement = false,
+            StopOnDamage = true
+        },
+        ["pointing"] = new CustomEmote
+        {
+            Code = "pointing", Name = "Pointing", DisplayName = "Point", Animation = "pointing", StopOnMovement = true,
+            StopOnDamage = true
+        },
+        ["leaningcrossed"] = new CustomEmote
+        {
+            Code = "leaningcrossed", Name = "LeaningCrossed", DisplayName = "Lean (Arms Crossed)",
+            Animation = "leaningcrossed", StopOnMovement = true, StopOnDamage = true
+        },
+        ["leaninghips"] = new CustomEmote
+        {
+            Code = "leaninghips", Name = "LeaningHips", DisplayName = "Lean (Hips)", Animation = "leaninghips",
+            StopOnMovement = true, StopOnDamage = true
+        },
+        ["leaninghandshead"] = new CustomEmote
+        {
+            Code = "leaninghandshead", Name = "LeaningHandsHead", DisplayName = "Lean (Hands on Head)",
+            Animation = "leaninghandshead", StopOnMovement = true, StopOnDamage = true
+        },
+        ["flippingoff"] = new CustomEmote
+        {
+            Code = "flippingoff", Name = "FlippingOff", DisplayName = "Flip Off", Animation = "flippingoff",
+            StopOnMovement = true, StopOnDamage = true, StopAfterAnimation = true
+        },
+        ["crossedarmsthinking"] = new CustomEmote
+        {
+            Code = "crossedarmsthinking", Name = "CrossedArmsThinking", DisplayName = "Think",
+            Animation = "crossedarmsthinking", StopOnMovement = true, StopOnDamage = true
+        },
+        ["sittingcool"] = new CustomEmote
+        {
+            Code = "sittingcool", Name = "SittingCool", DisplayName = "Sit (Cool)", Animation = "sittingcool",
+            StopOnMovement = true, StopOnDamage = true
+        },
+        ["blowkiss"] = new CustomEmote
+        {
+            Code = "blowkiss", Name = "Blowkiss", DisplayName = "Blow Kiss", Animation = "blowkiss",
+            StopOnMovement = true, StopOnDamage = true
+        },
+        ["chestthump"] = new CustomEmote
+        {
+            Code = "chestthump", Name = "ChestThump", DisplayName = "Chest Thump", Animation = "chestthump",
+            StopOnMovement = true, StopOnDamage = true, StopAfterAnimation = true
+        },
+        ["clapping"] = new CustomEmote
+        {
+            Code = "clapping", Name = "Clapping", DisplayName = "Clap", Animation = "clapping", StopOnMovement = true,
+            StopOnDamage = true, StopAfterAnimation = true
+        },
+        ["crossedarms"] = new CustomEmote
+        {
+            Code = "crossedarms", Name = "CrossedArms", DisplayName = "Cross Arms", Animation = "crossedarms",
+            StopOnMovement = true, StopOnDamage = true
+        },
+        ["handshake"] = new CustomEmote
+        {
+            Code = "handshake", Name = "Handshake", DisplayName = "Handshake", Animation = "handshake",
+            StopOnMovement = true, StopOnDamage = true
+        },
+        ["layingback"] = new CustomEmote
+        {
+            Code = "layingback", Name = "LayingBack", DisplayName = "Lay Back", Animation = "layingback",
+            StopOnMovement = true, StopOnDamage = true
+        },
+        ["refinedsalute"] = new CustomEmote
+        {
+            Code = "refinedsalute", Name = "RefinedSalute", DisplayName = "Refined Salute", Animation = "refinedsalute",
+            StopOnMovement = true, StopOnDamage = true
+        },
+        ["salute"] = new CustomEmote
+        {
+            Code = "salute", Name = "Salute", DisplayName = "Salute", Animation = "salute", StopOnMovement = true,
+            StopOnDamage = true
+        },
+        ["scanning"] = new CustomEmote
+        {
+            Code = "scanning", Name = "Scanning", DisplayName = "Scan", Animation = "scanning", StopOnMovement = true,
+            StopOnDamage = true
+        },
+        ["squatting"] = new CustomEmote
+        {
+            Code = "squatting", Name = "Squatting", DisplayName = "Squat", Animation = "squatting",
+            StopOnMovement = true, StopOnDamage = true
+        },
+        ["thinkinghard"] = new CustomEmote
+        {
+            Code = "thinkinghard", Name = "ThinkingHard", DisplayName = "Think Hard", Animation = "thinkinghard",
+            StopOnMovement = true, StopOnDamage = true
+        },
+        ["bringiton"] = new CustomEmote
+        {
+            Code = "bringiton", Name = "BringItOn", DisplayName = "Bring It On", Animation = "bringiton",
+            StopOnMovement = true, StopOnDamage = true
+        },
+        ["slitthroat"] = new CustomEmote
+        {
+            Code = "slitthroat", Name = "SlitThroat", DisplayName = "Slit Throat", Animation = "slitthroat",
+            StopOnMovement = true, StopOnDamage = true, StopAfterAnimation = true
+        },
+        ["prayer"] = new CustomEmote
+        {
+            Code = "prayer", Name = "Prayer", DisplayName = "Prayer", Animation = "prayer",
+            StopOnMovement = true, StopOnDamage = true
+        },
+        ["handup"] = new CustomEmote
+        {
+            Code = "handup", Name = "HandUp", DisplayName = "Hand Up", Animation = "handup",
+            StopOnMovement = true, StopOnDamage = true
+        },
+        ["victory"] = new CustomEmote
+        {
+            Code = "victory", Name = "Victory", DisplayName = "Victory", Animation = "victory",
+            StopOnMovement = true, StopOnDamage = true
+        },
+        ["handrub"] = new CustomEmote
+        {
+            Code = "handrub", Name = "HandRub", DisplayName = "Rub Hands", Animation = "handrub",
+            StopOnMovement = true, StopOnDamage = true, StopAfterAnimation = true
+        },
+        ["engarde"] = new CustomEmote
+        {
+            Code = "engarde", Name = "EnGarde", DisplayName = "En Garde", Animation = "engarde",
+            StopOnMovement = true, StopOnDamage = true
+        },
+        ["dapup"] = new CustomEmote
+        {
+            Code = "dapup", Name = "DapUp", DisplayName = "Dap Up", Animation = "dapup",
+            StopOnMovement = true, StopOnDamage = true
+        }
     };
 
-    IClientNetworkChannel clientChannel;
+    private static readonly HashSet<string> LeanEmotes = new() { "leaningcrossed", "leaninghips", "leaninghandshead" };
 
-    public static IReadOnlyDictionary<string, CustomEmote> GetEmotes() => Emotes;
+    private static readonly (BlockFacing facing, float yaw)[] HorizontalFacings =
+    {
+        (BlockFacing.NORTH, 0f),
+        (BlockFacing.SOUTH, (float)Math.PI),
+        (BlockFacing.EAST, -(float)(Math.PI / 2)),
+        (BlockFacing.WEST, (float)(Math.PI / 2))
+    };
+
+    private ICoreClientAPI clientApi;
+
+    private IClientNetworkChannel clientChannel;
+    private IServerNetworkChannel serverChannel;
+
+    public static IReadOnlyDictionary<string, CustomEmote> GetEmotes()
+    {
+        return Emotes;
+    }
 
     public static void SetEmoteState(EntityPlayer player, string code, bool active)
     {
@@ -55,13 +202,21 @@ public class EmotesModSystem : ModSystem
     {
         var tree = player.WatchedAttributes.GetOrAddTreeAttribute("emotes");
         foreach (var code in Emotes.Keys)
+        {
             tree.SetBool(code, false);
+        }
+
         player.WatchedAttributes.MarkPathDirty("emotes");
     }
 
     public void SendToggleEmote(string code)
     {
         clientChannel?.SendPacket(new EmotePacket { Code = code });
+    }
+
+    public void SendStopEmotes()
+    {
+        clientChannel?.SendPacket(new EmotePacket { ForceStop = true });
     }
 
     public override void Start(ICoreAPI api)
@@ -74,16 +229,26 @@ public class EmotesModSystem : ModSystem
     public override void StartClientSide(ICoreClientAPI api)
     {
         base.StartClientSide(api);
+        clientApi = api;
 
         clientChannel = api.Network.RegisterChannel(ChannelName)
-            .RegisterMessageType<EmotePacket>();
+            .RegisterMessageType<EmotePacket>()
+            .RegisterMessageType<LeanSnapPacket>()
+            .SetMessageHandler<LeanSnapPacket>(OnLeanSnap);
 
-        api.Input.RegisterHotKey("emotepicker", "Open Emote Picker", GlKeys.J, HotkeyType.CharacterControls, shiftPressed: true);
+        api.Input.RegisterHotKey("emotepicker", "Open Emote Picker", GlKeys.J, shiftPressed: true);
         var dialog = new GuiDialogEmotePicker(api, this);
         api.Input.SetHotKeyHandler("emotepicker", _ =>
         {
-            if (dialog.IsOpened()) dialog.TryClose();
-            else dialog.TryOpen();
+            if (dialog.IsOpened())
+            {
+                dialog.TryClose();
+            }
+            else
+            {
+                dialog.TryOpen();
+            }
+
             return true;
         });
     }
@@ -92,8 +257,9 @@ public class EmotesModSystem : ModSystem
     {
         base.StartServerSide(api);
 
-        api.Network.RegisterChannel(ChannelName)
+        serverChannel = api.Network.RegisterChannel(ChannelName)
             .RegisterMessageType<EmotePacket>()
+            .RegisterMessageType<LeanSnapPacket>()
             .SetMessageHandler<EmotePacket>(OnEmotePacket);
 
         api.ChatCommands
@@ -104,37 +270,122 @@ public class EmotesModSystem : ModSystem
             .HandleWith(HandleEmoteCommand);
     }
 
-    void OnEmotePacket(IServerPlayer fromPlayer, EmotePacket packet)
+    private void OnEmotePacket(IServerPlayer fromPlayer, EmotePacket packet)
     {
         if (fromPlayer.Entity is not EntityPlayer player) return;
+
+        if (packet.ForceStop)
+        {
+            StopAllEmotes(player);
+            return;
+        }
+
         if (!Emotes.ContainsKey(packet.Code)) return;
+
         var tree = player.WatchedAttributes.GetOrAddTreeAttribute("emotes");
-        bool isActive = tree.GetBool(packet.Code);
-        if (!isActive) StopAllEmotes(player);
-        SetEmoteState(player, packet.Code, !isActive);
+        var isActive = tree.GetBool(packet.Code);
+
+        if (!isActive && LeanEmotes.Contains(packet.Code))
+            TrySnapToWall(fromPlayer);
+
+        foreach (var code in Emotes.Keys)
+            tree.SetBool(code, false);
+
+        if (!isActive)
+            tree.SetBool(packet.Code, true);
+
+        player.WatchedAttributes.MarkPathDirty("emotes");
     }
 
-    void OnEntitySpawn(Entity entity)
+    private void OnLeanSnap(LeanSnapPacket packet)
     {
-        if (entity is not EntityPlayer) return;
-        if (entity.GetBehavior<BehaviorEmotes>() != null) return;
+        if (clientApi.World.Player?.Entity is not EntityPlayer ep)
+        {
+            return;
+        }
+
+        ep.BodyYawLimits = new AngleConstraint(packet.Yaw, 0f);
+    }
+
+    private bool TrySnapToWall(IServerPlayer player)
+    {
+        var entity = player.Entity;
+        var world = entity.World;
+        var pos = entity.ServerPos;
+        var blockPos = pos.AsBlockPos;
+
+        foreach (var (facing, yaw) in HorizontalFacings)
+        {
+            var norm = facing.Normali;
+            var wallPos = blockPos.AddCopy(norm.X, 0, norm.Z);
+
+            if (!IsSolidWall(world, wallPos, facing))
+            {
+                continue;
+            }
+
+            var gap = entity.Properties.CollisionBoxSize?.X / 2.0 ?? 0.3;
+            double snapX = pos.X, snapZ = pos.Z;
+
+            if (norm.X != 0)
+            {
+                snapX = wallPos.X + (norm.X > 0 ? -gap : 1.0 + gap);
+            }
+            else
+            {
+                snapZ = wallPos.Z + (norm.Z > 0 ? -gap : 1.0 + gap);
+            }
+
+            entity.TeleportToDouble(snapX, pos.Y, snapZ);
+            entity.ServerPos.Yaw = yaw;
+            serverChannel.SendPacket(new LeanSnapPacket { Yaw = yaw }, player);
+            return true;
+        }
+
+        return false;
+    }
+
+    private static bool IsSolidWall(IWorldAccessor world, BlockPos pos, BlockFacing facingToWall)
+    {
+        var playerSide = facingToWall.Opposite;
+        var low = world.BlockAccessor.GetBlock(pos);
+        var high = world.BlockAccessor.GetBlock(pos.AddCopy(0, 1, 0));
+        return low.SideSolid[playerSide.Index] && high.SideSolid[playerSide.Index];
+    }
+
+    private void OnEntitySpawn(Entity entity)
+    {
+        if (entity is not EntityPlayer)
+        {
+            return;
+        }
+
+        if (entity.GetBehavior<BehaviorEmotes>() != null)
+        {
+            return;
+        }
+
         var behavior = new BehaviorEmotes(entity);
         entity.AddBehavior(behavior);
         behavior.Initialize(entity.Properties, null);
     }
 
-    TextCommandResult HandleEmoteCommand(TextCommandCallingArgs args)
+    private TextCommandResult HandleEmoteCommand(TextCommandCallingArgs args)
     {
         if (args.Caller.Entity is not EntityPlayer player)
+        {
             return TextCommandResult.Error("Only players can use emotes");
+        }
 
         var input = (string)args[0];
 
-        if (string.IsNullOrEmpty(input) || input.Equals("list", System.StringComparison.OrdinalIgnoreCase))
+        if (string.IsNullOrEmpty(input) || input.Equals("list", StringComparison.OrdinalIgnoreCase))
+        {
             return TextCommandResult.Success("Available emotes: " + string.Join(", ", Emotes.Keys));
+        }
 
-        if (input.Equals("stop", System.StringComparison.OrdinalIgnoreCase) ||
-            input.Equals("stopall", System.StringComparison.OrdinalIgnoreCase))
+        if (input.Equals("stop", StringComparison.OrdinalIgnoreCase) ||
+            input.Equals("stopall", StringComparison.OrdinalIgnoreCase))
         {
             StopAllEmotes(player);
             return TextCommandResult.Success("All emotes stopped");
@@ -142,12 +393,20 @@ public class EmotesModSystem : ModSystem
 
         var key = input.ToLowerInvariant();
         if (!Emotes.TryGetValue(key, out var emote))
+        {
             return TextCommandResult.Error($"Emote '{input}' not found. Use '/emotes list' to see available emotes.");
+        }
 
         var tree = player.WatchedAttributes.GetOrAddTreeAttribute("emotes");
-        bool isActive = tree.GetBool(emote.Code);
-        if (!isActive) StopAllEmotes(player);
-        SetEmoteState(player, emote.Code, !isActive);
+        var isActive = tree.GetBool(emote.Code);
+
+        foreach (var code in Emotes.Keys)
+            tree.SetBool(code, false);
+
+        if (!isActive)
+            tree.SetBool(emote.Code, true);
+
+        player.WatchedAttributes.MarkPathDirty("emotes");
         return TextCommandResult.Success(isActive ? $"Stopped emote: {emote.Name}" : $"Started emote: {emote.Name}");
     }
 }
