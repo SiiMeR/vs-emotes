@@ -81,14 +81,6 @@
         "animationSpeed": 1
       },
       {
-        "code": "crossedarmsleaning2",
-        "animation": "CrossedArmsLeaning2",
-        "blendMode": "Add",
-        "easeInSpeed": 1,
-        "easeOutSpeed": 2,
-        "animationSpeed": 1
-      },
-      {
         "code": "flippingoff",
         "animation": "FlippingOff",
         "blendMode": "Add",
