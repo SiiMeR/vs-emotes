@@ -53,12 +53,13 @@ public class BehaviorEmotes : EntityBehavior
     void SyncAnimations()
     {
         var tree = entity.WatchedAttributes.GetTreeAttribute("emotes");
+        var tpManager = (entity as EntityPlayer)?.TpAnimManager;
 
         bool anyActive = false;
         foreach (var (code, emote) in EmotesModSystem.GetEmotes())
         {
             bool shouldPlay = tree?.GetBool(code) ?? false;
-            bool isPlaying = entity.AnimManager?.IsAnimationActive(emote.Animation) ?? false;
+            bool isPlaying = (tpManager ?? entity.AnimManager)?.IsAnimationActive(emote.Animation) ?? false;
 
             if (shouldPlay && !isPlaying)
                 StartAnimation(emote);
@@ -67,6 +68,8 @@ public class BehaviorEmotes : EntityBehavior
 
             if (shouldPlay) anyActive = true;
         }
+
+        EmotesModSystem.IsEmotePlaying = anyActive;
 
         if (anyActive && !yawLocked) LockYaw();
         else if (!anyActive && yawLocked) UnlockYaw();

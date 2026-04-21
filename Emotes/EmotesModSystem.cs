@@ -216,6 +216,8 @@ public class EmotesModSystem : ModSystem
     private IClientNetworkChannel clientChannel;
     private IServerNetworkChannel serverChannel;
 
+    public static bool IsEmotePlaying { get; set; }
+
     public static IReadOnlyDictionary<string, CustomEmote> GetEmotes()
     {
         return Emotes;
@@ -256,10 +258,17 @@ public class EmotesModSystem : ModSystem
         api.Event.OnEntitySpawn += OnEntitySpawn;
     }
 
+    public override void Dispose()
+    {
+        CombatOverhaulPatch.Remove();
+        base.Dispose();
+    }
+
     public override void StartClientSide(ICoreClientAPI api)
     {
         base.StartClientSide(api);
         clientApi = api;
+        CombatOverhaulPatch.Apply(api);
 
         clientChannel = api.Network.RegisterChannel(ChannelName)
             .RegisterMessageType<EmotePacket>()

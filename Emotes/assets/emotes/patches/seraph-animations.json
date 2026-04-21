@@ -5964,7 +5964,7 @@
       {
         "name": "Scanning",
         "code": "scanning",
-        "quantityframes": 24,
+        "quantityframes": 25,
         "onActivityStopped": "EaseOut",
         "onAnimationEnd": "Hold",
         "keyframes": [
@@ -5992,7 +5992,10 @@
               "LowerArmR": {
                 "rotationX": 0,
                 "rotationY": 0,
-                "rotationZ": 0
+                "rotationZ": 0,
+                "offsetX": 0,
+                "offsetY": 0,
+                "offsetZ": 0
               },
               "UpperArmL": {
                 "rotationX": 0,
@@ -6114,14 +6117,17 @@
                 "rotationZ": 0
               },
               "UpperArmR": {
-                "rotationX": -40.18,
-                "rotationY": -27.83,
-                "rotationZ": -172.77
+                "rotationX": -22.1049,
+                "rotationY": -21.7322,
+                "rotationZ": -160.0733
               },
               "LowerArmR": {
-                "rotationX": -86.62,
-                "rotationY": 36.87,
-                "rotationZ": -15.3
+                "rotationX": -74.9517,
+                "rotationY": 33.8004,
+                "rotationZ": -14.5735,
+                "offsetX": 0,
+                "offsetY": 1,
+                "offsetZ": -1
               },
               "UpperArmL": {
                 "rotationX": 0,
@@ -8433,7 +8439,7 @@
       {
         "name": "Prayer",
         "code": "prayer",
-        "quantityframes": 33,
+        "quantityframes": 34,
         "onActivityStopped": "EaseOut",
         "onAnimationEnd": "Hold",
         "keyframes": [
@@ -8583,7 +8589,7 @@
                 "rotationY": 0,
                 "rotationZ": 30,
                 "offsetX": 2.79,
-                "offsetY": -9.24,
+                "offsetY": -10.24,
                 "offsetZ": 0
               },
               "UpperArmR": {
