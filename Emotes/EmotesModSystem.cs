@@ -260,7 +260,7 @@ public class EmotesModSystem : ModSystem
 
     public override void Dispose()
     {
-        CombatOverhaulPatch.Remove();
+        if (clientApi?.ModLoader.IsModEnabled("overhaullib") == true) CombatOverhaulPatch.Remove();
         base.Dispose();
     }
 
@@ -268,7 +268,7 @@ public class EmotesModSystem : ModSystem
     {
         base.StartClientSide(api);
         clientApi = api;
-        CombatOverhaulPatch.Apply(api);
+        if (api.ModLoader.IsModEnabled("overhaullib")) CombatOverhaulPatch.Apply(api);
 
         clientChannel = api.Network.RegisterChannel(ChannelName)
             .RegisterMessageType<EmotePacket>()
