@@ -23,7 +23,10 @@ public class BehaviorEmotes : EntityBehavior
         api = entity.Api;
 
         if (api.Side == EnumAppSide.Server && entity is EntityPlayer player)
+        {
             EmotesModSystem.StopAllEmotes(player);
+            entity.WatchedAttributes.RegisterModifiedListener("mountedOn", OnMountChanged);
+        }
 
         if (api.Side != EnumAppSide.Client) return;
 
@@ -31,6 +34,13 @@ public class BehaviorEmotes : EntityBehavior
 
         if (entity.AnimManager != null)
             entity.AnimManager.OnAnimationStopped += OnAnimationStopped;
+    }
+
+    void OnMountChanged()
+    {
+        if (entity is not EntityPlayer player) return;
+        if (!entity.WatchedAttributes.HasAttribute("mountedOn")) return;
+        EmotesModSystem.StopAllEmotes(player);
     }
 
     void OnAnimationStopped(string animCode)
@@ -45,7 +55,7 @@ public class BehaviorEmotes : EntityBehavior
             if (tree?.GetBool(code) != true) continue;
 
             if (emote.StopAfterAnimation)
-                api.ModLoader.GetModSystem<EmotesModSystem>().SendToggleEmote(code);
+                api.ModLoader.GetModSystem<EmotesModSystem>().SendStopEmotes();
             break;
         }
     }
@@ -144,7 +154,7 @@ public class BehaviorEmotes : EntityBehavior
         if (controls == null) return;
         var motion = entity.ServerPos.Motion;
         bool moving = controls.TriesToMove || controls.Jump || motion.X * motion.X + motion.Z * motion.Z > 1e-5;
-        if (!moving) return;
+        if (!moving && !controls.FloorSitting) return;
 
         var tree = player.WatchedAttributes.GetTreeAttribute("emotes");
         if (tree == null) return;
@@ -152,7 +162,8 @@ public class BehaviorEmotes : EntityBehavior
         bool anyChanged = false;
         foreach (var (code, emote) in EmotesModSystem.GetEmotes())
         {
-            if (!emote.StopOnMovement || !tree.GetBool(code)) continue;
+            bool shouldStop = controls.FloorSitting || (moving && emote.StopOnMovement);
+            if (!shouldStop || !tree.GetBool(code)) continue;
             tree.SetBool(code, false);
             anyChanged = true;
         }

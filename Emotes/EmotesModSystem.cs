@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Vintagestory.API.Client;
 using Vintagestory.API.Common;
 using Vintagestory.API.Common.Entities;
@@ -106,7 +107,7 @@ public class EmotesModSystem : ModSystem
         },
         ["refinedsalute"] = new CustomEmote
         {
-            Code = "refinedsalute", Name = "RefinedSalute", DisplayName = "Refined Salute", Animation = "refinedsalute",
+            Code = "refinedsalute", Name = "RefinedSalute", DisplayName = "Salute (Refined)", Animation = "refinedsalute",
             StopOnMovement = true, StopOnDamage = true
         },
         ["salute"] = new CustomEmote
@@ -184,9 +185,19 @@ public class EmotesModSystem : ModSystem
             Code = "kisshand", Name = "KissHand", DisplayName = "Kiss Hand", Animation = "kisshand",
             StopOnMovement = true, StopOnDamage = true
         },
+        ["knocking"] = new CustomEmote
+        {
+            Code = "knocking", Name = "Knocking", DisplayName = "Knock", Animation = "knocking",
+            StopOnMovement = true, StopOnDamage = true, StopAfterAnimation = true
+        },
         ["martialarts"] = new CustomEmote
         {
             Code = "martialarts", Name = "MartialArts", DisplayName = "Martial Arts", Animation = "martialarts",
+            StopOnMovement = true, StopOnDamage = true
+        },
+        ["noblesalute"] = new CustomEmote
+        {
+            Code = "noblesalute", Name = "NobleSalute", DisplayName = "Salute (Noble)", Animation = "noblesalute",
             StopOnMovement = true, StopOnDamage = true
         },
         ["crackingknuckles"] = new CustomEmote
@@ -194,11 +205,6 @@ public class EmotesModSystem : ModSystem
             Code = "crackingknuckles", Name = "CrackingKnuckles", DisplayName = "Crack Knuckles", Animation = "crackingknuckles",
             StopOnMovement = true, StopOnDamage = true
         },
-        ["rubbinghands"] = new CustomEmote
-        {
-            Code = "rubbinghands", Name = "RubbingHands", DisplayName = "Rub Hands", Animation = "rubbinghands",
-            StopOnMovement = true, StopOnDamage = true
-        }
     };
 
     private static readonly HashSet<string> LeanEmotes = new() { "leaningcrossed", "leaninghips", "leaninghandshead" };
@@ -356,12 +362,18 @@ public class EmotesModSystem : ModSystem
         foreach (var (facing, yaw) in HorizontalFacings)
         {
             var norm = facing.Normali;
-            var wallPos = blockPos.AddCopy(norm.X, 0, norm.Z);
-
-            if (!IsSolidWall(world, wallPos, facing))
+            BlockPos wallPos = null;
+            for (int dist = 1; dist <= 2; dist++)
             {
-                continue;
+                var candidate = blockPos.AddCopy(norm.X * dist, 0, norm.Z * dist);
+                if (IsSolidWall(world, candidate, facing))
+                {
+                    wallPos = candidate;
+                    break;
+                }
             }
+
+            if (wallPos == null) continue;
 
             var gap = entity.Properties.CollisionBoxSize?.X / 2.0 ?? 0.3;
             double snapX = pos.X, snapZ = pos.Z;
@@ -420,7 +432,7 @@ public class EmotesModSystem : ModSystem
 
         if (string.IsNullOrEmpty(input) || input.Equals("list", StringComparison.OrdinalIgnoreCase))
         {
-            return TextCommandResult.Success("Available emotes: " + string.Join(", ", Emotes.Keys));
+            return TextCommandResult.Success("Available emotes: " + string.Join(", ", Emotes.Values.Select(e => $"{e.Code} ({e.DisplayName})")));
         }
 
         if (input.Equals("stop", StringComparison.OrdinalIgnoreCase) ||
@@ -428,6 +440,36 @@ public class EmotesModSystem : ModSystem
         {
             StopAllEmotes(player);
             return TextCommandResult.Success("All emotes stopped");
+        }
+
+        if (input.Equals("showcase", StringComparison.OrdinalIgnoreCase))
+        {
+            var codes = Emotes.Keys.ToList();
+            var showcaseApi = player.Api;
+
+            void RunNext(int index)
+            {
+                if (!player.Alive) return;
+                if (index >= codes.Count)
+                {
+                    StopAllEmotes(player);
+                    return;
+                }
+                var t = player.WatchedAttributes.GetOrAddTreeAttribute("emotes");
+                foreach (var code in Emotes.Keys)
+                    t.SetBool(code, false);
+                t.SetBool(codes[index], true);
+                player.WatchedAttributes.MarkPathDirty("emotes");
+                showcaseApi.Event.RegisterCallback(_ =>
+                {
+                    if (!player.Alive) return;
+                    StopAllEmotes(player);
+                    showcaseApi.Event.RegisterCallback(_ => RunNext(index + 1), 1000);
+                }, 3000);
+            }
+
+            RunNext(0);
+            return TextCommandResult.Success("Starting emote showcase...");
         }
 
         var key = input.ToLowerInvariant();

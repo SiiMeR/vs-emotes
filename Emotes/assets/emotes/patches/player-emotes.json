@@ -125,6 +125,14 @@
         "animationSpeed": 1
       },
       {
+        "code": "knocking",
+        "animation": "Knocking",
+        "blendMode": "Add",
+        "easeInSpeed": 1,
+        "easeOutSpeed": 2,
+        "animationSpeed": 1
+      },
+      {
         "code": "kneel",
         "animation": "Kneel",
         "blendMode": "Add",
@@ -175,6 +183,14 @@
       {
         "code": "martialarts",
         "animation": "MartialArts",
+        "blendMode": "Add",
+        "easeInSpeed": 1,
+        "easeOutSpeed": 2,
+        "animationSpeed": 1
+      },
+      {
+        "code": "noblesalute",
+        "animation": "NobleSalute",
         "blendMode": "Add",
         "easeInSpeed": 1,
         "easeOutSpeed": 2,
