@@ -5,6 +5,7 @@ using Vintagestory.API.Client;
 using Vintagestory.API.Common;
 using Vintagestory.API.Common.Entities;
 using Vintagestory.API.MathTools;
+using Vintagestory.API.Config;
 using Vintagestory.API.Server;
 
 namespace Emotes;
@@ -445,14 +446,28 @@ public class EmotesModSystem : ModSystem
         if (input.Equals("showcase", StringComparison.OrdinalIgnoreCase))
         {
             var codes = Emotes.Keys.ToList();
-            var showcaseApi = player.Api;
+            var showcaseApi = player.Api as ICoreServerAPI;
+            var cancelled = new bool[1];
+            var tickId = new long[1];
+
+            tickId[0] = showcaseApi.Event.RegisterGameTickListener(_ =>
+            {
+                if (cancelled[0]) { showcaseApi.Event.UnregisterGameTickListener(tickId[0]); return; }
+                var controls = player.ServerControls;
+                var motion = player.ServerPos.Motion;
+                if (!controls.TriesToMove && !controls.Jump && motion.X * motion.X + motion.Z * motion.Z <= 1e-5) return;
+                cancelled[0] = true;
+                showcaseApi.Event.UnregisterGameTickListener(tickId[0]);
+                StopAllEmotes(player);
+            }, 100);
 
             void RunNext(int index)
             {
-                if (!player.Alive) return;
+                if (!player.Alive || cancelled[0]) return;
                 if (index >= codes.Count)
                 {
                     StopAllEmotes(player);
+                    showcaseApi.Event.UnregisterGameTickListener(tickId[0]);
                     return;
                 }
                 var t = player.WatchedAttributes.GetOrAddTreeAttribute("emotes");
@@ -460,9 +475,11 @@ public class EmotesModSystem : ModSystem
                     t.SetBool(code, false);
                 t.SetBool(codes[index], true);
                 player.WatchedAttributes.MarkPathDirty("emotes");
+                var displayName = Emotes[codes[index]].DisplayName;
+                showcaseApi.SendMessageToGroup(GlobalConstants.GeneralChatGroup, displayName, EnumChatType.OthersMessage, $"from: {player.EntityId},withoutPrefix:{displayName}");
                 showcaseApi.Event.RegisterCallback(_ =>
                 {
-                    if (!player.Alive) return;
+                    if (!player.Alive || cancelled[0]) return;
                     StopAllEmotes(player);
                     showcaseApi.Event.RegisterCallback(_ => RunNext(index + 1), 1000);
                 }, 3000);
