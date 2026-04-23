@@ -5,7 +5,6 @@ using Vintagestory.API.Client;
 using Vintagestory.API.Common;
 using Vintagestory.API.Common.Entities;
 using Vintagestory.API.MathTools;
-using Vintagestory.API.Config;
 using Vintagestory.API.Server;
 
 namespace Emotes;
@@ -443,7 +442,7 @@ public class EmotesModSystem : ModSystem
             return TextCommandResult.Success("All emotes stopped");
         }
 
-        if (input.Equals("showcase", StringComparison.OrdinalIgnoreCase))
+if (input.Equals("showcase", StringComparison.OrdinalIgnoreCase))
         {
             var codes = Emotes.Keys.ToList();
             var showcaseApi = player.Api as ICoreServerAPI;
@@ -475,17 +474,15 @@ public class EmotesModSystem : ModSystem
                     t.SetBool(code, false);
                 t.SetBool(codes[index], true);
                 player.WatchedAttributes.MarkPathDirty("emotes");
-                var displayName = Emotes[codes[index]].DisplayName;
-                showcaseApi.SendMessageToGroup(GlobalConstants.GeneralChatGroup, displayName, EnumChatType.OthersMessage, $"from: {player.EntityId},withoutPrefix:{displayName}");
                 showcaseApi.Event.RegisterCallback(_ =>
                 {
                     if (!player.Alive || cancelled[0]) return;
                     StopAllEmotes(player);
                     showcaseApi.Event.RegisterCallback(_ => RunNext(index + 1), 1000);
-                }, 3000);
+                }, 4000);
             }
 
-            RunNext(0);
+            showcaseApi.Event.RegisterCallback(_ => RunNext(0), 3000);
             return TextCommandResult.Success("Starting emote showcase...");
         }
 

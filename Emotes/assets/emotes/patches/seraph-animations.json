@@ -323,7 +323,7 @@
                 "rotationY": 0,
                 "rotationZ": -1,
                 "offsetX": 0,
-                "offsetY": -10,
+                "offsetY": -11,
                 "offsetZ": 0
               },
               "UpperTorso": {
@@ -406,7 +406,7 @@
                 "rotationY": 0,
                 "rotationZ": -1,
                 "offsetX": 0,
-                "offsetY": -10.75,
+                "offsetY": -11.75,
                 "offsetZ": 0
               },
               "UpperTorso": {
