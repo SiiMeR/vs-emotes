@@ -7,7 +7,7 @@
     "W4RD0"
   ],
   "description": "Adds more custom emotes to the game.",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "dependencies": {
     "game": ""
   }

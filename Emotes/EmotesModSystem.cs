@@ -4,6 +4,7 @@ using System.Linq;
 using Vintagestory.API.Client;
 using Vintagestory.API.Common;
 using Vintagestory.API.Common.Entities;
+using Vintagestory.API.Config;
 using Vintagestory.API.MathTools;
 using Vintagestory.API.Server;
 
@@ -281,7 +282,7 @@ public class EmotesModSystem : ModSystem
             .RegisterMessageType<LeanSnapPacket>()
             .SetMessageHandler<LeanSnapPacket>(OnLeanSnap);
 
-        api.Input.RegisterHotKey("emotepicker", "Open Emote Picker", GlKeys.J, shiftPressed: true);
+        api.Input.RegisterHotKey("emotepicker", Lang.Get("emotes:hotkey-open"), GlKeys.J, shiftPressed: true);
         var dialog = new GuiDialogEmotePicker(api, this);
         api.Input.SetHotKeyHandler("emotepicker", _ =>
         {
@@ -310,7 +311,7 @@ public class EmotesModSystem : ModSystem
         api.ChatCommands
             .GetOrCreate("emotes")
             .RequiresPrivilege(Privilege.chat)
-            .WithDescription("Play an emote. Usage: /emotes <name|list|stop>")
+            .WithDescription(Lang.Get("emotes:cmd-description"))
             .WithArgs(api.ChatCommands.Parsers.OptionalWord("action"))
             .HandleWith(HandleEmoteCommand);
     }
@@ -425,21 +426,21 @@ public class EmotesModSystem : ModSystem
     {
         if (args.Caller.Entity is not EntityPlayer player)
         {
-            return TextCommandResult.Error("Only players can use emotes");
+            return TextCommandResult.Error(Lang.Get("emotes:cmd-only-players"));
         }
 
         var input = (string)args[0];
 
         if (string.IsNullOrEmpty(input) || input.Equals("list", StringComparison.OrdinalIgnoreCase))
         {
-            return TextCommandResult.Success("Available emotes: " + string.Join(", ", Emotes.Values.Select(e => $"{e.Code} ({e.DisplayName})")));
+            return TextCommandResult.Success(Lang.Get("emotes:cmd-available-emotes", string.Join(", ", Emotes.Values.Select(e => $"{e.Code} ({Lang.Get("emotes:emote-" + e.Code)})"))));
         }
 
         if (input.Equals("stop", StringComparison.OrdinalIgnoreCase) ||
             input.Equals("stopall", StringComparison.OrdinalIgnoreCase))
         {
             StopAllEmotes(player);
-            return TextCommandResult.Success("All emotes stopped");
+            return TextCommandResult.Success(Lang.Get("emotes:cmd-all-stopped"));
         }
 
 if (input.Equals("showcase", StringComparison.OrdinalIgnoreCase))
@@ -483,13 +484,13 @@ if (input.Equals("showcase", StringComparison.OrdinalIgnoreCase))
             }
 
             showcaseApi.Event.RegisterCallback(_ => RunNext(0), 3000);
-            return TextCommandResult.Success("Starting emote showcase...");
+            return TextCommandResult.Success(Lang.Get("emotes:cmd-showcase-start"));
         }
 
         var key = input.ToLowerInvariant();
         if (!Emotes.TryGetValue(key, out var emote))
         {
-            return TextCommandResult.Error($"Emote '{input}' not found. Use '/emotes list' to see available emotes.");
+            return TextCommandResult.Error(Lang.Get("emotes:cmd-not-found", input));
         }
 
         var tree = player.WatchedAttributes.GetOrAddTreeAttribute("emotes");
@@ -502,6 +503,7 @@ if (input.Equals("showcase", StringComparison.OrdinalIgnoreCase))
             tree.SetBool(emote.Code, true);
 
         player.WatchedAttributes.MarkPathDirty("emotes");
-        return TextCommandResult.Success(isActive ? $"Stopped emote: {emote.Name}" : $"Started emote: {emote.Name}");
+        var displayName = Lang.Get("emotes:emote-" + emote.Code);
+        return TextCommandResult.Success(isActive ? Lang.Get("emotes:cmd-emote-stopped", displayName) : Lang.Get("emotes:cmd-emote-started", displayName));
     }
 }

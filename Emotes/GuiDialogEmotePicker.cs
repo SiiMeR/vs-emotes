@@ -1,6 +1,7 @@
 using System.Linq;
 using Cairo;
 using Vintagestory.API.Client;
+using Vintagestory.API.Config;
 
 namespace Emotes;
 
@@ -14,18 +15,7 @@ public class GuiDialogEmotePicker : GuiDialog
     private const double BtnPad = 3;
     private const int Cols = 2;
 
-    private static readonly (string Code, string DisplayName)[] VanillaEmotes =
-    {
-        ("wave", "Wave"),
-        ("cheer", "Cheer"),
-        ("shrug", "Shrug"),
-        ("cry", "Cry"),
-        ("nod", "Nod"),
-        ("facepalm", "Facepalm"),
-        ("bow", "Bow"),
-        ("laugh", "Laugh"),
-        ("rage", "Rage")
-    };
+    private static readonly string[] VanillaEmoteCodes = { "wave", "cheer", "shrug", "cry", "nod", "facepalm", "bow", "laugh", "rage" };
 
     private readonly EmotesModSystem modSystem;
 
@@ -51,14 +41,17 @@ public class GuiDialogEmotePicker : GuiDialog
 
         if (activeTab == 1)
         {
-            codes = VanillaEmotes.Select(e => e.Code).ToArray();
-            names = VanillaEmotes.Select(e => e.DisplayName).ToArray();
+            codes = VanillaEmoteCodes;
+            names = VanillaEmoteCodes.Select(c => Lang.Get("emotes:emote-" + c)).ToArray();
         }
         else
         {
-            var emotes = EmotesModSystem.GetEmotes().Values.OrderBy(e => e.DisplayName).ToArray();
+            var emotes = EmotesModSystem.GetEmotes().Values
+                .Select(e => (e.Code, Name: Lang.Get("emotes:emote-" + e.Code)))
+                .OrderBy(e => e.Name)
+                .ToArray();
             codes = emotes.Select(e => e.Code).ToArray();
-            names = emotes.Select(e => e.DisplayName).ToArray();
+            names = emotes.Select(e => e.Name).ToArray();
         }
 
         const double TabGap = 8;
@@ -71,8 +64,8 @@ public class GuiDialogEmotePicker : GuiDialog
 
         var tabs = new GuiTab[]
         {
-            new() { Name = "Custom", DataInt = 0 },
-            new() { Name = "Vanilla", DataInt = 1 }
+            new() { Name = Lang.Get("emotes:tab-custom"), DataInt = 0 },
+            new() { Name = Lang.Get("emotes:tab-vanilla"), DataInt = 1 }
         };
 
         var tabsBounds = ElementBounds.Fixed(0, GuiStyle.TitleBarHeight, tabs.Length * TabW, TabH);
@@ -91,7 +84,7 @@ public class GuiDialogEmotePicker : GuiDialog
         var composer = capi.Gui
             .CreateCompo("emotepicker", dialogBounds)
             .AddShadedDialogBG(contentBounds)
-            .AddDialogTitleBar("Emotes", () => TryClose())
+            .AddDialogTitleBar(Lang.Get("emotes:dialog-title"), () => TryClose())
             .BeginChildElements(contentBounds)
             .AddHorizontalTabs(tabs, tabsBounds, OnTabClicked, font, selectedFont, "tabs");
 
