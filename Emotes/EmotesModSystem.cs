@@ -356,7 +356,7 @@ public class EmotesModSystem : ModSystem
     {
         var entity = player.Entity;
         var world = entity.World;
-        var pos = entity.ServerPos;
+        var pos = entity.Pos;
         var blockPos = pos.AsBlockPos;
 
         foreach (var (facing, yaw) in HorizontalFacings)
@@ -388,7 +388,7 @@ public class EmotesModSystem : ModSystem
             }
 
             entity.TeleportToDouble(snapX, pos.Y, snapZ);
-            entity.ServerPos.Yaw = yaw;
+            entity.Pos.Yaw = yaw;
             serverChannel.SendPacket(new LeanSnapPacket { Yaw = yaw }, player);
             return true;
         }
@@ -453,7 +453,7 @@ if (input.Equals("showcase", StringComparison.OrdinalIgnoreCase))
             {
                 if (cancelled[0]) { showcaseApi.Event.UnregisterGameTickListener(tickId[0]); return; }
                 var controls = player.ServerControls;
-                var motion = player.ServerPos.Motion;
+                var motion = player.Pos.Motion;
                 if (!controls.TriesToMove && !controls.Jump && motion.X * motion.X + motion.Z * motion.Z <= 1e-5) return;
                 cancelled[0] = true;
                 showcaseApi.Event.UnregisterGameTickListener(tickId[0]);

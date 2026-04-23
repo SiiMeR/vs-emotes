@@ -202,7 +202,7 @@ public class BehaviorEmotes : EntityBehavior
         if (entity is not EntityPlayer player) return;
         var controls = player.ServerControls;
         if (controls == null) return;
-        var motion = entity.ServerPos.Motion;
+        var motion = entity.Pos.Motion;
         bool moving = controls.TriesToMove || controls.Jump || motion.X * motion.X + motion.Z * motion.Z > 1e-5;
         if (!moving && !controls.FloorSitting) return;
 
