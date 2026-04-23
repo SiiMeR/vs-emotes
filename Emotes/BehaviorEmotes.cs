@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using Vintagestory.API.Client;
 using Vintagestory.API.Common;
 using Vintagestory.API.Common.Entities;
@@ -8,10 +10,23 @@ namespace Emotes;
 
 public class BehaviorEmotes : EntityBehavior
 {
+    static readonly Dictionary<string, double> EyeHeightByEmote = new()
+    {
+        ["seiza"]      = 0.97,
+        ["kneel"]      = 1.09,
+        ["prayer"]     = 0.97,
+        ["sittingcool"]= 0.89,
+        ["squatting"]  = 0.95,
+        ["layingback"] = 0.2,
+        ["layingdown"] = 0.2,
+    };
+
     ICoreAPI api;
     IRenderer fixYawRenderer;
+    IRenderer eyePosRenderer;
     float lockedYaw;
     bool yawLocked;
+    double targetEyeHeight;
 
     public BehaviorEmotes(Entity entity) : base(entity) { }
 
@@ -66,6 +81,7 @@ public class BehaviorEmotes : EntityBehavior
         var tpManager = (entity as EntityPlayer)?.TpAnimManager;
 
         bool anyActive = false;
+        string activeCode = null;
         foreach (var (code, emote) in EmotesModSystem.GetEmotes())
         {
             bool shouldPlay = tree?.GetBool(code) ?? false;
@@ -76,13 +92,43 @@ public class BehaviorEmotes : EntityBehavior
             else if (!shouldPlay && isPlaying)
                 entity.AnimManager?.StopAnimation(emote.Animation);
 
-            if (shouldPlay) anyActive = true;
+            if (shouldPlay) { anyActive = true; activeCode = code; }
         }
 
         EmotesModSystem.IsEmotePlaying = anyActive;
 
         if (anyActive && !yawLocked) LockYaw();
         else if (!anyActive && yawLocked) UnlockYaw();
+
+        if (api is not ICoreClientAPI capi) return;
+        if (capi.World.Player?.Entity?.EntityId != entity.EntityId) return;
+
+        if (activeCode != null && EyeHeightByEmote.TryGetValue(activeCode, out var eyeH))
+            StartEyePos(capi, eyeH);
+        else
+            StopEyePos(capi);
+    }
+
+    void StartEyePos(ICoreClientAPI capi, double target)
+    {
+        targetEyeHeight = target;
+        if (eyePosRenderer != null) return;
+        var ep = entity as EntityPlayer;
+        eyePosRenderer = new ActionRenderer(dt =>
+        {
+            double delta = (targetEyeHeight - ep.LocalEyePos.Y) * 5.0 * dt;
+            ep.LocalEyePos.Y = delta > 0
+                ? Math.Min(ep.LocalEyePos.Y + delta, targetEyeHeight)
+                : Math.Max(ep.LocalEyePos.Y + delta, targetEyeHeight);
+        });
+        capi.Event.RegisterRenderer(eyePosRenderer, EnumRenderStage.Before, "emote-eye-pos");
+    }
+
+    void StopEyePos(ICoreClientAPI capi)
+    {
+        if (eyePosRenderer == null) return;
+        capi.Event.UnregisterRenderer(eyePosRenderer, EnumRenderStage.Before);
+        eyePosRenderer = null;
     }
 
     void LockYaw()
@@ -110,7 +156,7 @@ public class BehaviorEmotes : EntityBehavior
 
         var capturedEntity = entity;
         var capturedYaw = lockedYaw;
-        fixYawRenderer = new ActionRenderer(() => capturedEntity.Pos.Yaw = capturedYaw);
+        fixYawRenderer = new ActionRenderer(_ => capturedEntity.Pos.Yaw = capturedYaw);
         capi.Event.RegisterRenderer(fixYawRenderer, EnumRenderStage.Before, "emote-fix-yaw");
     }
 
@@ -124,11 +170,15 @@ public class BehaviorEmotes : EntityBehavior
             ep.HeadYawLimits = null;
         }
 
-        if (fixYawRenderer != null && api is ICoreClientAPI capi)
+        if (api is not ICoreClientAPI capi) return;
+
+        if (fixYawRenderer != null)
         {
             capi.Event.UnregisterRenderer(fixYawRenderer, EnumRenderStage.Before);
             fixYawRenderer = null;
         }
+
+        StopEyePos(capi);
     }
 
     void StartAnimation(CustomEmote emote)
@@ -226,11 +276,11 @@ public class BehaviorEmotes : EntityBehavior
 
     class ActionRenderer : IRenderer
     {
-        readonly System.Action action;
-        public ActionRenderer(System.Action action) => this.action = action;
+        readonly Action<float> action;
+        public ActionRenderer(Action<float> action) => this.action = action;
         public double RenderOrder => 0.5;
         public int RenderRange => 9999;
-        public void OnRenderFrame(float deltaTime, EnumRenderStage stage) => action();
+        public void OnRenderFrame(float deltaTime, EnumRenderStage stage) => action(deltaTime);
         public void Dispose() { }
     }
 }
