@@ -1,16 +1,28 @@
 {
   "profiles": {
-    "Client": {
+    "Client 1.21": {
       "commandName": "Executable",
       "executablePath": "dotnet",
-      "commandLineArgs": "\"$(VINTAGE_STORY)/Vintagestory.dll\" --tracelog --dataPath \"$(VINTAGE_STORY_DATA)\" --addModPath \"$(ProjectDir)/bin/$(Configuration)/Mods\" --openWorld TestWorld",
-      "workingDirectory": "$(VINTAGE_STORY)"
+      "commandLineArgs": "\"C:/Users/User/AppData/Roaming/VSLGameVersions/1.21.5/Vintagestory.dll\" --tracelog --dataPath \"C:/Users/User/AppData/Roaming/VSLInstallations/1.21.5\" --addModPath \"$(ProjectDir)/bin/$(Configuration)/Mods\" --openWorld TestWorld",
+      "workingDirectory": "C:/Users/User/AppData/Roaming/VSLGameVersions/1.21.5"
     },
-    "Server": {
+    "Client 1.22": {
       "commandName": "Executable",
       "executablePath": "dotnet",
-      "commandLineArgs": "\"$(VINTAGE_STORY)/VintagestoryServer.dll\" --tracelog --addModPath \"$(ProjectDir)/bin/$(Configuration)/Mods\" --dataPath \"$(VINTAGE_STORY_DATA)\"",
-      "workingDirectory": "$(VINTAGE_STORY)"
+      "commandLineArgs": "\"C:/Users/User/AppData/Roaming/VSLGameVersions/1.22.0/Vintagestory.dll\" --tracelog --dataPath \"C:/Users/User/AppData/Roaming/VSLInstallations/1.22.0\" --addModPath \"$(ProjectDir)/bin/$(Configuration)/Mods\" --openWorld TestWorld",
+      "workingDirectory": "C:/Users/User/AppData/Roaming/VSLGameVersions/1.22.0"
+    },
+    "Server 1.21": {
+      "commandName": "Executable",
+      "executablePath": "dotnet",
+      "commandLineArgs": "\"C:/Users/User/AppData/Roaming/VSLGameVersions/1.21.5/VintagestoryServer.dll\" --tracelog --addModPath \"$(ProjectDir)/bin/$(Configuration)/Mods\" --dataPath \"C:/Users/User/AppData/Roaming/VSLInstallations/1.21.5\"",
+      "workingDirectory": "C:/Users/User/AppData/Roaming/VSLGameVersions/1.21.5"
+    },
+    "Server 1.22": {
+      "commandName": "Executable",
+      "executablePath": "dotnet",
+      "commandLineArgs": "\"C:/Users/User/AppData/Roaming/VSLGameVersions/1.22.0/VintagestoryServer.dll\" --tracelog --addModPath \"$(ProjectDir)/bin/$(Configuration)/Mods\" --dataPath \"C:/Users/User/AppData/Roaming/VSLInstallations/1.22.0\"",
+      "workingDirectory": "C:/Users/User/AppData/Roaming/VSLGameVersions/1.22.0"
     },
     "Upload Release (Build)": {
       "commandName": "Executable",
