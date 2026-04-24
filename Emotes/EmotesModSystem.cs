@@ -250,6 +250,11 @@ public class EmotesModSystem : ModSystem
 
     public void SendToggleEmote(string code)
     {
+        if (clientApi?.World.Player?.Entity?.MountedOn != null)
+        {
+            clientApi.TriggerIngameError(this, "emote-mounted", Lang.Get("emotes:cmd-mounted"));
+            return;
+        }
         clientChannel?.SendPacket(new EmotePacket { Code = code });
     }
 
@@ -327,6 +332,7 @@ public class EmotesModSystem : ModSystem
         }
 
         if (!Emotes.ContainsKey(packet.Code)) return;
+        if (player.MountedOn != null) return;
 
         var tree = player.WatchedAttributes.GetOrAddTreeAttribute("emotes");
         var isActive = tree.GetBool(packet.Code);
@@ -486,6 +492,9 @@ if (input.Equals("showcase", StringComparison.OrdinalIgnoreCase))
             showcaseApi.Event.RegisterCallback(_ => RunNext(0), 3000);
             return TextCommandResult.Success(Lang.Get("emotes:cmd-showcase-start"));
         }
+
+        if (player.MountedOn != null)
+            return TextCommandResult.Error(Lang.Get("emotes:cmd-mounted"));
 
         var key = input.ToLowerInvariant();
         if (!Emotes.TryGetValue(key, out var emote))

@@ -23,10 +23,10 @@ public class BehaviorEmotes : EntityBehavior
 
     ICoreAPI api;
     IRenderer fixYawRenderer;
-    IRenderer eyePosRenderer;
     float lockedYaw;
     bool yawLocked;
-    double targetEyeHeight;
+    double originalEyeHeight;
+    bool eyeHeightOverrideActive;
 
     public BehaviorEmotes(Entity entity) : base(entity) { }
 
@@ -102,33 +102,29 @@ public class BehaviorEmotes : EntityBehavior
 
         if (api is not ICoreClientAPI capi) return;
         if (capi.World.Player?.Entity?.EntityId != entity.EntityId) return;
+        if (entity is not EntityPlayer ep) return;
 
         if (activeCode != null && EyeHeightByEmote.TryGetValue(activeCode, out var eyeH))
-            StartEyePos(capi, eyeH);
+            StartEyePos(ep, eyeH);
         else
-            StopEyePos(capi);
+            StopEyePos(ep);
     }
 
-    void StartEyePos(ICoreClientAPI capi, double target)
+    void StartEyePos(EntityPlayer ep, double target)
     {
-        targetEyeHeight = target;
-        if (eyePosRenderer != null) return;
-        var ep = entity as EntityPlayer;
-        eyePosRenderer = new ActionRenderer(dt =>
+        if (!eyeHeightOverrideActive)
         {
-            double delta = (targetEyeHeight - ep.LocalEyePos.Y) * 5.0 * dt;
-            ep.LocalEyePos.Y = delta > 0
-                ? Math.Min(ep.LocalEyePos.Y + delta, targetEyeHeight)
-                : Math.Max(ep.LocalEyePos.Y + delta, targetEyeHeight);
-        });
-        capi.Event.RegisterRenderer(eyePosRenderer, EnumRenderStage.Before, "emote-eye-pos");
+            originalEyeHeight = ep.Properties.EyeHeight;
+            eyeHeightOverrideActive = true;
+        }
+        ep.Properties.EyeHeight = target;
     }
 
-    void StopEyePos(ICoreClientAPI capi)
+    void StopEyePos(EntityPlayer ep)
     {
-        if (eyePosRenderer == null) return;
-        capi.Event.UnregisterRenderer(eyePosRenderer, EnumRenderStage.Before);
-        eyePosRenderer = null;
+        if (!eyeHeightOverrideActive) return;
+        ep.Properties.EyeHeight = originalEyeHeight;
+        eyeHeightOverrideActive = false;
     }
 
     void LockYaw()
@@ -164,7 +160,8 @@ public class BehaviorEmotes : EntityBehavior
     {
         yawLocked = false;
 
-        if (entity is EntityPlayer ep)
+        var ep = entity as EntityPlayer;
+        if (ep != null)
         {
             ep.BodyYawLimits = null;
             ep.HeadYawLimits = null;
@@ -178,7 +175,8 @@ public class BehaviorEmotes : EntityBehavior
             fixYawRenderer = null;
         }
 
-        StopEyePos(capi);
+        if (ep != null)
+            StopEyePos(ep);
     }
 
     void StartAnimation(CustomEmote emote)

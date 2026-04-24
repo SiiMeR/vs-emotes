@@ -11,6 +11,7 @@
   "emotes:cmd-not-found": "Emote '{0}' not found. Use '/emotes list' to see available emotes.",
   "emotes:cmd-emote-stopped": "Stopped emote: {0}",
   "emotes:cmd-emote-started": "Started emote: {0}",
+  "emotes:cmd-mounted": "Cannot use emotes while mounted",
 
   "emotes:emote-seiza": "Sit (Seiza)",
   "emotes:emote-kneel": "Kneel",
