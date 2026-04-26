@@ -95,14 +95,14 @@ public class BehaviorEmotes : EntityBehavior
             if (shouldPlay) { anyActive = true; activeCode = code; }
         }
 
-        EmotesModSystem.IsEmotePlaying = anyActive;
-
         if (anyActive && !yawLocked) LockYaw();
         else if (!anyActive && yawLocked) UnlockYaw();
 
         if (api is not ICoreClientAPI capi) return;
         if (capi.World.Player?.Entity?.EntityId != entity.EntityId) return;
         if (entity is not EntityPlayer ep) return;
+
+        EmotesModSystem.IsEmotePlaying = anyActive;
 
         if (activeCode != null && EyeHeightByEmote.TryGetValue(activeCode, out var eyeH))
             StartEyePos(ep, eyeH);

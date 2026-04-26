@@ -11,7 +11,7 @@
     "DeanBro"
   ],
   "description": "Adds more custom emotes to the game.",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "dependencies": {
     "game": "*"
   }
