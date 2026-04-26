@@ -1,15 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-    <PropertyGroup Condition="$(Configuration.Contains('1.21'))">
+    <PropertyGroup>
         <VINTAGE_STORY>C:\Users\User\AppData\Roaming\VSLGameVersions\1.21.5</VINTAGE_STORY>
         <VINTAGE_STORY_DATA>C:\Users\User\AppData\Roaming\VSLInstallations\1.21.5</VINTAGE_STORY_DATA>
         <TargetFramework>net8.0</TargetFramework>
-    </PropertyGroup>
-
-    <PropertyGroup Condition="!$(Configuration.Contains('1.21'))">
-        <VINTAGE_STORY>C:\Users\User\AppData\Roaming\VSLGameVersions\1.22.0</VINTAGE_STORY>
-        <VINTAGE_STORY_DATA>C:\Users\User\AppData\Roaming\VSLInstallations\1.22.0</VINTAGE_STORY_DATA>
-        <TargetFramework>net10.0</TargetFramework>
     </PropertyGroup>
 
     <PropertyGroup>
