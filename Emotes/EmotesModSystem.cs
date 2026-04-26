@@ -206,6 +206,41 @@ public class EmotesModSystem : ModSystem
             Code = "crackingknuckles", Name = "CrackingKnuckles", DisplayName = "Crack Knuckles", Animation = "crackingknuckles",
             StopOnMovement = true, StopOnDamage = true
         },
+        ["sittingchill"] = new CustomEmote
+        {
+            Code = "sittingchill", Name = "SittingChill", DisplayName = "Sit (Chill)", Animation = "sittingchill",
+            StopOnMovement = true, StopOnDamage = true
+        },
+        ["sittingrelaxed"] = new CustomEmote
+        {
+            Code = "sittingrelaxed", Name = "SittingRelaxed", DisplayName = "Sit (Relaxed)", Animation = "sittingrelaxed",
+            StopOnMovement = true, StopOnDamage = true
+        },
+        ["sittingrefined"] = new CustomEmote
+        {
+            Code = "sittingrefined", Name = "SittingRefined", DisplayName = "Sit (Refined)", Animation = "sittingrefined",
+            StopOnMovement = true, StopOnDamage = true
+        },
+        ["sittingcalm"] = new CustomEmote
+        {
+            Code = "sittingcalm", Name = "SittingCalm", DisplayName = "Sit (Calm)", Animation = "sittingcalm",
+            StopOnMovement = true, StopOnDamage = true
+        },
+        ["sittinginnocent"] = new CustomEmote
+        {
+            Code = "sittinginnocent", Name = "SittingInnocent", DisplayName = "Sit (Innocent)", Animation = "sittinginnocent",
+            StopOnMovement = true, StopOnDamage = true
+        },
+        ["laydownsensual"] = new CustomEmote
+        {
+            Code = "laydownsensual", Name = "LayDownSensual", DisplayName = "Lay Down (Sensual)", Animation = "laydownsensual",
+            StopOnMovement = true, StopOnDamage = true
+        },
+        ["handships"] = new CustomEmote
+        {
+            Code = "handships", Name = "HandsHips", DisplayName = "Hands on Hips", Animation = "handships",
+            StopOnMovement = true, StopOnDamage = true
+        },
     };
 
     private static readonly HashSet<string> LeanEmotes = new() { "leaningcrossed", "leaninghips", "leaninghandshead" };
@@ -460,8 +495,7 @@ if (input.Equals("showcase", StringComparison.OrdinalIgnoreCase))
             {
                 if (cancelled[0]) { showcaseApi.Event.UnregisterGameTickListener(tickId[0]); return; }
                 var controls = player.ServerControls;
-                var motion = player.Pos.Motion;
-                if (!controls.TriesToMove && !controls.Jump && motion.X * motion.X + motion.Z * motion.Z <= 1e-5) return;
+                if (!controls.TriesToMove && !controls.Jump) return;
                 cancelled[0] = true;
                 showcaseApi.Event.UnregisterGameTickListener(tickId[0]);
                 StopAllEmotes(player);

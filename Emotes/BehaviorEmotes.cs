@@ -200,8 +200,7 @@ public class BehaviorEmotes : EntityBehavior
         if (entity is not EntityPlayer player) return;
         var controls = player.ServerControls;
         if (controls == null) return;
-        var motion = entity.Pos.Motion;
-        bool moving = controls.TriesToMove || controls.Jump || motion.X * motion.X + motion.Z * motion.Z > 1e-5;
+        bool moving = controls.TriesToMove || controls.Jump || controls.Sneak || controls.LeftMouseDown;
         if (!moving && !controls.FloorSitting) return;
 
         var tree = player.WatchedAttributes.GetTreeAttribute("emotes");
@@ -227,7 +226,7 @@ public class BehaviorEmotes : EntityBehavior
         if (!yawLocked) return;
 
         var controls = (entity as EntityAgent)?.Controls;
-        if (controls == null || (!controls.TriesToMove && !controls.Jump)) return;
+        if (controls == null || (!controls.TriesToMove && !controls.Jump && !controls.Sneak && !controls.LeftMouseDown)) return;
 
         UnlockYaw();
         capi.ModLoader.GetModSystem<EmotesModSystem>().SendStopEmotes();

@@ -327,6 +327,62 @@
         "easeInSpeed": 1,
         "easeOutSpeed": 2,
         "animationSpeed": 1
+      },
+      {
+        "code": "sittingchill",
+        "animation": "SittingChill",
+        "blendMode": "Add",
+        "easeInSpeed": 1,
+        "easeOutSpeed": 2,
+        "animationSpeed": 1
+      },
+      {
+        "code": "sittingrelaxed",
+        "animation": "SittingRelaxed",
+        "blendMode": "Add",
+        "easeInSpeed": 1,
+        "easeOutSpeed": 2,
+        "animationSpeed": 1
+      },
+      {
+        "code": "sittingrefined",
+        "animation": "SittingRefined",
+        "blendMode": "Add",
+        "easeInSpeed": 1,
+        "easeOutSpeed": 2,
+        "animationSpeed": 1
+      },
+      {
+        "code": "sittingcalm",
+        "animation": "SittingCalm",
+        "blendMode": "Add",
+        "easeInSpeed": 1,
+        "easeOutSpeed": 2,
+        "animationSpeed": 1
+      },
+      {
+        "code": "sittinginnocent",
+        "animation": "SittingInnocent",
+        "blendMode": "Add",
+        "easeInSpeed": 1,
+        "easeOutSpeed": 2,
+        "animationSpeed": 1
+      },
+      {
+        "code": "laydownsensual",
+        "animation": "LayDownSensual",
+        "blendMode": "Add",
+        "easeInSpeed": 1,
+        "easeOutSpeed": 2,
+        "animationSpeed": 1
+      },
+      {
+        "code": "handships",
+        "animation": "HandsHips",
+        "blendMode": "Add",
+        "easeInSpeed": 1,
+        "easeOutSpeed": 2,
+        "animationSpeed": 1
       }
     ],
     "side": "Universal"
