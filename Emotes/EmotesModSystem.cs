@@ -100,7 +100,8 @@ public class EmotesModSystem : ModSystem
         ["handshake"] = new CustomEmote
         {
             Code = "handshake", Name = "Handshake", DisplayName = "Handshake", Animation = "handshake",
-            StopOnMovement = true, StopOnDamage = true
+            StopOnMovement = true, StopOnDamage = true, StopAfterAnimation = true, RequiresTarget = true,
+            PairDistance = 0.7f
         },
         ["layingback"] = new CustomEmote
         {
@@ -109,7 +110,8 @@ public class EmotesModSystem : ModSystem
         },
         ["refinedsalute"] = new CustomEmote
         {
-            Code = "refinedsalute", Name = "RefinedSalute", DisplayName = "Salute (Refined)", Animation = "refinedsalute",
+            Code = "refinedsalute", Name = "RefinedSalute", DisplayName = "Salute (Refined)",
+            Animation = "refinedsalute",
             StopOnMovement = true, StopOnDamage = true
         },
         ["salute"] = new CustomEmote
@@ -179,7 +181,8 @@ public class EmotesModSystem : ModSystem
         },
         ["prayerstanding"] = new CustomEmote
         {
-            Code = "prayerstanding", Name = "PrayerStanding", DisplayName = "Prayer (Standing)", Animation = "prayerstanding",
+            Code = "prayerstanding", Name = "PrayerStanding", DisplayName = "Prayer (Standing)",
+            Animation = "prayerstanding",
             StopOnMovement = true, StopOnDamage = true
         },
         ["kisshand"] = new CustomEmote
@@ -204,7 +207,8 @@ public class EmotesModSystem : ModSystem
         },
         ["crackingknuckles"] = new CustomEmote
         {
-            Code = "crackingknuckles", Name = "CrackingKnuckles", DisplayName = "Crack Knuckles", Animation = "crackingknuckles",
+            Code = "crackingknuckles", Name = "CrackingKnuckles", DisplayName = "Crack Knuckles",
+            Animation = "crackingknuckles",
             StopOnMovement = true, StopOnDamage = true
         },
         ["sittingchill"] = new CustomEmote
@@ -214,12 +218,14 @@ public class EmotesModSystem : ModSystem
         },
         ["sittingrelaxed"] = new CustomEmote
         {
-            Code = "sittingrelaxed", Name = "SittingRelaxed", DisplayName = "Sit (Relaxed)", Animation = "sittingrelaxed",
+            Code = "sittingrelaxed", Name = "SittingRelaxed", DisplayName = "Sit (Relaxed)",
+            Animation = "sittingrelaxed",
             StopOnMovement = true, StopOnDamage = true
         },
         ["sittingrefined"] = new CustomEmote
         {
-            Code = "sittingrefined", Name = "SittingRefined", DisplayName = "Sit (Refined)", Animation = "sittingrefined",
+            Code = "sittingrefined", Name = "SittingRefined", DisplayName = "Sit (Refined)",
+            Animation = "sittingrefined",
             StopOnMovement = true, StopOnDamage = true
         },
         ["sittingcalm"] = new CustomEmote
@@ -229,12 +235,14 @@ public class EmotesModSystem : ModSystem
         },
         ["sittinginnocent"] = new CustomEmote
         {
-            Code = "sittinginnocent", Name = "SittingInnocent", DisplayName = "Sit (Innocent)", Animation = "sittinginnocent",
+            Code = "sittinginnocent", Name = "SittingInnocent", DisplayName = "Sit (Innocent)",
+            Animation = "sittinginnocent",
             StopOnMovement = true, StopOnDamage = true
         },
         ["laydownsensual"] = new CustomEmote
         {
-            Code = "laydownsensual", Name = "LayDownSensual", DisplayName = "Lay Down (Sensual)", Animation = "laydownsensual",
+            Code = "laydownsensual", Name = "LayDownSensual", DisplayName = "Lay Down (Sensual)",
+            Animation = "laydownsensual",
             StopOnMovement = true, StopOnDamage = true
         },
         ["handships"] = new CustomEmote
@@ -244,9 +252,24 @@ public class EmotesModSystem : ModSystem
         },
         ["hug"] = new CustomEmote
         {
-            Code = "hug", Name = "Hug", DisplayName = "Hug", Animation = "hug",
-            StopOnMovement = true, StopOnDamage = true, StopAfterAnimation = true, RequiresTarget = true, PairDistance = 0.5f
-        },
+            Code = "hug", Name = "Hug", DisplayName = "Hug (Intimate)", Animation = "hug",
+            StopOnMovement = true, StopOnDamage = true, StopAfterAnimation = true, RequiresTarget = true,
+            PairDistance = 0.1f        },
+        ["kiss"] = new CustomEmote
+        {
+            Code = "kiss", Name = "Kiss", DisplayName = "Kiss (Intimate)", Animation = "kiss",
+            StopOnMovement = true, StopOnDamage = true, StopAfterAnimation = true, RequiresTarget = true,
+            PairDistance = 0.2f        },
+        ["hugfriendly"] = new CustomEmote
+        {
+            Code = "hugfriendly", Name = "HugFriendly", DisplayName = "Hug (Friendly)", Animation = "hugfriendly",
+            StopOnMovement = true, StopOnDamage = true, StopAfterAnimation = true, RequiresTarget = true,
+            PairDistance = 0.15f        },
+        ["smooch"] = new CustomEmote
+        {
+            Code = "smooch", Name = "Smooch", DisplayName = "Smooch", Animation = "smooch",
+            StopOnMovement = true, StopOnDamage = true, StopAfterAnimation = true, RequiresTarget = true,
+            PairDistance = 0.3f        },
     };
 
     private static readonly HashSet<string> LeanEmotes = new() { "leaningcrossed", "leaninghips", "leaninghandshead" };
@@ -259,15 +282,14 @@ public class EmotesModSystem : ModSystem
         (BlockFacing.WEST, (float)(Math.PI / 2))
     };
 
-    private ICoreClientAPI clientApi;
-    private ICoreServerAPI serverApi;
-
-    private IClientNetworkChannel clientChannel;
-    private IServerNetworkChannel serverChannel;
-
     private readonly Dictionary<string, PairRequest> pairRequests = new();
 
-    private record PairRequest(string InitiatorUid, string TargetUid, string EmoteCode, DateTime RequestTime);
+    private EmotesConfig config;
+    private ICoreClientAPI clientApi;
+
+    private IClientNetworkChannel clientChannel;
+    private ICoreServerAPI serverApi;
+    private IServerNetworkChannel serverChannel;
 
     public static bool IsEmotePlaying { get; set; }
 
@@ -301,6 +323,7 @@ public class EmotesModSystem : ModSystem
             clientApi.TriggerIngameError(this, "emote-mounted", Lang.Get("emotes:cmd-mounted"));
             return;
         }
+
         clientChannel?.SendPacket(new EmotePacket { Code = code });
     }
 
@@ -318,7 +341,11 @@ public class EmotesModSystem : ModSystem
 
     public override void Dispose()
     {
-        if (clientApi?.ModLoader.IsModEnabled("overhaullib") == true) CombatOverhaulPatch.Remove();
+        if (clientApi?.ModLoader.IsModEnabled("overhaullib") == true)
+        {
+            CombatOverhaulPatch.Remove();
+        }
+
         base.Dispose();
     }
 
@@ -326,7 +353,10 @@ public class EmotesModSystem : ModSystem
     {
         base.StartClientSide(api);
         clientApi = api;
-        if (api.ModLoader.IsModEnabled("overhaullib")) CombatOverhaulPatch.Apply(api);
+        if (api.ModLoader.IsModEnabled("overhaullib"))
+        {
+            CombatOverhaulPatch.Apply(api);
+        }
 
         clientChannel = api.Network.RegisterChannel(ChannelName)
             .RegisterMessageType<EmotePacket>()
@@ -354,6 +384,8 @@ public class EmotesModSystem : ModSystem
     {
         base.StartServerSide(api);
         serverApi = api;
+        config = api.LoadModConfig<EmotesConfig>("emotes.json") ?? new EmotesConfig();
+        api.StoreModConfig(config, "emotes.json");
 
         serverChannel = api.Network.RegisterChannel(ChannelName)
             .RegisterMessageType<EmotePacket>()
@@ -366,48 +398,51 @@ public class EmotesModSystem : ModSystem
             .WithDescription(Lang.Get("emotes:cmd-description"));
 
         cmd.BeginSubCommand("play")
-                .RequiresPlayer()
-                .WithArgs(api.ChatCommands.Parsers.Word("name"))
-                .HandleWith(HandlePlayCommand)
+            .RequiresPlayer()
+            .WithArgs(api.ChatCommands.Parsers.Word("name"))
+            .HandleWith(HandlePlayCommand)
             .EndSubCommand();
 
         cmd.BeginSubCommand("list")
-                .HandleWith(HandleListCommand)
+            .HandleWith(HandleListCommand)
             .EndSubCommand();
 
         cmd.BeginSubCommand("stop")
-                .RequiresPlayer()
-                .HandleWith(HandleStopCommand)
+            .RequiresPlayer()
+            .HandleWith(HandleStopCommand)
             .EndSubCommand();
 
         cmd.BeginSubCommand("showcase")
-                .RequiresPlayer()
-                .HandleWith(HandleShowcaseCommand)
+            .RequiresPlayer()
+            .HandleWith(HandleShowcaseCommand)
             .EndSubCommand();
 
         cmd.BeginSubCommand("accept")
-                .RequiresPlayer()
-                .HandleWith(OnPairAccepted)
+            .RequiresPlayer()
+            .HandleWith(OnPairAccepted)
             .EndSubCommand();
 
         cmd.BeginSubCommand("refuse")
-                .RequiresPlayer()
-                .HandleWith(OnPairRefused)
+            .RequiresPlayer()
+            .HandleWith(OnPairRefused)
             .EndSubCommand();
 
         foreach (var (code, _) in Emotes.Where(kv => kv.Value.RequiresTarget))
         {
             var capturedCode = code;
             cmd.BeginSubCommand(code)
-                    .RequiresPlayer()
-                    .HandleWith(args => OnPairInitiate(capturedCode, args))
+                .RequiresPlayer()
+                .HandleWith(args => OnPairInitiate(capturedCode, args))
                 .EndSubCommand();
         }
     }
 
     private void OnEmotePacket(IServerPlayer fromPlayer, EmotePacket packet)
     {
-        if (fromPlayer.Entity is not EntityPlayer player) return;
+        if (fromPlayer.Entity is not EntityPlayer player)
+        {
+            return;
+        }
 
         if (packet.ForceStop)
         {
@@ -415,26 +450,40 @@ public class EmotesModSystem : ModSystem
             return;
         }
 
-        if (!Emotes.TryGetValue(packet.Code, out var emoteInfo)) return;
+        if (!Emotes.TryGetValue(packet.Code, out var emoteInfo))
+        {
+            return;
+        }
 
         if (emoteInfo.RequiresTarget)
         {
-            OnPairInitiate(packet.Code, new TextCommandCallingArgs { Caller = new Caller { Player = fromPlayer, Entity = fromPlayer.Entity } });
+            OnPairInitiate(packet.Code,
+                new TextCommandCallingArgs { Caller = new Caller { Player = fromPlayer, Entity = fromPlayer.Entity } });
             return;
         }
-        if (player.MountedOn != null) return;
+
+        if (player.MountedOn != null)
+        {
+            return;
+        }
 
         var tree = player.WatchedAttributes.GetOrAddTreeAttribute("emotes");
         var isActive = tree.GetBool(packet.Code);
 
         if (!isActive && LeanEmotes.Contains(packet.Code))
+        {
             TrySnapToWall(fromPlayer);
+        }
 
         foreach (var code in Emotes.Keys)
+        {
             tree.SetBool(code, false);
+        }
 
         if (!isActive)
+        {
             tree.SetBool(packet.Code, true);
+        }
 
         player.WatchedAttributes.MarkPathDirty("emotes");
     }
@@ -460,7 +509,7 @@ public class EmotesModSystem : ModSystem
         {
             var norm = facing.Normali;
             BlockPos wallPos = null;
-            for (int dist = 1; dist <= 2; dist++)
+            for (var dist = 1; dist <= 2; dist++)
             {
                 var candidate = blockPos.AddCopy(norm.X * dist, 0, norm.Z * dist);
                 if (IsSolidWall(world, candidate, facing))
@@ -470,7 +519,10 @@ public class EmotesModSystem : ModSystem
                 }
             }
 
-            if (wallPos == null) continue;
+            if (wallPos == null)
+            {
+                continue;
+            }
 
             var gap = entity.Properties.CollisionBoxSize?.X / 2.0 ?? 0.3;
             double snapX = pos.X, snapZ = pos.Z;
@@ -518,23 +570,27 @@ public class EmotesModSystem : ModSystem
         behavior.Initialize(entity.Properties, null);
     }
 
-    private float? SnapPairPositions(IServerPlayer initiatorPlayer, EntityPlayer initiator, Entity target, float pairDistance)
+    private float? SnapPairPositions(IServerPlayer initiatorPlayer, EntityPlayer initiator, Entity target,
+        float pairDistance)
     {
-        double dx = target.Pos.X - initiator.Pos.X;
-        double dz = target.Pos.Z - initiator.Pos.Z;
-        double dist = Math.Sqrt(dx * dx + dz * dz);
+        var dx = target.Pos.X - initiator.Pos.X;
+        var dz = target.Pos.Z - initiator.Pos.Z;
+        var dist = Math.Sqrt(dx * dx + dz * dz);
 
-        if (dist > 3.0 || dist < 0.01) return null;
+        if (dist > 3.0 || dist < 0.01)
+        {
+            return null;
+        }
 
-        double midX = (initiator.Pos.X + target.Pos.X) / 2;
-        double midZ = (initiator.Pos.Z + target.Pos.Z) / 2;
-        double normX = dx / dist;
-        double normZ = dz / dist;
+        var midX = (initiator.Pos.X + target.Pos.X) / 2;
+        var midZ = (initiator.Pos.Z + target.Pos.Z) / 2;
+        var normX = dx / dist;
+        var normZ = dz / dist;
 
         initiator.TeleportToDouble(midX - normX * pairDistance, initiator.Pos.Y, midZ - normZ * pairDistance);
         target.TeleportToDouble(midX + normX * pairDistance, initiator.Pos.Y, midZ + normZ * pairDistance);
 
-        float yaw = (float)Math.Atan2(dx, dz);
+        var yaw = (float)Math.Atan2(dx, dz);
         initiator.Pos.Yaw = yaw;
         target.Pos.Yaw = yaw + (float)Math.PI;
 
@@ -545,19 +601,28 @@ public class EmotesModSystem : ModSystem
     private TextCommandResult OnPairInitiate(string emoteCode, TextCommandCallingArgs args)
     {
         if (args.Caller.Entity is not EntityPlayer initiator)
+        {
             return TextCommandResult.Error(Lang.Get("emotes:cmd-only-players"));
+        }
 
         var initiatorPlayer = (IServerPlayer)args.Caller.Player;
         var emote = Emotes[emoteCode];
         var selected = initiator.EntitySelection?.Entity;
 
         if (selected == null)
+        {
             return TextCommandResult.Error(Lang.Get("emotes:pair-no-target"));
+        }
 
         if (selected is EntityPlayerBot bot)
         {
             var botYaw = SnapPairPositions(initiatorPlayer, initiator, bot, emote.PairDistance);
-            if (botYaw == null) return TextCommandResult.Error(Lang.Get("emotes:pair-too-far"));
+            if (botYaw == null)
+            {
+                return TextCommandResult.Error(Lang.Get("emotes:pair-too-far"));
+            }
+
+            StopAllEmotes(initiator);
             var botTree = initiator.WatchedAttributes.GetOrAddTreeAttribute("emotes");
             botTree.SetFloat("pairYaw", botYaw.Value);
             SetEmoteState(initiator, emoteCode, true);
@@ -565,23 +630,66 @@ public class EmotesModSystem : ModSystem
         }
 
         if (selected is not EntityPlayer target)
+        {
             return TextCommandResult.Error(Lang.Get("emotes:pair-no-target"));
+        }
+
         if (target.EntityId == initiator.EntityId)
+        {
             return TextCommandResult.Error(Lang.Get("emotes:pair-self"));
+        }
+
         if (initiator.Pos.DistanceTo(target.Pos) > 3.0)
+        {
             return TextCommandResult.Error(Lang.Get("emotes:pair-too-far"));
+        }
+
         if (target.Player is not IServerPlayer targetPlayer)
+        {
             return TextCommandResult.Error(Lang.Get("emotes:pair-no-target"));
+        }
 
-        pairRequests[initiatorPlayer.PlayerUID] = new PairRequest(initiatorPlayer.PlayerUID, targetPlayer.PlayerUID, emoteCode, DateTime.Now);
+        if (!config.PairedEmotesRequireConsent)
+            return ExecutePair(emoteCode, emote, initiatorPlayer, initiator, targetPlayer, target);
 
-        var accept = $"<a href=\"command:///emotes accept\">Accept</a>";
-        var refuse = $"<a href=\"command:///emotes refuse\">Refuse</a>";
+        pairRequests[initiatorPlayer.PlayerUID] = new PairRequest(initiatorPlayer.PlayerUID, targetPlayer.PlayerUID,
+            emoteCode, DateTime.Now);
+
+        var accept = "<a href=\"command:///emotes accept\">Accept</a>";
+        var refuse = "<a href=\"command:///emotes refuse\">Refuse</a>";
         targetPlayer.SendMessage(GlobalConstants.CurrentChatGroup,
-            Lang.Get("emotes:pair-request-received", initiator.GetName(), Lang.Get("emotes:emote-" + emoteCode), accept, refuse),
+            Lang.Get("emotes:pair-request-received", initiator.GetName(), Lang.Get("emotes:emote-" + emoteCode), accept,
+                refuse),
             EnumChatType.GroupInvite);
 
         return TextCommandResult.Success(Lang.Get("emotes:pair-request-sent", target.GetName()));
+    }
+
+    private TextCommandResult ExecutePair(string emoteCode, CustomEmote emote, IServerPlayer initiatorPlayer,
+        EntityPlayer initiatorEntity, IServerPlayer targetPlayer, EntityPlayer targetEntity)
+    {
+        var yaw = SnapPairPositions(initiatorPlayer, initiatorEntity, targetEntity, emote.PairDistance);
+        if (yaw == null)
+            return TextCommandResult.Error(Lang.Get("emotes:pair-too-far"));
+
+        var targetYaw = yaw.Value + (float)Math.PI;
+        serverChannel.SendPacket(new LeanSnapPacket { Yaw = targetYaw }, targetPlayer);
+
+        StopAllEmotes(initiatorEntity);
+        StopAllEmotes(targetEntity);
+
+        var initiatorTree = initiatorEntity.WatchedAttributes.GetOrAddTreeAttribute("emotes");
+        initiatorTree.SetString("pairPartner", targetPlayer.PlayerUID);
+        initiatorTree.SetFloat("pairYaw", yaw.Value);
+
+        var targetTree = targetEntity.WatchedAttributes.GetOrAddTreeAttribute("emotes");
+        targetTree.SetString("pairPartner", initiatorPlayer.PlayerUID);
+        targetTree.SetFloat("pairYaw", targetYaw);
+
+        SetEmoteState(initiatorEntity, emoteCode, true);
+        SetEmoteState(targetEntity, emoteCode, true);
+
+        return TextCommandResult.Success();
     }
 
     private TextCommandResult OnPairAccepted(TextCommandCallingArgs args)
@@ -606,25 +714,8 @@ public class EmotesModSystem : ModSystem
             callerPlayer.Entity is not EntityPlayer targetEntity)
             return TextCommandResult.Error(Lang.Get("emotes:pair-no-target"));
 
-        var emote = Emotes[request.EmoteCode];
-        var yaw = SnapPairPositions(initiatorPlayer, initiatorEntity, targetEntity, emote.PairDistance);
-        if (yaw == null) return TextCommandResult.Error(Lang.Get("emotes:pair-too-far"));
-
-        float targetYaw = yaw.Value + (float)Math.PI;
-        serverChannel.SendPacket(new LeanSnapPacket { Yaw = targetYaw }, callerPlayer);
-
-        var initiatorTree = initiatorEntity.WatchedAttributes.GetOrAddTreeAttribute("emotes");
-        initiatorTree.SetString("pairPartner", callerPlayer.PlayerUID);
-        initiatorTree.SetFloat("pairYaw", yaw.Value);
-
-        var targetTree = targetEntity.WatchedAttributes.GetOrAddTreeAttribute("emotes");
-        targetTree.SetString("pairPartner", initiatorPlayer.PlayerUID);
-        targetTree.SetFloat("pairYaw", targetYaw);
-
-        SetEmoteState(initiatorEntity, request.EmoteCode, true);
-        SetEmoteState(targetEntity, request.EmoteCode, true);
-
-        return TextCommandResult.Success();
+        return ExecutePair(request.EmoteCode, Emotes[request.EmoteCode], initiatorPlayer, initiatorEntity, callerPlayer,
+            targetEntity);
     }
 
     private TextCommandResult OnPairRefused(TextCommandCallingArgs args)
@@ -635,7 +726,9 @@ public class EmotesModSystem : ModSystem
             .FirstOrDefault(r => r.TargetUid == callerPlayer.PlayerUID);
 
         if (request == null)
+        {
             return TextCommandResult.Error(Lang.Get("emotes:pair-no-request"));
+        }
 
         pairRequests.Remove(request.InitiatorUid);
 
@@ -653,13 +746,23 @@ public class EmotesModSystem : ModSystem
     {
         var tree = player.WatchedAttributes.GetTreeAttribute("emotes");
         var partnerUid = tree?.GetString("pairPartner");
-        if (string.IsNullOrEmpty(partnerUid)) return;
+        if (string.IsNullOrEmpty(partnerUid))
+        {
+            return;
+        }
 
         tree.SetString("pairPartner", "");
         player.WatchedAttributes.MarkPathDirty("emotes");
 
-        if (serverApi.World.PlayerByUid(partnerUid) is not IServerPlayer partnerPlayer) return;
-        if (partnerPlayer.Entity is not EntityPlayer partnerEntity) return;
+        if (serverApi.World.PlayerByUid(partnerUid) is not IServerPlayer partnerPlayer)
+        {
+            return;
+        }
+
+        if (partnerPlayer.Entity is not EntityPlayer partnerEntity)
+        {
+            return;
+        }
 
         partnerEntity.WatchedAttributes.GetOrAddTreeAttribute("emotes").SetString("pairPartner", "");
         StopAllEmotes(partnerEntity);
@@ -668,36 +771,56 @@ public class EmotesModSystem : ModSystem
     private TextCommandResult HandlePlayCommand(TextCommandCallingArgs args)
     {
         if (args.Caller.Entity is not EntityPlayer player)
+        {
             return TextCommandResult.Error(Lang.Get("emotes:cmd-only-players"));
+        }
+
         if (player.MountedOn != null)
+        {
             return TextCommandResult.Error(Lang.Get("emotes:cmd-mounted"));
+        }
 
         var key = ((string)args[0]).ToLowerInvariant();
         if (!Emotes.TryGetValue(key, out var emote) || emote.RequiresTarget)
+        {
             return TextCommandResult.Error(Lang.Get("emotes:cmd-not-found", key));
+        }
 
         var tree = player.WatchedAttributes.GetOrAddTreeAttribute("emotes");
         var isActive = tree.GetBool(emote.Code);
         foreach (var code in Emotes.Keys)
+        {
             tree.SetBool(code, false);
+        }
+
         if (!isActive)
+        {
             tree.SetBool(emote.Code, true);
+        }
+
         player.WatchedAttributes.MarkPathDirty("emotes");
 
         var displayName = Lang.Get("emotes:emote-" + emote.Code);
-        return TextCommandResult.Success(isActive ? Lang.Get("emotes:cmd-emote-stopped", displayName) : Lang.Get("emotes:cmd-emote-started", displayName));
+        return TextCommandResult.Success(isActive
+            ? Lang.Get("emotes:cmd-emote-stopped", displayName)
+            : Lang.Get("emotes:cmd-emote-started", displayName));
     }
 
     private TextCommandResult HandleListCommand(TextCommandCallingArgs args)
     {
         return TextCommandResult.Success(Lang.Get("emotes:cmd-available-emotes",
-            string.Join(", ", Emotes.Values.Where(e => !e.RequiresTarget).Select(e => $"{e.Code} ({Lang.Get("emotes:emote-" + e.Code)})"))));
+            string.Join(", ",
+                Emotes.Values.Where(e => !e.RequiresTarget)
+                    .Select(e => $"{e.Code} ({Lang.Get("emotes:emote-" + e.Code)})"))));
     }
 
     private TextCommandResult HandleStopCommand(TextCommandCallingArgs args)
     {
         if (args.Caller.Entity is not EntityPlayer player)
+        {
             return TextCommandResult.Error(Lang.Get("emotes:cmd-only-players"));
+        }
+
         StopAllEmotes(player);
         return TextCommandResult.Success(Lang.Get("emotes:cmd-all-stopped"));
     }
@@ -705,7 +828,9 @@ public class EmotesModSystem : ModSystem
     private TextCommandResult HandleShowcaseCommand(TextCommandCallingArgs args)
     {
         if (args.Caller.Entity is not EntityPlayer player)
+        {
             return TextCommandResult.Error(Lang.Get("emotes:cmd-only-players"));
+        }
 
         var codes = Emotes.Keys.ToList();
         var cancelled = new bool[1];
@@ -713,9 +838,18 @@ public class EmotesModSystem : ModSystem
 
         tickId[0] = serverApi.Event.RegisterGameTickListener(_ =>
         {
-            if (cancelled[0]) { serverApi.Event.UnregisterGameTickListener(tickId[0]); return; }
+            if (cancelled[0])
+            {
+                serverApi.Event.UnregisterGameTickListener(tickId[0]);
+                return;
+            }
+
             var controls = player.ServerControls;
-            if (!controls.TriesToMove && !controls.Jump) return;
+            if (!controls.TriesToMove && !controls.Jump)
+            {
+                return;
+            }
+
             cancelled[0] = true;
             serverApi.Event.UnregisterGameTickListener(tickId[0]);
             StopAllEmotes(player);
@@ -723,21 +857,33 @@ public class EmotesModSystem : ModSystem
 
         void RunNext(int index)
         {
-            if (!player.Alive || cancelled[0]) return;
+            if (!player.Alive || cancelled[0])
+            {
+                return;
+            }
+
             if (index >= codes.Count)
             {
                 StopAllEmotes(player);
                 serverApi.Event.UnregisterGameTickListener(tickId[0]);
                 return;
             }
+
             var t = player.WatchedAttributes.GetOrAddTreeAttribute("emotes");
             foreach (var code in Emotes.Keys)
+            {
                 t.SetBool(code, false);
+            }
+
             t.SetBool(codes[index], true);
             player.WatchedAttributes.MarkPathDirty("emotes");
             serverApi.Event.RegisterCallback(_ =>
             {
-                if (!player.Alive || cancelled[0]) return;
+                if (!player.Alive || cancelled[0])
+                {
+                    return;
+                }
+
                 StopAllEmotes(player);
                 serverApi.Event.RegisterCallback(_ => RunNext(index + 1), 1000);
             }, 4000);
@@ -746,4 +892,6 @@ public class EmotesModSystem : ModSystem
         serverApi.Event.RegisterCallback(_ => RunNext(0), 3000);
         return TextCommandResult.Success(Lang.Get("emotes:cmd-showcase-start"));
     }
+
+    private record PairRequest(string InitiatorUid, string TargetUid, string EmoteCode, DateTime RequestTime);
 }

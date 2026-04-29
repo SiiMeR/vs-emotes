@@ -1,5 +1,4 @@
 using System.Linq;
-using Cairo;
 using Vintagestory.API.Client;
 using Vintagestory.API.Common;
 using Vintagestory.API.Common.Entities;
@@ -11,8 +10,7 @@ namespace Emotes;
 public class GuiDialogEmotePicker : GuiDialog
 {
     private const double Pad = 10;
-    private const double TabH = 30;
-    private const double TabW = 120;
+    private const double TabW = 100;
     private const double BtnW = 195;
     private const double BtnH = 36;
     private const double BtnPad = 3;
@@ -21,9 +19,21 @@ public class GuiDialogEmotePicker : GuiDialog
     private static readonly string[] VanillaEmoteCodes =
         { "wave", "cheer", "shrug", "cry", "nod", "facepalm", "bow", "laugh", "rage" };
 
-    private readonly EmotesModSystem modSystem;
+    private static readonly (string LangKey, string[] Codes)[] NamedCategories =
+    {
+        ("cat-sitting",    new[] { "seiza", "prayer", "sittingcool", "sittingchill", "sittingrelaxed", "sittingrefined", "sittingcalm", "sittinginnocent", "squatting", "kneel" }),
+        ("cat-laying",     new[] { "layingdown", "layingback", "laydownsensual" }),
+        ("cat-friendly",   new[] { "blowkiss", "clapping", "dapup", "kisshand", "politebow", "victory" }),
+        ("cat-neutral",    new[] { "atease", "crossedarms", "crossedarmsthinking", "handrub", "handships", "handup", "knocking", "leaningcrossed", "leaninghandshead", "leaninghips", "martialarts", "noblesalute", "pointing", "prayerstanding", "refinedsalute", "salute", "scanning", "surrender", "thinkinghard", "crackingknuckles" }),
+        ("cat-aggressive", new[] { "bringiton", "chestthump", "engarde", "flippingoff", "slitthroat" }),
+        ("cat-paired",     new[] { "hug", "hugfriendly", "handshake", "kiss", "smooch" }),
+    };
 
-    private int activeTab;
+    private static int VanillaIndex => NamedCategories.Length;
+    private static int TabCount     => NamedCategories.Length + 1;
+
+    private readonly EmotesModSystem modSystem;
+    private int activeCategory;
     private Entity cachedEntitySelection;
 
     public GuiDialogEmotePicker(ICoreClientAPI capi, EmotesModSystem modSystem) : base(capi)
@@ -33,48 +43,34 @@ public class GuiDialogEmotePicker : GuiDialog
 
     public override string ToggleKeyCombinationCode => "emotepicker";
     public override bool PrefersUngrabbedMouse => false;
-
-    public override bool ShouldReceiveKeyboardEvents()
-    {
-        return false;
-    }
+    public override bool ShouldReceiveKeyboardEvents() => false;
 
     private void ComposeDialog()
     {
-        string[] codes;
-        string[] names;
+        bool isVanilla = activeCategory == VanillaIndex;
 
-        if (activeTab == 1)
+        string[] codes, names;
+        if (isVanilla)
         {
             codes = VanillaEmoteCodes;
-            names = VanillaEmoteCodes.Select(c => Lang.Get("emotes:emote-" + c)).ToArray();
+            names = codes.Select(c => Lang.Get("emotes:emote-" + c)).ToArray();
         }
         else
         {
-            var emotes = EmotesModSystem.GetEmotes().Values
-                .Select(e => (e.Code, Name: Lang.Get("emotes:emote-" + e.Code)))
+            var emotes = NamedCategories[activeCategory].Codes
+                .Where(c => EmotesModSystem.GetEmotes().ContainsKey(c))
+                .Select(c => (Code: c, Name: Lang.Get("emotes:emote-" + c)))
                 .OrderBy(e => e.Name)
                 .ToArray();
             codes = emotes.Select(e => e.Code).ToArray();
             names = emotes.Select(e => e.Name).ToArray();
         }
 
-        const double TabGap = 8;
-        const double BottomPad = 8;
-
-        var rows = (names.Length + Cols - 1) / Cols;
+        var rows = System.Math.Max(1, (names.Length + Cols - 1) / Cols);
         var contentW = Cols * (BtnW + BtnPad);
-        var contentH = rows * (BtnH + BtnPad);
-        var gridStartY = GuiStyle.TitleBarHeight + TabH + TabGap;
+        var gridStartY = GuiStyle.TitleBarHeight + Pad;
 
-        var tabs = new GuiTab[]
-        {
-            new() { Name = Lang.Get("emotes:tab-custom"), DataInt = 0 },
-            new() { Name = Lang.Get("emotes:tab-vanilla"), DataInt = 1 }
-        };
-
-        var tabsBounds = ElementBounds.Fixed(0, GuiStyle.TitleBarHeight, tabs.Length * TabW, TabH);
-        var contentBounds = ElementBounds.Fixed(0, 0, contentW, gridStartY - Pad + contentH + BottomPad)
+        var contentBounds = ElementBounds.Fixed(0, 0, contentW, gridStartY - Pad + rows * (BtnH + BtnPad) + 8)
             .WithFixedPadding(Pad);
         contentBounds.BothSizing = ElementSizing.Fixed;
 
@@ -82,62 +78,55 @@ public class GuiDialogEmotePicker : GuiDialog
             .WithAlignment(EnumDialogArea.RightMiddle)
             .WithFixedAlignmentOffset(-GuiStyle.DialogToScreenPadding, 0);
 
-        var font = CairoFont.WhiteSmallText();
-        var selectedFont = CairoFont.WhiteSmallText().WithWeight(FontWeight.Bold);
-        var btnFont = CairoFont.SmallButtonText();
+        var tabBounds = ElementBounds.Fixed(-(Pad + TabW), GuiStyle.TitleBarHeight, TabW, TabCount * 32.0);
+
+        var guiTabs = new GuiTab[TabCount];
+        for (int i = 0; i < NamedCategories.Length; i++)
+            guiTabs[i] = new GuiTab { Name = Lang.Get("emotes:" + NamedCategories[i].LangKey), DataInt = i };
+        guiTabs[VanillaIndex] = new GuiTab { Name = Lang.Get("emotes:cat-vanilla"), DataInt = VanillaIndex };
 
         var composer = capi.Gui
             .CreateCompo("emotepicker", dialogBounds)
             .AddShadedDialogBG(contentBounds)
             .AddDialogTitleBar(Lang.Get("emotes:dialog-title"), () => TryClose())
             .BeginChildElements(contentBounds)
-            .AddHorizontalTabs(tabs, tabsBounds, OnTabClicked, font, selectedFont, "tabs");
-
-        composer.GetHorizontalTabs("tabs").activeElement = activeTab;
+            .AddVerticalTabs(guiTabs, tabBounds, (idx, _) => { activeCategory = idx; ComposeDialog(); }, "tabs");
 
         for (var i = 0; i < names.Length; i++)
         {
-            var col = i % Cols;
-            var row = i / Cols;
-            var x = col * (BtnW + BtnPad);
-            var y = gridStartY + row * (BtnH + BtnPad);
-            var btnBounds = ElementBounds.Fixed(x, y, BtnW, BtnH);
-            var captured = i;
+            var x = (i % Cols) * (BtnW + BtnPad);
+            var y = gridStartY + (i / Cols) * (BtnH + BtnPad);
             var capturedCode = codes[i];
             composer.AddSmallButton(names[i], () =>
+            {
+                if (isVanilla)
                 {
-                    if (activeTab == 1)
+                    capi.SendChatMessage("/emote " + capturedCode);
+                }
+                else
+                {
+                    if (EmotesModSystem.GetEmotes().TryGetValue(capturedCode, out var emote)
+                        && emote.RequiresTarget
+                        && cachedEntitySelection is not EntityPlayer and not EntityPlayerBot)
                     {
-                        capi.SendChatMessage("/emote " + capturedCode);
+                        capi.TriggerIngameError(this, "emote-target-required", Lang.Get("emotes:pair-requires-target"));
+                        TryClose();
+                        return true;
                     }
-                    else
-                    {
-                        if (EmotesModSystem.GetEmotes().TryGetValue(capturedCode, out var emote)
-                            && emote.RequiresTarget
-                            && cachedEntitySelection is not EntityPlayer and not EntityPlayerBot)
-                        {
-                            capi.TriggerIngameError(this, "emote-target-required",
-                                Lang.Get("emotes:pair-requires-target"));
-                            TryClose();
-                            return true;
-                        }
-
-                        modSystem.SendToggleEmote(capturedCode);
-                    }
-
-                    TryClose();
-                    return true;
-                }, btnBounds, EnumButtonStyle.Normal, $"btn-{i}");
+                    modSystem.SendToggleEmote(capturedCode);
+                }
+                TryClose();
+                return true;
+            }, ElementBounds.Fixed(x, y, BtnW, BtnH), EnumButtonStyle.Normal, $"btn-{i}");
         }
 
         composer.EndChildElements().Compose();
-        SingleComposer = composer;
-    }
 
-    private void OnTabClicked(int tabDataInt)
-    {
-        activeTab = tabDataInt;
-        ComposeDialog();
+        for (int i = 0; i < guiTabs.Length; i++) guiTabs[i].Active = false;
+        guiTabs[activeCategory].Active = true;
+        composer.GetVerticalTab("tabs").ActiveElement = activeCategory;
+
+        SingleComposer = composer;
     }
 
     public override void OnGuiOpened()
