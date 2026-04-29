@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Vintagestory.API.Client;
 using Vintagestory.API.Common;
 using Vintagestory.API.Common.Entities;
@@ -12,13 +13,19 @@ public class BehaviorEmotes : EntityBehavior
 {
     static readonly Dictionary<string, double> EyeHeightByEmote = new()
     {
-        ["seiza"]      = 0.97,
-        ["kneel"]      = 1.09,
-        ["prayer"]     = 0.97,
-        ["sittingcool"]= 0.89,
-        ["squatting"]  = 0.95,
-        ["layingback"] = 0.2,
-        ["layingdown"] = 0.2,
+        ["seiza"]          = 0.97,
+        ["kneel"]          = 1.09,
+        ["prayer"]         = 0.97,
+        ["sittingcool"]    = 0.89,
+        ["sittingchill"]   = 0.89,
+        ["sittingrelaxed"] = 0.89,
+        ["sittingrefined"] = 0.89,
+        ["sittingcalm"]    = 0.89,
+        ["sittinginnocent"]= 0.89,
+        ["squatting"]      = 0.95,
+        ["layingback"]     = 0.2,
+        ["layingdown"]     = 0.2,
+        ["laydownsensual"] = 0.2,
     };
 
     ICoreAPI api;
@@ -41,6 +48,7 @@ public class BehaviorEmotes : EntityBehavior
         {
             EmotesModSystem.StopAllEmotes(player);
             entity.WatchedAttributes.RegisterModifiedListener("mountedOn", OnMountChanged);
+            entity.WatchedAttributes.RegisterModifiedListener("emotes", OnEmotesChangedServer);
         }
 
         if (api.Side != EnumAppSide.Client) return;
@@ -56,6 +64,16 @@ public class BehaviorEmotes : EntityBehavior
         if (entity is not EntityPlayer player) return;
         if (!entity.WatchedAttributes.HasAttribute("mountedOn")) return;
         EmotesModSystem.StopAllEmotes(player);
+    }
+
+    void OnEmotesChangedServer()
+    {
+        if (entity is not EntityPlayer player) return;
+        var tree = player.WatchedAttributes.GetTreeAttribute("emotes");
+
+        if (string.IsNullOrEmpty(tree?.GetString("pairPartner"))) return;
+        if (EmotesModSystem.GetEmotes().Any(kv => kv.Value.RequiresTarget && tree.GetBool(kv.Key))) return;
+        api.ModLoader.GetModSystem<EmotesModSystem>()?.TryEndPair(player);
     }
 
     void OnAnimationStopped(string animCode)
@@ -137,7 +155,10 @@ public class BehaviorEmotes : EntityBehavior
                 lockedYaw = ep.BodyYawLimits.CenterRad;
             else
             {
-                lockedYaw = entity.Pos.Yaw;
+                var tree = entity.WatchedAttributes.GetTreeAttribute("emotes");
+                lockedYaw = EmotesModSystem.GetEmotes().Any(kv => kv.Value.RequiresTarget && tree?.GetBool(kv.Key) == true)
+                    ? tree.GetFloat("pairYaw")
+                    : entity.Pos.Yaw;
                 ep.BodyYawLimits = new AngleConstraint(lockedYaw, 0f);
             }
         }
@@ -266,6 +287,8 @@ public class BehaviorEmotes : EntityBehavior
     public override void OnEntityDespawn(EntityDespawnData despawnData)
     {
         base.OnEntityDespawn(despawnData);
+        if (api.Side == EnumAppSide.Server && entity is EntityPlayer player)
+            api.ModLoader.GetModSystem<EmotesModSystem>()?.TryEndPair(player);
         UnlockYaw();
         if (entity.AnimManager != null)
             entity.AnimManager.OnAnimationStopped -= OnAnimationStopped;

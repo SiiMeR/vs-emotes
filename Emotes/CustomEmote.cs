@@ -9,4 +9,6 @@ public class CustomEmote
     public bool StopOnMovement { get; set; } = true;
     public bool StopOnDamage { get; set; } = true;
     public bool StopAfterAnimation { get; set; } = false;
+    public bool RequiresTarget { get; set; } = false;
+    public float PairDistance { get; set; } = 0.5f;
 }

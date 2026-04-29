@@ -1,7 +1,10 @@
 using System.Linq;
 using Cairo;
 using Vintagestory.API.Client;
+using Vintagestory.API.Common;
+using Vintagestory.API.Common.Entities;
 using Vintagestory.API.Config;
+using Vintagestory.GameContent;
 
 namespace Emotes;
 
@@ -15,11 +18,13 @@ public class GuiDialogEmotePicker : GuiDialog
     private const double BtnPad = 3;
     private const int Cols = 2;
 
-    private static readonly string[] VanillaEmoteCodes = { "wave", "cheer", "shrug", "cry", "nod", "facepalm", "bow", "laugh", "rage" };
+    private static readonly string[] VanillaEmoteCodes =
+        { "wave", "cheer", "shrug", "cry", "nod", "facepalm", "bow", "laugh", "rage" };
 
     private readonly EmotesModSystem modSystem;
 
     private int activeTab;
+    private Entity cachedEntitySelection;
 
     public GuiDialogEmotePicker(ICoreClientAPI capi, EmotesModSystem modSystem) : base(capi)
     {
@@ -107,6 +112,16 @@ public class GuiDialogEmotePicker : GuiDialog
                     }
                     else
                     {
+                        if (EmotesModSystem.GetEmotes().TryGetValue(capturedCode, out var emote)
+                            && emote.RequiresTarget
+                            && cachedEntitySelection is not EntityPlayer and not EntityPlayerBot)
+                        {
+                            capi.TriggerIngameError(this, "emote-target-required",
+                                Lang.Get("emotes:pair-requires-target"));
+                            TryClose();
+                            return true;
+                        }
+
                         modSystem.SendToggleEmote(capturedCode);
                     }
 
@@ -127,6 +142,7 @@ public class GuiDialogEmotePicker : GuiDialog
 
     public override void OnGuiOpened()
     {
+        cachedEntitySelection = capi.World.Player.CurrentEntitySelection?.Entity;
         ComposeDialog();
     }
 }

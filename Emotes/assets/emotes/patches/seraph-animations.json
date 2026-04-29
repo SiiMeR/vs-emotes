@@ -13405,6 +13405,127 @@
             }
           }
         ]
+      },
+      {
+        "name": "Hug",
+        "code": "hug",
+        "quantityframes": 31,
+        "onActivityStopped": "EaseOut",
+        "onAnimationEnd": "Hold",
+        "keyframes": [
+          {
+            "frame": 0,
+            "elements": {
+              "LowerTorso": {
+                "offsetX": 0,
+                "offsetY": 0,
+                "offsetZ": 0
+              },
+              "UpperArmR": {
+                "rotationX": 0,
+                "rotationY": 0,
+                "rotationZ": 0,
+                "offsetX": 0,
+                "offsetY": 0,
+                "offsetZ": 0
+              },
+              "LowerArmR": {
+                "rotationX": 0,
+                "rotationY": 0,
+                "rotationZ": 0
+              },
+              "UpperArmL": {
+                "rotationX": 0,
+                "rotationY": 0,
+                "rotationZ": 0,
+                "offsetX": 0,
+                "offsetY": 0,
+                "offsetZ": 0
+              },
+              "LowerArmL": {
+                "rotationX": 0,
+                "rotationY": 0,
+                "rotationZ": 0
+              },
+              "UpperFootL": {
+                "rotationX": 0,
+                "rotationY": 0,
+                "rotationZ": 0
+              },
+              "LowerFootL": {
+                "rotationX": 0,
+                "rotationY": 0,
+                "rotationZ": 0
+              },
+              "UpperFootR": {
+                "rotationX": 0,
+                "rotationY": 0,
+                "rotationZ": 0
+              },
+              "LowerFootR": {
+                "rotationX": 0,
+                "rotationY": 0,
+                "rotationZ": 0
+              }
+            }
+          },
+          {
+            "frame": 30,
+            "elements": {
+              "LowerTorso": {
+                "offsetX": -5,
+                "offsetY": 0,
+                "offsetZ": 0
+              },
+              "UpperArmR": {
+                "rotationX": 0.3824,
+                "rotationY": -26.0064,
+                "rotationZ": -66.0914,
+                "offsetX": 0,
+                "offsetY": -1,
+                "offsetZ": 1
+              },
+              "LowerArmR": {
+                "rotationX": -77.6478,
+                "rotationY": 1.2081,
+                "rotationZ": 2.4488
+              },
+              "UpperArmL": {
+                "rotationX": 6.5559,
+                "rotationY": 26.0496,
+                "rotationZ": -86.2404,
+                "offsetX": 0,
+                "offsetY": -2,
+                "offsetZ": -1
+              },
+              "LowerArmL": {
+                "rotationX": 78.007,
+                "rotationY": 3.1586,
+                "rotationZ": 2.7623
+              },
+              "UpperFootL": {
+                "rotationX": 0,
+                "rotationY": 0,
+                "rotationZ": -20
+              },
+              "LowerFootL": {
+                "rotationX": 0,
+                "rotationY": 0,
+                "rotationZ": 7.5
+              },
+              "UpperFootR": {
+                "rotationX": 0,
+                "rotationY": 0,
+                "rotationZ": 12.5
+              },
+              "LowerFootR": {
+                "rotationX": 0,
+                "rotationY": 0,
+                "rotationZ": -5
+              }
+            }
+          }
+        ]
       }
     ]
   }

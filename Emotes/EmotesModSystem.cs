@@ -7,6 +7,7 @@ using Vintagestory.API.Common.Entities;
 using Vintagestory.API.Config;
 using Vintagestory.API.MathTools;
 using Vintagestory.API.Server;
+using Vintagestory.GameContent;
 
 namespace Emotes;
 
@@ -241,6 +242,11 @@ public class EmotesModSystem : ModSystem
             Code = "handships", Name = "HandsHips", DisplayName = "Hands on Hips", Animation = "handships",
             StopOnMovement = true, StopOnDamage = true
         },
+        ["hug"] = new CustomEmote
+        {
+            Code = "hug", Name = "Hug", DisplayName = "Hug", Animation = "hug",
+            StopOnMovement = true, StopOnDamage = true, StopAfterAnimation = true, RequiresTarget = true, PairDistance = 0.5f
+        },
     };
 
     private static readonly HashSet<string> LeanEmotes = new() { "leaningcrossed", "leaninghips", "leaninghandshead" };
@@ -254,9 +260,14 @@ public class EmotesModSystem : ModSystem
     };
 
     private ICoreClientAPI clientApi;
+    private ICoreServerAPI serverApi;
 
     private IClientNetworkChannel clientChannel;
     private IServerNetworkChannel serverChannel;
+
+    private readonly Dictionary<string, PairRequest> pairRequests = new();
+
+    private record PairRequest(string InitiatorUid, string TargetUid, string EmoteCode, DateTime RequestTime);
 
     public static bool IsEmotePlaying { get; set; }
 
@@ -342,18 +353,56 @@ public class EmotesModSystem : ModSystem
     public override void StartServerSide(ICoreServerAPI api)
     {
         base.StartServerSide(api);
+        serverApi = api;
 
         serverChannel = api.Network.RegisterChannel(ChannelName)
             .RegisterMessageType<EmotePacket>()
             .RegisterMessageType<LeanSnapPacket>()
             .SetMessageHandler<EmotePacket>(OnEmotePacket);
 
-        api.ChatCommands
+        var cmd = api.ChatCommands
             .GetOrCreate("emotes")
             .RequiresPrivilege(Privilege.chat)
-            .WithDescription(Lang.Get("emotes:cmd-description"))
-            .WithArgs(api.ChatCommands.Parsers.OptionalWord("action"))
-            .HandleWith(HandleEmoteCommand);
+            .WithDescription(Lang.Get("emotes:cmd-description"));
+
+        cmd.BeginSubCommand("play")
+                .RequiresPlayer()
+                .WithArgs(api.ChatCommands.Parsers.Word("name"))
+                .HandleWith(HandlePlayCommand)
+            .EndSubCommand();
+
+        cmd.BeginSubCommand("list")
+                .HandleWith(HandleListCommand)
+            .EndSubCommand();
+
+        cmd.BeginSubCommand("stop")
+                .RequiresPlayer()
+                .HandleWith(HandleStopCommand)
+            .EndSubCommand();
+
+        cmd.BeginSubCommand("showcase")
+                .RequiresPlayer()
+                .HandleWith(HandleShowcaseCommand)
+            .EndSubCommand();
+
+        cmd.BeginSubCommand("accept")
+                .RequiresPlayer()
+                .HandleWith(OnPairAccepted)
+            .EndSubCommand();
+
+        cmd.BeginSubCommand("refuse")
+                .RequiresPlayer()
+                .HandleWith(OnPairRefused)
+            .EndSubCommand();
+
+        foreach (var (code, _) in Emotes.Where(kv => kv.Value.RequiresTarget))
+        {
+            var capturedCode = code;
+            cmd.BeginSubCommand(code)
+                    .RequiresPlayer()
+                    .HandleWith(args => OnPairInitiate(capturedCode, args))
+                .EndSubCommand();
+        }
     }
 
     private void OnEmotePacket(IServerPlayer fromPlayer, EmotePacket packet)
@@ -366,7 +415,13 @@ public class EmotesModSystem : ModSystem
             return;
         }
 
-        if (!Emotes.ContainsKey(packet.Code)) return;
+        if (!Emotes.TryGetValue(packet.Code, out var emoteInfo)) return;
+
+        if (emoteInfo.RequiresTarget)
+        {
+            OnPairInitiate(packet.Code, new TextCommandCallingArgs { Caller = new Caller { Player = fromPlayer, Entity = fromPlayer.Entity } });
+            return;
+        }
         if (player.MountedOn != null) return;
 
         var tree = player.WatchedAttributes.GetOrAddTreeAttribute("emotes");
@@ -463,90 +518,232 @@ public class EmotesModSystem : ModSystem
         behavior.Initialize(entity.Properties, null);
     }
 
-    private TextCommandResult HandleEmoteCommand(TextCommandCallingArgs args)
+    private float? SnapPairPositions(IServerPlayer initiatorPlayer, EntityPlayer initiator, Entity target, float pairDistance)
+    {
+        double dx = target.Pos.X - initiator.Pos.X;
+        double dz = target.Pos.Z - initiator.Pos.Z;
+        double dist = Math.Sqrt(dx * dx + dz * dz);
+
+        if (dist > 3.0 || dist < 0.01) return null;
+
+        double midX = (initiator.Pos.X + target.Pos.X) / 2;
+        double midZ = (initiator.Pos.Z + target.Pos.Z) / 2;
+        double normX = dx / dist;
+        double normZ = dz / dist;
+
+        initiator.TeleportToDouble(midX - normX * pairDistance, initiator.Pos.Y, midZ - normZ * pairDistance);
+        target.TeleportToDouble(midX + normX * pairDistance, initiator.Pos.Y, midZ + normZ * pairDistance);
+
+        float yaw = (float)Math.Atan2(dx, dz);
+        initiator.Pos.Yaw = yaw;
+        target.Pos.Yaw = yaw + (float)Math.PI;
+
+        serverChannel.SendPacket(new LeanSnapPacket { Yaw = yaw }, initiatorPlayer);
+        return yaw;
+    }
+
+    private TextCommandResult OnPairInitiate(string emoteCode, TextCommandCallingArgs args)
+    {
+        if (args.Caller.Entity is not EntityPlayer initiator)
+            return TextCommandResult.Error(Lang.Get("emotes:cmd-only-players"));
+
+        var initiatorPlayer = (IServerPlayer)args.Caller.Player;
+        var emote = Emotes[emoteCode];
+        var selected = initiator.EntitySelection?.Entity;
+
+        if (selected == null)
+            return TextCommandResult.Error(Lang.Get("emotes:pair-no-target"));
+
+        if (selected is EntityPlayerBot bot)
+        {
+            var botYaw = SnapPairPositions(initiatorPlayer, initiator, bot, emote.PairDistance);
+            if (botYaw == null) return TextCommandResult.Error(Lang.Get("emotes:pair-too-far"));
+            var botTree = initiator.WatchedAttributes.GetOrAddTreeAttribute("emotes");
+            botTree.SetFloat("pairYaw", botYaw.Value);
+            SetEmoteState(initiator, emoteCode, true);
+            return TextCommandResult.Success();
+        }
+
+        if (selected is not EntityPlayer target)
+            return TextCommandResult.Error(Lang.Get("emotes:pair-no-target"));
+        if (target.EntityId == initiator.EntityId)
+            return TextCommandResult.Error(Lang.Get("emotes:pair-self"));
+        if (initiator.Pos.DistanceTo(target.Pos) > 3.0)
+            return TextCommandResult.Error(Lang.Get("emotes:pair-too-far"));
+        if (target.Player is not IServerPlayer targetPlayer)
+            return TextCommandResult.Error(Lang.Get("emotes:pair-no-target"));
+
+        pairRequests[initiatorPlayer.PlayerUID] = new PairRequest(initiatorPlayer.PlayerUID, targetPlayer.PlayerUID, emoteCode, DateTime.Now);
+
+        var accept = $"<a href=\"command:///emotes accept\">Accept</a>";
+        var refuse = $"<a href=\"command:///emotes refuse\">Refuse</a>";
+        targetPlayer.SendMessage(GlobalConstants.CurrentChatGroup,
+            Lang.Get("emotes:pair-request-received", initiator.GetName(), Lang.Get("emotes:emote-" + emoteCode), accept, refuse),
+            EnumChatType.GroupInvite);
+
+        return TextCommandResult.Success(Lang.Get("emotes:pair-request-sent", target.GetName()));
+    }
+
+    private TextCommandResult OnPairAccepted(TextCommandCallingArgs args)
+    {
+        var callerPlayer = (IServerPlayer)args.Caller.Player;
+        var request = pairRequests.Values
+            .OrderByDescending(r => r.RequestTime)
+            .FirstOrDefault(r => r.TargetUid == callerPlayer.PlayerUID);
+
+        if (request == null)
+            return TextCommandResult.Error(Lang.Get("emotes:pair-no-request"));
+
+        if (serverApi.World.PlayerByUid(request.InitiatorUid) is not IServerPlayer initiatorPlayer)
+        {
+            pairRequests.Remove(request.InitiatorUid);
+            return TextCommandResult.Error(Lang.Get("emotes:pair-initiator-gone"));
+        }
+
+        pairRequests.Remove(request.InitiatorUid);
+
+        if (initiatorPlayer.Entity is not EntityPlayer initiatorEntity ||
+            callerPlayer.Entity is not EntityPlayer targetEntity)
+            return TextCommandResult.Error(Lang.Get("emotes:pair-no-target"));
+
+        var emote = Emotes[request.EmoteCode];
+        var yaw = SnapPairPositions(initiatorPlayer, initiatorEntity, targetEntity, emote.PairDistance);
+        if (yaw == null) return TextCommandResult.Error(Lang.Get("emotes:pair-too-far"));
+
+        float targetYaw = yaw.Value + (float)Math.PI;
+        serverChannel.SendPacket(new LeanSnapPacket { Yaw = targetYaw }, callerPlayer);
+
+        var initiatorTree = initiatorEntity.WatchedAttributes.GetOrAddTreeAttribute("emotes");
+        initiatorTree.SetString("pairPartner", callerPlayer.PlayerUID);
+        initiatorTree.SetFloat("pairYaw", yaw.Value);
+
+        var targetTree = targetEntity.WatchedAttributes.GetOrAddTreeAttribute("emotes");
+        targetTree.SetString("pairPartner", initiatorPlayer.PlayerUID);
+        targetTree.SetFloat("pairYaw", targetYaw);
+
+        SetEmoteState(initiatorEntity, request.EmoteCode, true);
+        SetEmoteState(targetEntity, request.EmoteCode, true);
+
+        return TextCommandResult.Success();
+    }
+
+    private TextCommandResult OnPairRefused(TextCommandCallingArgs args)
+    {
+        var callerPlayer = (IServerPlayer)args.Caller.Player;
+        var request = pairRequests.Values
+            .OrderByDescending(r => r.RequestTime)
+            .FirstOrDefault(r => r.TargetUid == callerPlayer.PlayerUID);
+
+        if (request == null)
+            return TextCommandResult.Error(Lang.Get("emotes:pair-no-request"));
+
+        pairRequests.Remove(request.InitiatorUid);
+
+        if (serverApi.World.PlayerByUid(request.InitiatorUid) is IServerPlayer initiatorPlayer)
+        {
+            initiatorPlayer.SendMessage(GlobalConstants.CurrentChatGroup,
+                Lang.Get("emotes:pair-refused", callerPlayer.Entity?.GetName() ?? callerPlayer.PlayerName),
+                EnumChatType.Notification);
+        }
+
+        return TextCommandResult.Success();
+    }
+
+    public void TryEndPair(EntityPlayer player)
+    {
+        var tree = player.WatchedAttributes.GetTreeAttribute("emotes");
+        var partnerUid = tree?.GetString("pairPartner");
+        if (string.IsNullOrEmpty(partnerUid)) return;
+
+        tree.SetString("pairPartner", "");
+        player.WatchedAttributes.MarkPathDirty("emotes");
+
+        if (serverApi.World.PlayerByUid(partnerUid) is not IServerPlayer partnerPlayer) return;
+        if (partnerPlayer.Entity is not EntityPlayer partnerEntity) return;
+
+        partnerEntity.WatchedAttributes.GetOrAddTreeAttribute("emotes").SetString("pairPartner", "");
+        StopAllEmotes(partnerEntity);
+    }
+
+    private TextCommandResult HandlePlayCommand(TextCommandCallingArgs args)
     {
         if (args.Caller.Entity is not EntityPlayer player)
-        {
             return TextCommandResult.Error(Lang.Get("emotes:cmd-only-players"));
-        }
-
-        var input = (string)args[0];
-
-        if (string.IsNullOrEmpty(input) || input.Equals("list", StringComparison.OrdinalIgnoreCase))
-        {
-            return TextCommandResult.Success(Lang.Get("emotes:cmd-available-emotes", string.Join(", ", Emotes.Values.Select(e => $"{e.Code} ({Lang.Get("emotes:emote-" + e.Code)})"))));
-        }
-
-        if (input.Equals("stop", StringComparison.OrdinalIgnoreCase) ||
-            input.Equals("stopall", StringComparison.OrdinalIgnoreCase))
-        {
-            StopAllEmotes(player);
-            return TextCommandResult.Success(Lang.Get("emotes:cmd-all-stopped"));
-        }
-
-if (input.Equals("showcase", StringComparison.OrdinalIgnoreCase))
-        {
-            var codes = Emotes.Keys.ToList();
-            var showcaseApi = player.Api as ICoreServerAPI;
-            var cancelled = new bool[1];
-            var tickId = new long[1];
-
-            tickId[0] = showcaseApi.Event.RegisterGameTickListener(_ =>
-            {
-                if (cancelled[0]) { showcaseApi.Event.UnregisterGameTickListener(tickId[0]); return; }
-                var controls = player.ServerControls;
-                if (!controls.TriesToMove && !controls.Jump) return;
-                cancelled[0] = true;
-                showcaseApi.Event.UnregisterGameTickListener(tickId[0]);
-                StopAllEmotes(player);
-            }, 100);
-
-            void RunNext(int index)
-            {
-                if (!player.Alive || cancelled[0]) return;
-                if (index >= codes.Count)
-                {
-                    StopAllEmotes(player);
-                    showcaseApi.Event.UnregisterGameTickListener(tickId[0]);
-                    return;
-                }
-                var t = player.WatchedAttributes.GetOrAddTreeAttribute("emotes");
-                foreach (var code in Emotes.Keys)
-                    t.SetBool(code, false);
-                t.SetBool(codes[index], true);
-                player.WatchedAttributes.MarkPathDirty("emotes");
-                showcaseApi.Event.RegisterCallback(_ =>
-                {
-                    if (!player.Alive || cancelled[0]) return;
-                    StopAllEmotes(player);
-                    showcaseApi.Event.RegisterCallback(_ => RunNext(index + 1), 1000);
-                }, 4000);
-            }
-
-            showcaseApi.Event.RegisterCallback(_ => RunNext(0), 3000);
-            return TextCommandResult.Success(Lang.Get("emotes:cmd-showcase-start"));
-        }
-
         if (player.MountedOn != null)
             return TextCommandResult.Error(Lang.Get("emotes:cmd-mounted"));
 
-        var key = input.ToLowerInvariant();
-        if (!Emotes.TryGetValue(key, out var emote))
-        {
-            return TextCommandResult.Error(Lang.Get("emotes:cmd-not-found", input));
-        }
+        var key = ((string)args[0]).ToLowerInvariant();
+        if (!Emotes.TryGetValue(key, out var emote) || emote.RequiresTarget)
+            return TextCommandResult.Error(Lang.Get("emotes:cmd-not-found", key));
 
         var tree = player.WatchedAttributes.GetOrAddTreeAttribute("emotes");
         var isActive = tree.GetBool(emote.Code);
-
         foreach (var code in Emotes.Keys)
             tree.SetBool(code, false);
-
         if (!isActive)
             tree.SetBool(emote.Code, true);
-
         player.WatchedAttributes.MarkPathDirty("emotes");
+
         var displayName = Lang.Get("emotes:emote-" + emote.Code);
         return TextCommandResult.Success(isActive ? Lang.Get("emotes:cmd-emote-stopped", displayName) : Lang.Get("emotes:cmd-emote-started", displayName));
+    }
+
+    private TextCommandResult HandleListCommand(TextCommandCallingArgs args)
+    {
+        return TextCommandResult.Success(Lang.Get("emotes:cmd-available-emotes",
+            string.Join(", ", Emotes.Values.Where(e => !e.RequiresTarget).Select(e => $"{e.Code} ({Lang.Get("emotes:emote-" + e.Code)})"))));
+    }
+
+    private TextCommandResult HandleStopCommand(TextCommandCallingArgs args)
+    {
+        if (args.Caller.Entity is not EntityPlayer player)
+            return TextCommandResult.Error(Lang.Get("emotes:cmd-only-players"));
+        StopAllEmotes(player);
+        return TextCommandResult.Success(Lang.Get("emotes:cmd-all-stopped"));
+    }
+
+    private TextCommandResult HandleShowcaseCommand(TextCommandCallingArgs args)
+    {
+        if (args.Caller.Entity is not EntityPlayer player)
+            return TextCommandResult.Error(Lang.Get("emotes:cmd-only-players"));
+
+        var codes = Emotes.Keys.ToList();
+        var cancelled = new bool[1];
+        var tickId = new long[1];
+
+        tickId[0] = serverApi.Event.RegisterGameTickListener(_ =>
+        {
+            if (cancelled[0]) { serverApi.Event.UnregisterGameTickListener(tickId[0]); return; }
+            var controls = player.ServerControls;
+            if (!controls.TriesToMove && !controls.Jump) return;
+            cancelled[0] = true;
+            serverApi.Event.UnregisterGameTickListener(tickId[0]);
+            StopAllEmotes(player);
+        }, 100);
+
+        void RunNext(int index)
+        {
+            if (!player.Alive || cancelled[0]) return;
+            if (index >= codes.Count)
+            {
+                StopAllEmotes(player);
+                serverApi.Event.UnregisterGameTickListener(tickId[0]);
+                return;
+            }
+            var t = player.WatchedAttributes.GetOrAddTreeAttribute("emotes");
+            foreach (var code in Emotes.Keys)
+                t.SetBool(code, false);
+            t.SetBool(codes[index], true);
+            player.WatchedAttributes.MarkPathDirty("emotes");
+            serverApi.Event.RegisterCallback(_ =>
+            {
+                if (!player.Alive || cancelled[0]) return;
+                StopAllEmotes(player);
+                serverApi.Event.RegisterCallback(_ => RunNext(index + 1), 1000);
+            }, 4000);
+        }
+
+        serverApi.Event.RegisterCallback(_ => RunNext(0), 3000);
+        return TextCommandResult.Success(Lang.Get("emotes:cmd-showcase-start"));
     }
 }
