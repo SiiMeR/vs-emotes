@@ -221,7 +221,7 @@ public class BehaviorEmotes : EntityBehavior
         if (entity is not EntityPlayer player) return;
         var controls = player.ServerControls;
         if (controls == null) return;
-        bool moving = controls.TriesToMove || controls.Jump || controls.Sneak || controls.LeftMouseDown;
+        bool moving = player.Swimming || controls.TriesToMove || controls.Jump || controls.Sneak || controls.LeftMouseDown;
         if (!moving && !controls.FloorSitting) return;
 
         var tree = player.WatchedAttributes.GetTreeAttribute("emotes");
@@ -245,6 +245,13 @@ public class BehaviorEmotes : EntityBehavior
         if (api is not ICoreClientAPI capi) return;
         if (capi.World.Player?.Entity?.EntityId != entity.EntityId) return;
         if (!yawLocked) return;
+
+        if (entity.Swimming || entity.FeetInLiquid)
+        {
+            entity.AnimManager?.StopAnimation("swimidle");
+            entity.AnimManager?.StopAnimation("swim");
+            return;
+        }
 
         var controls = (entity as EntityAgent)?.Controls;
         if (controls == null || (!controls.TriesToMove && !controls.Jump && !controls.Sneak && !controls.LeftMouseDown)) return;
