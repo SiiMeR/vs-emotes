@@ -23,8 +23,9 @@ public class GuiDialogEmotePicker : GuiDialog
     {
         ("cat-sitting",    new[] { "seiza", "prayer", "sittingcool", "sittingchill", "sittingrelaxed", "sittingrefined", "sittingcalm", "sittinginnocent", "squatting", "kneel" }),
         ("cat-laying",     new[] { "layingdown", "layingback", "laydownsensual" }),
-        ("cat-friendly",   new[] { "blowkiss", "clapping", "dapup", "kisshand", "politebow", "victory" }),
-        ("cat-neutral",    new[] { "atease", "crossedarms", "crossedarmsthinking", "handrub", "handships", "handup", "knocking", "leaningcrossed", "leaninghandshead", "leaninghips", "martialarts", "noblesalute", "pointing", "prayerstanding", "refinedsalute", "salute", "scanning", "surrender", "thinkinghard", "crackingknuckles" }),
+        ("cat-friendly",   new[] { "blowkiss", "clapping", "dapup", "kisshand", "politebow", "victory", "hugalone", "hugfriendlyalone" }),
+        ("cat-idle",       new[] { "atease", "crossedarms", "handships", "leaningcrossed", "leaninghandshead", "leaninghips" }),
+        ("cat-neutral",    new[] { "crossedarmsthinking", "handrub", "handup", "knocking", "martialarts", "noblesalute", "pointing", "prayerstanding", "refinedsalute", "salute", "scanning", "surrender", "thinkinghard", "crackingknuckles" }),
         ("cat-aggressive", new[] { "bringiton", "chestthump", "engarde", "flippingoff", "slitthroat" }),
         ("cat-paired",     new[] { "hug", "hugfriendly", "handshake", "kiss", "smooch" }),
     };

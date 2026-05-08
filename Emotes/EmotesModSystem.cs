@@ -254,7 +254,13 @@ public class EmotesModSystem : ModSystem
         {
             Code = "hug", Name = "Hug", DisplayName = "Hug (Intimate)", Animation = "hug",
             StopOnMovement = true, StopOnDamage = true, StopAfterAnimation = true, RequiresTarget = true,
-            PairDistance = 0.1f        },
+            PairDistance = 0.1f
+        },
+        ["hugalone"] = new CustomEmote
+        {
+            Code = "hugalone", Name = "HugAlone", DisplayName = "Hug (Intimate)", Animation = "hug",
+            StopOnMovement = true, StopOnDamage = true, StopAfterAnimation = true
+        },
         ["kiss"] = new CustomEmote
         {
             Code = "kiss", Name = "Kiss", DisplayName = "Kiss (Intimate)", Animation = "kiss",
@@ -264,7 +270,13 @@ public class EmotesModSystem : ModSystem
         {
             Code = "hugfriendly", Name = "HugFriendly", DisplayName = "Hug (Friendly)", Animation = "hugfriendly",
             StopOnMovement = true, StopOnDamage = true, StopAfterAnimation = true, RequiresTarget = true,
-            PairDistance = 0.15f        },
+            PairDistance = 0.15f
+        },
+        ["hugfriendlyalone"] = new CustomEmote
+        {
+            Code = "hugfriendlyalone", Name = "HugFriendlyAlone", DisplayName = "Hug (Friendly)", Animation = "hugfriendly",
+            StopOnMovement = true, StopOnDamage = true, StopAfterAnimation = true
+        },
         ["smooch"] = new CustomEmote
         {
             Code = "smooch", Name = "Smooch", DisplayName = "Smooch", Animation = "smooch",
