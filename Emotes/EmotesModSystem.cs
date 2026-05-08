@@ -80,7 +80,7 @@ public class EmotesModSystem : ModSystem
         ["blowkiss"] = new CustomEmote
         {
             Code = "blowkiss", Name = "Blowkiss", DisplayName = "Blow Kiss", Animation = "blowkiss",
-            StopOnMovement = true, StopOnDamage = true
+            StopOnMovement = true, StopOnDamage = true, StopAfterAnimation = true
         },
         ["chestthump"] = new CustomEmote
         {
@@ -100,8 +100,8 @@ public class EmotesModSystem : ModSystem
         ["handshake"] = new CustomEmote
         {
             Code = "handshake", Name = "Handshake", DisplayName = "Handshake", Animation = "handshake",
-            StopOnMovement = true, StopOnDamage = true, StopAfterAnimation = true, RequiresTarget = true,
-            PairDistance = 0.7f
+            StopOnMovement = true, StopOnDamage = true, RequiresTarget = true,
+            PairDistance = 0.75f
         },
         ["layingback"] = new CustomEmote
         {
@@ -172,7 +172,8 @@ public class EmotesModSystem : ModSystem
         ["dapup"] = new CustomEmote
         {
             Code = "dapup", Name = "DapUp", DisplayName = "Dap Up", Animation = "dapup",
-            StopOnMovement = true, StopOnDamage = true
+            StopOnMovement = true, StopOnDamage = true, RequiresTarget = true, StopAfterAnimation = false,
+            PairDistance = 0.75f
         },
         ["politebow"] = new CustomEmote
         {
@@ -253,38 +254,80 @@ public class EmotesModSystem : ModSystem
         ["hug"] = new CustomEmote
         {
             Code = "hug", Name = "Hug", DisplayName = "Hug (Intimate)", Animation = "hug",
-            StopOnMovement = true, StopOnDamage = true, StopAfterAnimation = true, RequiresTarget = true,
+            StopOnMovement = true, StopOnDamage = true, StopAfterAnimation = false, RequiresTarget = true,
             PairDistance = 0.1f
         },
         ["hugalone"] = new CustomEmote
         {
             Code = "hugalone", Name = "HugAlone", DisplayName = "Hug (Intimate)", Animation = "hug",
-            StopOnMovement = true, StopOnDamage = true, StopAfterAnimation = true
+            StopOnMovement = true, StopOnDamage = true, StopAfterAnimation = false
         },
         ["kiss"] = new CustomEmote
         {
             Code = "kiss", Name = "Kiss", DisplayName = "Kiss (Intimate)", Animation = "kiss",
             StopOnMovement = true, StopOnDamage = true, StopAfterAnimation = true, RequiresTarget = true,
-            PairDistance = 0.2f        },
+            PairDistance = 0.2f
+        },
         ["hugfriendly"] = new CustomEmote
         {
             Code = "hugfriendly", Name = "HugFriendly", DisplayName = "Hug (Friendly)", Animation = "hugfriendly",
-            StopOnMovement = true, StopOnDamage = true, StopAfterAnimation = true, RequiresTarget = true,
+            StopOnMovement = true, StopOnDamage = true, StopAfterAnimation = false, RequiresTarget = true,
             PairDistance = 0.15f
         },
         ["hugfriendlyalone"] = new CustomEmote
         {
-            Code = "hugfriendlyalone", Name = "HugFriendlyAlone", DisplayName = "Hug (Friendly)", Animation = "hugfriendly",
-            StopOnMovement = true, StopOnDamage = true, StopAfterAnimation = true
+            Code = "hugfriendlyalone", Name = "HugFriendlyAlone", DisplayName = "Hug (Friendly)",
+            Animation = "hugfriendly",
+            StopOnMovement = true, StopOnDamage = true, StopAfterAnimation = false
         },
         ["smooch"] = new CustomEmote
         {
             Code = "smooch", Name = "Smooch", DisplayName = "Smooch", Animation = "smooch",
             StopOnMovement = true, StopOnDamage = true, StopAfterAnimation = true, RequiresTarget = true,
-            PairDistance = 0.3f        },
+            PairDistance = 0.35f
+        },
+        ["handshakedouble"] = new CustomEmote
+        {
+            Code = "handshakedouble", Name = "HandshakeDouble", DisplayName = "Handshake (Double)",
+            Animation = "handshakedouble",
+            StopOnMovement = true, StopOnDamage = true, StopAfterAnimation = true, RequiresTarget = true,
+            PairDistance = 0.75f
+        },
+        ["handholding"] = new CustomEmote
+        {
+            Code = "handholding", Name = "HandHolding", DisplayName = "Hold Hands", Animation = "handholding",
+            StopOnMovement = true, StopOnDamage = true, RequiresTarget = true,
+            PairDistance = 0.65f
+        },
+        ["handholdingintimate"] = new CustomEmote
+        {
+            Code = "handholdingintimate", Name = "HandHoldingIntimate", DisplayName = "Hold Hands (Intimate)",
+            Animation = "handholdingintimate",
+            StopOnMovement = true, StopOnDamage = true, RequiresTarget = true,
+            PairDistance = 0.35f
+        },
+        ["sittingrested"] = new CustomEmote
+        {
+            Code = "sittingrested", Name = "SittingRested", DisplayName = "Sit (Rested)",
+            Animation = "sittingrested",
+            StopOnMovement = true, StopOnDamage = true
+        },
+        ["sittingintrovert"] = new CustomEmote
+        {
+            Code = "sittingintrovert", Name = "SittingIntrovert", DisplayName = "Sit (Introvert)",
+            Animation = "sittingintrovert",
+            StopOnMovement = true, StopOnDamage = true
+        },
+        ["leaningsimple"] = new CustomEmote
+        {
+            Code = "leaningsimple", Name = "LeaningSimple", DisplayName = "Lean (Simple)",
+            Animation = "leaningsimple",
+            StopOnMovement = true, StopOnDamage = true
+        }
     };
 
-    private static readonly HashSet<string> LeanEmotes = new() { "leaningcrossed", "leaninghips", "leaninghandshead" };
+    private static readonly HashSet<string> LeanEmotes = new()
+        { "leaningcrossed", "leaninghips", "leaninghandshead", "leaningsimple" };
 
     private static readonly (BlockFacing facing, float yaw)[] HorizontalFacings =
     {
@@ -295,11 +338,11 @@ public class EmotesModSystem : ModSystem
     };
 
     private readonly Dictionary<string, PairRequest> pairRequests = new();
-
-    private EmotesConfig config;
     private ICoreClientAPI clientApi;
 
     private IClientNetworkChannel clientChannel;
+
+    private EmotesConfig config;
     private ICoreServerAPI serverApi;
     private IServerNetworkChannel serverChannel;
 
@@ -550,6 +593,7 @@ public class EmotesModSystem : ModSystem
 
             entity.TeleportToDouble(snapX, pos.Y, snapZ);
             entity.Pos.Yaw = yaw;
+            entity.WatchedAttributes.GetOrAddTreeAttribute("emotes").SetFloat("leanYaw", yaw);
             serverChannel.SendPacket(new LeanSnapPacket { Yaw = yaw }, player);
             return true;
         }
@@ -662,7 +706,9 @@ public class EmotesModSystem : ModSystem
         }
 
         if (!config.PairedEmotesRequireConsent)
+        {
             return ExecutePair(emoteCode, emote, initiatorPlayer, initiator, targetPlayer, target);
+        }
 
         pairRequests[initiatorPlayer.PlayerUID] = new PairRequest(initiatorPlayer.PlayerUID, targetPlayer.PlayerUID,
             emoteCode, DateTime.Now);
@@ -682,7 +728,9 @@ public class EmotesModSystem : ModSystem
     {
         var yaw = SnapPairPositions(initiatorPlayer, initiatorEntity, targetEntity, emote.PairDistance);
         if (yaw == null)
+        {
             return TextCommandResult.Error(Lang.Get("emotes:pair-too-far"));
+        }
 
         var targetYaw = yaw.Value + (float)Math.PI;
         serverChannel.SendPacket(new LeanSnapPacket { Yaw = targetYaw }, targetPlayer);
@@ -712,7 +760,9 @@ public class EmotesModSystem : ModSystem
             .FirstOrDefault(r => r.TargetUid == callerPlayer.PlayerUID);
 
         if (request == null)
+        {
             return TextCommandResult.Error(Lang.Get("emotes:pair-no-request"));
+        }
 
         if (serverApi.World.PlayerByUid(request.InitiatorUid) is not IServerPlayer initiatorPlayer)
         {
@@ -724,7 +774,9 @@ public class EmotesModSystem : ModSystem
 
         if (initiatorPlayer.Entity is not EntityPlayer initiatorEntity ||
             callerPlayer.Entity is not EntityPlayer targetEntity)
+        {
             return TextCommandResult.Error(Lang.Get("emotes:pair-no-target"));
+        }
 
         return ExecutePair(request.EmoteCode, Emotes[request.EmoteCode], initiatorPlayer, initiatorEntity, callerPlayer,
             targetEntity);

@@ -415,6 +415,54 @@
         "easeInSpeed": 1,
         "easeOutSpeed": 2,
         "animationSpeed": 1
+      },
+      {
+        "code": "handshakedouble",
+        "animation": "HandshakeDouble",
+        "blendMode": "Add",
+        "easeInSpeed": 1,
+        "easeOutSpeed": 2,
+        "animationSpeed": 1
+      },
+      {
+        "code": "handholding",
+        "animation": "HandHolding",
+        "blendMode": "Add",
+        "easeInSpeed": 1,
+        "easeOutSpeed": 2,
+        "animationSpeed": 1
+      },
+      {
+        "code": "handholdingintimate",
+        "animation": "HandHoldingIntimate",
+        "blendMode": "Add",
+        "easeInSpeed": 1,
+        "easeOutSpeed": 2,
+        "animationSpeed": 1
+      },
+      {
+        "code": "sittingrested",
+        "animation": "SittingRested",
+        "blendMode": "Add",
+        "easeInSpeed": 1,
+        "easeOutSpeed": 2,
+        "animationSpeed": 1
+      },
+      {
+        "code": "sittingintrovert",
+        "animation": "SittingIntrovert",
+        "blendMode": "Add",
+        "easeInSpeed": 1,
+        "easeOutSpeed": 2,
+        "animationSpeed": 1
+      },
+      {
+        "code": "leaningsimple",
+        "animation": "LeaningSimple",
+        "blendMode": "Add",
+        "easeInSpeed": 1,
+        "easeOutSpeed": 2,
+        "animationSpeed": 1
       }
     ],
     "side": "Universal"

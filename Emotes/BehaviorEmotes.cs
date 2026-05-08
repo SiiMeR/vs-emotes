@@ -22,6 +22,8 @@ public class BehaviorEmotes : EntityBehavior
         ["sittingrefined"] = 0.89,
         ["sittingcalm"]    = 0.89,
         ["sittinginnocent"]= 0.89,
+        ["sittingrested"]  = 0.89,
+        ["sittingintrovert"]= 0.89,
         ["squatting"]      = 0.95,
         ["layingback"]     = 0.2,
         ["layingdown"]     = 0.2,
@@ -156,9 +158,12 @@ public class BehaviorEmotes : EntityBehavior
             else
             {
                 var tree = entity.WatchedAttributes.GetTreeAttribute("emotes");
-                lockedYaw = EmotesModSystem.GetEmotes().Any(kv => kv.Value.RequiresTarget && tree?.GetBool(kv.Key) == true)
-                    ? tree.GetFloat("pairYaw")
-                    : entity.Pos.Yaw;
+                if (EmotesModSystem.GetEmotes().Any(kv => kv.Value.RequiresTarget && tree?.GetBool(kv.Key) == true))
+                    lockedYaw = tree.GetFloat("pairYaw");
+                else if (tree != null && tree.HasAttribute("leanYaw"))
+                    lockedYaw = tree.GetFloat("leanYaw");
+                else
+                    lockedYaw = entity.Pos.Yaw;
                 ep.BodyYawLimits = new AngleConstraint(lockedYaw, 0f);
             }
         }

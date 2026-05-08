@@ -21,13 +21,13 @@ public class GuiDialogEmotePicker : GuiDialog
 
     private static readonly (string LangKey, string[] Codes)[] NamedCategories =
     {
-        ("cat-sitting",    new[] { "seiza", "prayer", "sittingcool", "sittingchill", "sittingrelaxed", "sittingrefined", "sittingcalm", "sittinginnocent", "squatting", "kneel" }),
+        ("cat-sitting",    new[] { "seiza", "prayer", "sittingcool", "sittingchill", "sittingrelaxed", "sittingrefined", "sittingcalm", "sittinginnocent", "squatting", "kneel", "sittingrested", "sittingintrovert" }),
         ("cat-laying",     new[] { "layingdown", "layingback", "laydownsensual" }),
-        ("cat-friendly",   new[] { "blowkiss", "clapping", "dapup", "kisshand", "politebow", "victory", "hugalone", "hugfriendlyalone" }),
-        ("cat-idle",       new[] { "atease", "crossedarms", "handships", "leaningcrossed", "leaninghandshead", "leaninghips" }),
+        ("cat-friendly",   new[] { "blowkiss", "clapping", "kisshand", "politebow", "victory", "hugalone", "hugfriendlyalone" }),
+        ("cat-idle",       new[] { "atease", "crossedarms", "handships", "leaningcrossed", "leaninghandshead", "leaninghips", "leaningsimple" }),
         ("cat-neutral",    new[] { "crossedarmsthinking", "handrub", "handup", "knocking", "martialarts", "noblesalute", "pointing", "prayerstanding", "refinedsalute", "salute", "scanning", "surrender", "thinkinghard", "crackingknuckles" }),
         ("cat-aggressive", new[] { "bringiton", "chestthump", "engarde", "flippingoff", "slitthroat" }),
-        ("cat-paired",     new[] { "hug", "hugfriendly", "handshake", "kiss", "smooch" }),
+        ("cat-paired",     new[] { "hug", "hugfriendly", "handshake", "dapup", "kiss", "smooch", "handshakedouble", "handholding", "handholdingintimate" }),
     };
 
     private static int VanillaIndex => NamedCategories.Length;
