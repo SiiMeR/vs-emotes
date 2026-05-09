@@ -463,6 +463,22 @@
         "easeInSpeed": 1,
         "easeOutSpeed": 2,
         "animationSpeed": 1
+      },
+      {
+        "code": "leaningoversimple",
+        "animation": "LeaningOverSimple",
+        "blendMode": "Add",
+        "easeInSpeed": 1,
+        "easeOutSpeed": 2,
+        "animationSpeed": 1
+      },
+      {
+        "code": "leaningoverconfident",
+        "animation": "LeaningOverConfident",
+        "blendMode": "Add",
+        "easeInSpeed": 1,
+        "easeOutSpeed": 2,
+        "animationSpeed": 1
       }
     ],
     "side": "Universal"

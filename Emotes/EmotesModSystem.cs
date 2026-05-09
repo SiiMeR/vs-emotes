@@ -173,7 +173,7 @@ public class EmotesModSystem : ModSystem
         {
             Code = "dapup", Name = "DapUp", DisplayName = "Dap Up", Animation = "dapup",
             StopOnMovement = true, StopOnDamage = true, RequiresTarget = true, StopAfterAnimation = false,
-            PairDistance = 0.75f
+            PairDistance = 0.9f
         },
         ["politebow"] = new CustomEmote
         {
@@ -253,14 +253,9 @@ public class EmotesModSystem : ModSystem
         },
         ["hug"] = new CustomEmote
         {
-            Code = "hug", Name = "Hug", DisplayName = "Hug (Intimate)", Animation = "hug",
+            Code = "hug", Name = "Hug", DisplayName = "Hug (Friendly)", Animation = "hug",
             StopOnMovement = true, StopOnDamage = true, StopAfterAnimation = false, RequiresTarget = true,
             PairDistance = 0.1f
-        },
-        ["hugalone"] = new CustomEmote
-        {
-            Code = "hugalone", Name = "HugAlone", DisplayName = "Hug (Intimate)", Animation = "hug",
-            StopOnMovement = true, StopOnDamage = true, StopAfterAnimation = false
         },
         ["kiss"] = new CustomEmote
         {
@@ -270,21 +265,15 @@ public class EmotesModSystem : ModSystem
         },
         ["hugfriendly"] = new CustomEmote
         {
-            Code = "hugfriendly", Name = "HugFriendly", DisplayName = "Hug (Friendly)", Animation = "hugfriendly",
+            Code = "hugfriendly", Name = "HugFriendly", DisplayName = "Hug (Intimate)", Animation = "hugfriendly",
             StopOnMovement = true, StopOnDamage = true, StopAfterAnimation = false, RequiresTarget = true,
             PairDistance = 0.15f
-        },
-        ["hugfriendlyalone"] = new CustomEmote
-        {
-            Code = "hugfriendlyalone", Name = "HugFriendlyAlone", DisplayName = "Hug (Friendly)",
-            Animation = "hugfriendly",
-            StopOnMovement = true, StopOnDamage = true, StopAfterAnimation = false
         },
         ["smooch"] = new CustomEmote
         {
             Code = "smooch", Name = "Smooch", DisplayName = "Smooch", Animation = "smooch",
             StopOnMovement = true, StopOnDamage = true, StopAfterAnimation = true, RequiresTarget = true,
-            PairDistance = 0.35f
+            PairDistance = 0.38f
         },
         ["handshakedouble"] = new CustomEmote
         {
@@ -322,6 +311,18 @@ public class EmotesModSystem : ModSystem
         {
             Code = "leaningsimple", Name = "LeaningSimple", DisplayName = "Lean (Simple)",
             Animation = "leaningsimple",
+            StopOnMovement = true, StopOnDamage = true
+        },
+        ["leaningoversimple"] = new CustomEmote
+        {
+            Code = "leaningoversimple", Name = "LeaningOverSimple", DisplayName = "Lean Over (Simple)",
+            Animation = "leaningoversimple",
+            StopOnMovement = true, StopOnDamage = true
+        },
+        ["leaningoverconfident"] = new CustomEmote
+        {
+            Code = "leaningoverconfident", Name = "LeaningOverConfident", DisplayName = "Lean Over (Confident)",
+            Animation = "leaningoverconfident",
             StopOnMovement = true, StopOnDamage = true
         }
     };
@@ -529,7 +530,9 @@ public class EmotesModSystem : ModSystem
         if (!isActive && LeanEmotes.Contains(packet.Code))
         {
             if (!TrySnapToWall(fromPlayer))
+            {
                 tree.RemoveAttribute("leanYaw");
+            }
         }
         else
         {
