@@ -368,6 +368,7 @@ public class EmotesModSystem : ModSystem
             tree.SetBool(code, false);
         }
 
+        tree.RemoveAttribute("leanYaw");
         player.WatchedAttributes.MarkPathDirty("emotes");
     }
 
@@ -527,7 +528,12 @@ public class EmotesModSystem : ModSystem
 
         if (!isActive && LeanEmotes.Contains(packet.Code))
         {
-            TrySnapToWall(fromPlayer);
+            if (!TrySnapToWall(fromPlayer))
+                tree.RemoveAttribute("leanYaw");
+        }
+        else
+        {
+            tree.RemoveAttribute("leanYaw");
         }
 
         foreach (var code in Emotes.Keys)
