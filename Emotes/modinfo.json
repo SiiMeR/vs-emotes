@@ -8,10 +8,11 @@
     "W4RD0"
   ],
   "contributors": [
-    "DeanBro"
+    "DeanBro",
+    "spasmos"
   ],
   "description": "Adds more custom emotes to the game.",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "dependencies": {
     "game": "*"
   }

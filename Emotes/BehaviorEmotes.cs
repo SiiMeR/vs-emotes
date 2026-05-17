@@ -270,6 +270,7 @@ public class BehaviorEmotes : EntityBehavior
         base.OnEntityReceiveDamage(damageSource, ref damage);
 
         if (api.Side != EnumAppSide.Server) return;
+        if (damageSource.Type == EnumDamageType.Heal) return;
         if (entity is not EntityPlayer player) return;
 
         var tree = player.WatchedAttributes.GetTreeAttribute("emotes");

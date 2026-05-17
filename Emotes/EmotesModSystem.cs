@@ -35,7 +35,7 @@ public class EmotesModSystem : ModSystem
         ["surrender"] = new CustomEmote
         {
             Code = "surrender", Name = "Surrender", DisplayName = "Surrender", Animation = "surrender",
-            StopOnMovement = true, StopOnDamage = true
+            StopOnMovement = true, StopOnDamage = false
         },
         ["atease"] = new CustomEmote
         {
