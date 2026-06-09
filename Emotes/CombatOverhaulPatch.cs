@@ -51,8 +51,8 @@ public static class CombatOverhaulPatch
         _harmony?.UnpatchAll(HarmonyId);
     }
 
-    private static bool SkipIfEmotePlaying()
+    private static bool SkipIfEmotePlaying(Entity __0)
     {
-        return !EmotesModSystem.IsEmotePlaying;
+        return !EmotesModSystem.IsEntityEmoting(__0);
     }
 }

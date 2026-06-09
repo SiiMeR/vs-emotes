@@ -14,6 +14,7 @@ namespace Emotes;
 public class EmotesModSystem : ModSystem
 {
     private const string ChannelName = "emotes";
+    private const string ConsentKey = "emotesConsent";
 
     private static readonly Dictionary<string, CustomEmote> Emotes = new()
     {
@@ -347,11 +348,28 @@ public class EmotesModSystem : ModSystem
     private ICoreServerAPI serverApi;
     private IServerNetworkChannel serverChannel;
 
-    public static bool IsEmotePlaying { get; set; }
-
     public static IReadOnlyDictionary<string, CustomEmote> GetEmotes()
     {
         return Emotes;
+    }
+
+    public static bool IsEntityEmoting(Entity entity)
+    {
+        var tree = entity?.WatchedAttributes?.GetTreeAttribute("emotes");
+        if (tree == null)
+        {
+            return false;
+        }
+
+        foreach (var code in Emotes.Keys)
+        {
+            if (tree.GetBool(code))
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public static void SetEmoteState(EntityPlayer player, string code, bool active)
@@ -472,6 +490,12 @@ public class EmotesModSystem : ModSystem
         cmd.BeginSubCommand("showcase")
             .RequiresPlayer()
             .HandleWith(HandleShowcaseCommand)
+            .EndSubCommand();
+
+        cmd.BeginSubCommand("consent")
+            .RequiresPlayer()
+            .WithArgs(api.ChatCommands.Parsers.Bool("autoaccept"))
+            .HandleWith(HandleConsentCommand)
             .EndSubCommand();
 
         cmd.BeginSubCommand("accept")
@@ -714,7 +738,7 @@ public class EmotesModSystem : ModSystem
             return TextCommandResult.Error(Lang.Get("emotes:pair-no-target"));
         }
 
-        if (!config.PairedEmotesRequireConsent)
+        if (!targetPlayer.GetModData(ConsentKey, config.PairedEmotesRequireConsent))
         {
             return ExecutePair(emoteCode, emote, initiatorPlayer, initiator, targetPlayer, target);
         }
@@ -759,6 +783,18 @@ public class EmotesModSystem : ModSystem
         SetEmoteState(targetEntity, emoteCode, true);
 
         return TextCommandResult.Success();
+    }
+
+    private TextCommandResult HandleConsentCommand(TextCommandCallingArgs args)
+    {
+        if (args.Caller.Player is not IServerPlayer player)
+        {
+            return TextCommandResult.Error(Lang.Get("emotes:cmd-only-players"));
+        }
+
+        var requireConsent = (bool)args[0];
+        player.SetModData(ConsentKey, requireConsent);
+        return TextCommandResult.Success(Lang.Get(requireConsent ? "emotes:consent-on" : "emotes:consent-off"));
     }
 
     private TextCommandResult OnPairAccepted(TextCommandCallingArgs args)

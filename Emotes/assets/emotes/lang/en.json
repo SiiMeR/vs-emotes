@@ -8,6 +8,8 @@
   "emotes:cat-aggressive": "Aggressive",
   "emotes:cat-paired": "Paired",
   "emotes:cat-vanilla": "Vanilla",
+  "emotes:cat-all": "All",
+  "emotes:search-placeholder": "Search...",
   "emotes:hotkey-open": "Open Emote Picker",
   "emotes:cmd-description": "Play an emote. Usage: /emotes <name|list|stop>",
   "emotes:cmd-only-players": "Only players can use emotes",
@@ -87,6 +89,8 @@
   "emotes:pair-initiator-gone": "The requesting player is no longer online.",
   "emotes:pair-too-far": "You are too far apart.",
   "emotes:pair-refused": "{0} refused the emote request.",
+  "emotes:consent-on": "You will now be asked before paired emotes.",
+  "emotes:consent-off": "You will now auto-accept paired emote requests.",
 
   "emotes:emote-wave": "Wave",
   "emotes:emote-cheer": "Cheer",

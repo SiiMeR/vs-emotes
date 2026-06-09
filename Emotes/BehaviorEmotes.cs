@@ -122,8 +122,6 @@ public class BehaviorEmotes : EntityBehavior
         if (capi.World.Player?.Entity?.EntityId != entity.EntityId) return;
         if (entity is not EntityPlayer ep) return;
 
-        EmotesModSystem.IsEmotePlaying = anyActive;
-
         if (activeCode != null && EyeHeightByEmote.TryGetValue(activeCode, out var eyeH))
             StartEyePos(ep, eyeH);
         else
