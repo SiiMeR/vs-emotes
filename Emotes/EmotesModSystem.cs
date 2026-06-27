@@ -507,15 +507,6 @@ public class EmotesModSystem : ModSystem
             .RequiresPlayer()
             .HandleWith(OnPairRefused)
             .EndSubCommand();
-
-        foreach (var (code, _) in Emotes.Where(kv => kv.Value.RequiresTarget))
-        {
-            var capturedCode = code;
-            cmd.BeginSubCommand(code)
-                .RequiresPlayer()
-                .HandleWith(args => OnPairInitiate(capturedCode, args))
-                .EndSubCommand();
-        }
     }
 
     private void OnEmotePacket(IServerPlayer fromPlayer, EmotePacket packet)
@@ -890,9 +881,14 @@ public class EmotesModSystem : ModSystem
         }
 
         var key = ((string)args[0]).ToLowerInvariant();
-        if (!Emotes.TryGetValue(key, out var emote) || emote.RequiresTarget)
+        if (!Emotes.TryGetValue(key, out var emote))
         {
             return TextCommandResult.Error(Lang.Get("emotes:cmd-not-found", key));
+        }
+
+        if (emote.RequiresTarget)
+        {
+            return OnPairInitiate(key, args);
         }
 
         var tree = player.WatchedAttributes.GetOrAddTreeAttribute("emotes");
@@ -917,10 +913,20 @@ public class EmotesModSystem : ModSystem
 
     private TextCommandResult HandleListCommand(TextCommandCallingArgs args)
     {
-        return TextCommandResult.Success(Lang.Get("emotes:cmd-available-emotes",
-            string.Join(", ",
-                Emotes.Values.Where(e => !e.RequiresTarget)
-                    .Select(e => $"{e.Code} ({Lang.Get("emotes:emote-" + e.Code)})"))));
+        var solo = string.Join(", ",
+            Emotes.Values.Where(e => !e.RequiresTarget)
+                .Select(e => $"{e.Code} ({Lang.Get("emotes:emote-" + e.Code)})"));
+        var paired = string.Join(", ",
+            Emotes.Values.Where(e => e.RequiresTarget)
+                .Select(e => $"{e.Code} ({Lang.Get("emotes:emote-" + e.Code)})"));
+
+        var message = Lang.Get("emotes:cmd-available-emotes", solo);
+        if (!string.IsNullOrEmpty(paired))
+        {
+            message += "\n" + Lang.Get("emotes:cmd-paired-emotes", paired);
+        }
+
+        return TextCommandResult.Success(message);
     }
 
     private TextCommandResult HandleStopCommand(TextCommandCallingArgs args)
