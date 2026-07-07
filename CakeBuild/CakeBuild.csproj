@@ -6,6 +6,7 @@
 
     <PropertyGroup>
         <OutputType>Exe</OutputType>
+        <UseAppHost>false</UseAppHost>
         <RunWorkingDirectory>$(MSBuildProjectDirectory)</RunWorkingDirectory>
     </PropertyGroup>
 

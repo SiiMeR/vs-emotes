@@ -28,6 +28,7 @@ public class BehaviorEmotes : EntityBehavior
         ["layingback"]     = 0.2,
         ["layingdown"]     = 0.2,
         ["laydownsensual"] = 0.2,
+        ["prone"]          = 0.2,
     };
 
     ICoreAPI api;

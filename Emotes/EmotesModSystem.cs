@@ -33,6 +33,11 @@ public class EmotesModSystem : ModSystem
             Code = "layingdown", Name = "LayingDown", DisplayName = "Lay Down", Animation = "layingdown",
             StopOnMovement = true, StopOnDamage = true
         },
+        ["prone"] = new CustomEmote
+        {
+            Code = "prone", Name = "Prone", DisplayName = "Prone", Animation = "prone",
+            StopOnMovement = true, StopOnDamage = true
+        },
         ["surrender"] = new CustomEmote
         {
             Code = "surrender", Name = "Surrender", DisplayName = "Surrender", Animation = "surrender",
@@ -340,6 +345,8 @@ public class EmotesModSystem : ModSystem
     };
 
     private readonly Dictionary<string, PairRequest> pairRequests = new();
+    private HashSet<string> disabledEmotes = new();
+    private HashSet<string> clientDisabledEmotes = new();
     private ICoreClientAPI clientApi;
 
     private IClientNetworkChannel clientChannel;
@@ -351,6 +358,11 @@ public class EmotesModSystem : ModSystem
     public static IReadOnlyDictionary<string, CustomEmote> GetEmotes()
     {
         return Emotes;
+    }
+
+    public bool IsEmoteDisabled(string code)
+    {
+        return clientDisabledEmotes.Contains(code);
     }
 
     public static bool IsEntityEmoting(Entity entity)
@@ -436,7 +448,9 @@ public class EmotesModSystem : ModSystem
         clientChannel = api.Network.RegisterChannel(ChannelName)
             .RegisterMessageType<EmotePacket>()
             .RegisterMessageType<LeanSnapPacket>()
-            .SetMessageHandler<LeanSnapPacket>(OnLeanSnap);
+            .RegisterMessageType<DisabledEmotesPacket>()
+            .SetMessageHandler<LeanSnapPacket>(OnLeanSnap)
+            .SetMessageHandler<DisabledEmotesPacket>(OnDisabledEmotes);
 
         api.Input.RegisterHotKey("emotepicker", Lang.Get("emotes:hotkey-open"), GlKeys.J, shiftPressed: true);
         var dialog = new GuiDialogEmotePicker(api, this);
@@ -461,11 +475,16 @@ public class EmotesModSystem : ModSystem
         serverApi = api;
         config = api.LoadModConfig<EmotesConfig>("emotes.json") ?? new EmotesConfig();
         api.StoreModConfig(config, "emotes.json");
+        disabledEmotes = new HashSet<string>(config.DisabledEmotes ?? new List<string>(),
+            StringComparer.OrdinalIgnoreCase);
 
         serverChannel = api.Network.RegisterChannel(ChannelName)
             .RegisterMessageType<EmotePacket>()
             .RegisterMessageType<LeanSnapPacket>()
+            .RegisterMessageType<DisabledEmotesPacket>()
             .SetMessageHandler<EmotePacket>(OnEmotePacket);
+
+        api.Event.PlayerJoin += SendDisabledEmotes;
 
         var cmd = api.ChatCommands
             .GetOrCreate("emotes")
@@ -527,6 +546,11 @@ public class EmotesModSystem : ModSystem
             return;
         }
 
+        if (disabledEmotes.Contains(packet.Code))
+        {
+            return;
+        }
+
         if (emoteInfo.RequiresTarget)
         {
             OnPairInitiate(packet.Code,
@@ -565,6 +589,17 @@ public class EmotesModSystem : ModSystem
         }
 
         player.WatchedAttributes.MarkPathDirty("emotes");
+    }
+
+    private void SendDisabledEmotes(IServerPlayer player)
+    {
+        serverChannel?.SendPacket(new DisabledEmotesPacket { Codes = disabledEmotes.ToArray() }, player);
+    }
+
+    private void OnDisabledEmotes(DisabledEmotesPacket packet)
+    {
+        clientDisabledEmotes = new HashSet<string>(packet.Codes ?? Array.Empty<string>(),
+            StringComparer.OrdinalIgnoreCase);
     }
 
     private void OnLeanSnap(LeanSnapPacket packet)
@@ -886,6 +921,11 @@ public class EmotesModSystem : ModSystem
             return TextCommandResult.Error(Lang.Get("emotes:cmd-not-found", key));
         }
 
+        if (disabledEmotes.Contains(key))
+        {
+            return TextCommandResult.Error(Lang.Get("emotes:cmd-disabled", key));
+        }
+
         if (emote.RequiresTarget)
         {
             return OnPairInitiate(key, args);
@@ -914,10 +954,10 @@ public class EmotesModSystem : ModSystem
     private TextCommandResult HandleListCommand(TextCommandCallingArgs args)
     {
         var solo = string.Join(", ",
-            Emotes.Values.Where(e => !e.RequiresTarget)
+            Emotes.Values.Where(e => !e.RequiresTarget && !disabledEmotes.Contains(e.Code))
                 .Select(e => $"{e.Code} ({Lang.Get("emotes:emote-" + e.Code)})"));
         var paired = string.Join(", ",
-            Emotes.Values.Where(e => e.RequiresTarget)
+            Emotes.Values.Where(e => e.RequiresTarget && !disabledEmotes.Contains(e.Code))
                 .Select(e => $"{e.Code} ({Lang.Get("emotes:emote-" + e.Code)})"));
 
         var message = Lang.Get("emotes:cmd-available-emotes", solo);
@@ -947,7 +987,7 @@ public class EmotesModSystem : ModSystem
             return TextCommandResult.Error(Lang.Get("emotes:cmd-only-players"));
         }
 
-        var codes = Emotes.Keys.ToList();
+        var codes = Emotes.Keys.Where(c => !disabledEmotes.Contains(c)).ToList();
         var cancelled = new bool[1];
         var tickId = new long[1];
 

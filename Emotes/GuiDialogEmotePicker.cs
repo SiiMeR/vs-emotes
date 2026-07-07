@@ -24,7 +24,7 @@ public class GuiDialogEmotePicker : GuiDialog
     private static readonly (string LangKey, string[] Codes)[] NamedCategories =
     {
         ("cat-sitting",    new[] { "seiza", "prayer", "sittingcool", "sittingchill", "sittingrelaxed", "sittingrefined", "sittingcalm", "sittinginnocent", "squatting", "kneel", "sittingrested", "sittingintrovert" }),
-        ("cat-laying",     new[] { "layingdown", "layingback", "laydownsensual" }),
+        ("cat-laying",     new[] { "layingdown", "prone", "layingback", "laydownsensual" }),
         ("cat-friendly",   new[] { "blowkiss", "clapping", "kisshand", "politebow", "victory" }),
         ("cat-idle",       new[] { "atease", "crossedarms", "handships", "leaningcrossed", "leaninghandshead", "leaninghips", "leaningsimple", "leaningoversimple", "leaningoverconfident" }),
         ("cat-neutral",    new[] { "crossedarmsthinking", "handrub", "handup", "knocking", "martialarts", "noblesalute", "pointing", "prayerstanding", "refinedsalute", "salute", "scanning", "surrender", "thinkinghard", "crackingknuckles" }),
@@ -102,7 +102,7 @@ public class GuiDialogEmotePicker : GuiDialog
         else
         {
             var emotes = NamedCategories[activeCategory - 1].Codes
-                .Where(c => EmotesModSystem.GetEmotes().ContainsKey(c))
+                .Where(c => EmotesModSystem.GetEmotes().ContainsKey(c) && !modSystem.IsEmoteDisabled(c))
                 .Select(c => (Code: c, Name: Lang.Get("emotes:emote-" + c)))
                 .OrderBy(e => e.Name)
                 .ToArray();
@@ -158,6 +158,7 @@ public class GuiDialogEmotePicker : GuiDialog
     {
         var q = searchText.ToLowerInvariant().Trim();
         var emotes = EmotesModSystem.GetEmotes()
+            .Where(kv => !modSystem.IsEmoteDisabled(kv.Key))
             .Select(kv => (Code: kv.Key, Name: Lang.Get("emotes:emote-" + kv.Key)))
             .Where(e => q.Length == 0 || e.Name.ToLowerInvariant().Contains(q) || e.Code.Contains(q))
             .OrderBy(e => e.Name)

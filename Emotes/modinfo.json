@@ -12,7 +12,7 @@
     "spasmos"
   ],
   "description": "Adds more custom emotes to the game.",
-  "version": "2.4.0",
+  "version": "2.5.1",
   "dependencies": {
     "game": "*"
   }

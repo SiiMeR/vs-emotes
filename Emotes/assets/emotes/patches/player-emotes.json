@@ -157,6 +157,14 @@
         "animationSpeed": 1
       },
       {
+        "code": "prone",
+        "animation": "Prone",
+        "blendMode": "Add",
+        "easeInSpeed": 1,
+        "easeOutSpeed": 2,
+        "animationSpeed": 1
+      },
+      {
         "code": "leaningcrossed",
         "animation": "LeaningCrossed",
         "blendMode": "Add",
