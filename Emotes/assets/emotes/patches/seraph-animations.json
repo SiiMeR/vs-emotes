@@ -6,7 +6,7 @@
     "value": [
       {
         "name": "Seiza",
-        "code": "seiza",
+        "code": "emotes:seiza",
         "quantityframes": 62,
         "onActivityStopped": "EaseOut",
         "onAnimationEnd": "Hold",
@@ -563,7 +563,7 @@
       },
       {
         "name": "Kneel",
-        "code": "kneel",
+        "code": "emotes:kneel",
         "quantityframes": 33,
         "onActivityStopped": "EaseOut",
         "onAnimationEnd": "Hold",
@@ -756,7 +756,7 @@
       },
       {
         "name": "Surrender",
-        "code": "surrender",
+        "code": "emotes:surrender",
         "quantityframes": 42,
         "onActivityStopped": "EaseOut",
         "onAnimationEnd": "Hold",
@@ -928,7 +928,7 @@
       },
       {
         "name": "AtEase",
-        "code": "atease",
+        "code": "emotes:atease",
         "quantityframes": 18,
         "onActivityStopped": "EaseOut",
         "onAnimationEnd": "Hold",
@@ -1159,7 +1159,7 @@
       },
       {
         "name": "Pointing",
-        "code": "pointing",
+        "code": "emotes:pointing",
         "quantityframes": 33,
         "onActivityStopped": "EaseOut",
         "onAnimationEnd": "Hold",
@@ -1353,7 +1353,7 @@
       },
       {
         "name": "LeaningCrossed",
-        "code": "leaningcrossed",
+        "code": "emotes:leaningcrossed",
         "quantityframes": 33,
         "onActivityStopped": "EaseOut",
         "onAnimationEnd": "Hold",
@@ -1539,7 +1539,7 @@
       },
       {
         "name": "LeaningHips",
-        "code": "leaninghips",
+        "code": "emotes:leaninghips",
         "quantityframes": 21,
         "onActivityStopped": "EaseOut",
         "onAnimationEnd": "Hold",
@@ -1734,7 +1734,7 @@
       },
       {
         "name": "FlippingOff",
-        "code": "flippingoff",
+        "code": "emotes:flippingoff",
         "quantityframes": 63,
         "onActivityStopped": "EaseOut",
         "onAnimationEnd": "Hold",
@@ -1924,7 +1924,7 @@
       },
       {
         "name": "CrossedArmsThinking",
-        "code": "crossedarmsthinking",
+        "code": "emotes:crossedarmsthinking",
         "quantityframes": 107,
         "onActivityStopped": "EaseOut",
         "onAnimationEnd": "Hold",
@@ -2153,7 +2153,7 @@
       },
       {
         "name": "SittingCool",
-        "code": "sittingcool",
+        "code": "emotes:sittingcool",
         "quantityframes": 33,
         "onActivityStopped": "EaseOut",
         "onAnimationEnd": "Hold",
@@ -2617,7 +2617,7 @@
       },
       {
         "name": "LayingDown",
-        "code": "layingdown",
+        "code": "emotes:layingdown",
         "quantityframes": 93,
         "onActivityStopped": "EaseOut",
         "onAnimationEnd": "Hold",
@@ -3379,7 +3379,7 @@
       },
       {
         "name": "Blowkiss",
-        "code": "blowkiss",
+        "code": "emotes:blowkiss",
         "quantityframes": 45,
         "onActivityStopped": "EaseOut",
         "onAnimationEnd": "Hold",
@@ -3704,7 +3704,7 @@
       },
       {
         "name": "ChestThump",
-        "code": "chestthump",
+        "code": "emotes:chestthump",
         "quantityframes": 82,
         "onActivityStopped": "EaseOut",
         "onAnimationEnd": "EaseOut",
@@ -4102,7 +4102,7 @@
       },
       {
         "name": "Clapping",
-        "code": "clapping",
+        "code": "emotes:clapping",
         "quantityframes": 76,
         "onActivityStopped": "EaseOut",
         "onAnimationEnd": "EaseOut",
@@ -4607,7 +4607,7 @@
       },
       {
         "name": "CrossedArms",
-        "code": "crossedarms",
+        "code": "emotes:crossedarms",
         "quantityframes": 15,
         "onActivityStopped": "EaseOut",
         "onAnimationEnd": "Hold",
@@ -4768,7 +4768,7 @@
       },
       {
         "name": "Handshake",
-        "code": "handshake",
+        "code": "emotes:handshake",
         "quantityframes": 24,
         "onActivityStopped": "EaseOut",
         "onAnimationEnd": "Hold",
@@ -4934,7 +4934,7 @@
       },
       {
         "name": "Layingback",
-        "code": "layingback",
+        "code": "emotes:layingback",
         "quantityframes": 80,
         "onActivityStopped": "EaseOut",
         "onAnimationEnd": "Hold",
@@ -5589,7 +5589,7 @@
       },
       {
         "name": "RefinedSalute",
-        "code": "refinedsalute",
+        "code": "emotes:refinedsalute",
         "quantityframes": 45,
         "onActivityStopped": "EaseOut",
         "onAnimationEnd": "Hold",
@@ -5789,7 +5789,7 @@
       },
       {
         "name": "Salute",
-        "code": "salute",
+        "code": "emotes:salute",
         "quantityframes": 47,
         "onActivityStopped": "EaseOut",
         "onAnimationEnd": "Hold",
@@ -5969,7 +5969,7 @@
       },
       {
         "name": "Scanning",
-        "code": "scanning",
+        "code": "emotes:scanning",
         "quantityframes": 24,
         "onActivityStopped": "EaseOut",
         "onAnimationEnd": "Hold",
@@ -6176,7 +6176,7 @@
       },
       {
         "name": "Squatting",
-        "code": "squatting",
+        "code": "emotes:squatting",
         "quantityframes": 24,
         "onActivityStopped": "EaseOut",
         "onAnimationEnd": "Hold",
@@ -6491,7 +6491,7 @@
       },
       {
         "name": "ThinkingHARD",
-        "code": "thinkinghard",
+        "code": "emotes:thinkinghard",
         "quantityframes": 24,
         "onActivityStopped": "EaseOut",
         "onAnimationEnd": "Hold",
@@ -6720,7 +6720,7 @@
       },
       {
         "name": "BringItOn",
-        "code": "bringiton",
+        "code": "emotes:bringiton",
         "quantityframes": 49,
         "onActivityStopped": "EaseOut",
         "onAnimationEnd": "Hold",
@@ -6954,7 +6954,7 @@
       },
       {
         "name": "SlitThroat",
-        "code": "slitthroat",
+        "code": "emotes:slitthroat",
         "quantityframes": 63,
         "onActivityStopped": "EaseOut",
         "onAnimationEnd": "Hold",
@@ -7197,7 +7197,7 @@
       },
       {
         "name": "HandRub",
-        "code": "handrub",
+        "code": "emotes:handrub",
         "quantityframes": 67,
         "onActivityStopped": "EaseOut",
         "onAnimationEnd": "EaseOut",
@@ -7632,7 +7632,7 @@
       },
       {
         "name": "DapUp",
-        "code": "dapup",
+        "code": "emotes:dapup",
         "quantityframes": 31,
         "onActivityStopped": "EaseOut",
         "onAnimationEnd": "Hold",
@@ -7923,7 +7923,7 @@
       },
       {
         "name": "EnGarde",
-        "code": "engarde",
+        "code": "emotes:engarde",
         "quantityframes": 33,
         "onActivityStopped": "EaseOut",
         "onAnimationEnd": "Hold",
@@ -8150,7 +8150,7 @@
       },
       {
         "name": "LeaningHandsHead",
-        "code": "leaninghandshead",
+        "code": "emotes:leaninghandshead",
         "quantityframes": 21,
         "onActivityStopped": "EaseOut",
         "onAnimationEnd": "Hold",
@@ -8353,7 +8353,7 @@
       },
       {
         "name": "HandUp",
-        "code": "handup",
+        "code": "emotes:handup",
         "quantityframes": 15,
         "onActivityStopped": "EaseOut",
         "onAnimationEnd": "Hold",
@@ -8507,7 +8507,7 @@
       },
       {
         "name": "Prayer",
-        "code": "prayer",
+        "code": "emotes:prayer",
         "quantityframes": 33,
         "onActivityStopped": "EaseOut",
         "onAnimationEnd": "Hold",
@@ -8718,7 +8718,7 @@
       },
       {
         "name": "Victory",
-        "code": "victory",
+        "code": "emotes:victory",
         "quantityframes": 32,
         "onActivityStopped": "EaseOut",
         "onAnimationEnd": "Hold",
@@ -9153,7 +9153,7 @@
       },
       {
         "name": "PoliteBow",
-        "code": "politebow",
+        "code": "emotes:politebow",
         "quantityframes": 31,
         "onActivityStopped": "EaseOut",
         "onAnimationEnd": "Hold",
@@ -9328,7 +9328,7 @@
       },
       {
         "name": "PrayerStanding",
-        "code": "prayerstanding",
+        "code": "emotes:prayerstanding",
         "quantityframes": 31,
         "onActivityStopped": "EaseOut",
         "onAnimationEnd": "Hold",
@@ -9485,7 +9485,7 @@
       },
       {
         "name": "KissHand",
-        "code": "kisshand",
+        "code": "emotes:kisshand",
         "quantityframes": 32,
         "onActivityStopped": "EaseOut",
         "onAnimationEnd": "Hold",
@@ -9686,7 +9686,7 @@
       },
       {
         "name": "MartialArts",
-        "code": "martialarts",
+        "code": "emotes:martialarts",
         "quantityframes": 29,
         "onActivityStopped": "EaseOut",
         "onAnimationEnd": "Hold",
@@ -10023,7 +10023,7 @@
       },
       {
         "name": "CrackingKnuckles",
-        "code": "crackingknuckles",
+        "code": "emotes:crackingknuckles",
         "quantityframes": 55,
         "onActivityStopped": "EaseOut",
         "onAnimationEnd": "Hold",
@@ -10480,7 +10480,7 @@
       },
       {
         "name": "NobleSalute",
-        "code": "noblesalute",
+        "code": "emotes:noblesalute",
         "quantityframes": 46,
         "onActivityStopped": "EaseOut",
         "onAnimationEnd": "Hold",
@@ -10774,7 +10774,7 @@
       },
       {
         "name": "Knocking",
-        "code": "knocking",
+        "code": "emotes:knocking",
         "quantityframes": 57,
         "onActivityStopped": "EaseOut",
         "onAnimationEnd": "EaseOut",
@@ -11083,7 +11083,7 @@
       },
       {
         "name": "HandsHips",
-        "code": "handships",
+        "code": "emotes:handships",
         "quantityframes": 10,
         "onActivityStopped": "EaseOut",
         "onAnimationEnd": "Hold",
@@ -11242,7 +11242,7 @@
       },
       {
         "name": "SittingChill",
-        "code": "sittingchill",
+        "code": "emotes:sittingchill",
         "quantityframes": 32,
         "onActivityStopped": "EaseOut",
         "onAnimationEnd": "Hold",
@@ -11697,7 +11697,7 @@
       },
       {
         "name": "SittingRelaxed",
-        "code": "sittingrelaxed",
+        "code": "emotes:sittingrelaxed",
         "quantityframes": 32,
         "onActivityStopped": "EaseOut",
         "onAnimationEnd": "Hold",
@@ -12114,7 +12114,7 @@
       },
       {
         "name": "SittingRefined",
-        "code": "sittingrefined",
+        "code": "emotes:sittingrefined",
         "quantityframes": 22,
         "onActivityStopped": "EaseOut",
         "onAnimationEnd": "Hold",
@@ -12434,7 +12434,7 @@
       },
       {
         "name": "LayDownSensual",
-        "code": "laydownsensual",
+        "code": "emotes:laydownsensual",
         "quantityframes": 43,
         "onActivityStopped": "EaseOut",
         "onAnimationEnd": "Hold",
@@ -12989,7 +12989,7 @@
       },
       {
         "name": "SittingCalm",
-        "code": "sittingcalm",
+        "code": "emotes:sittingcalm",
         "quantityframes": 22,
         "onActivityStopped": "EaseOut",
         "onAnimationEnd": "Hold",
@@ -13275,7 +13275,7 @@
       },
       {
         "name": "SittingInnocent",
-        "code": "sittinginnocent",
+        "code": "emotes:sittinginnocent",
         "quantityframes": 22,
         "onActivityStopped": "EaseOut",
         "onAnimationEnd": "Hold",
@@ -13477,7 +13477,7 @@
       },
       {
         "name": "Hug",
-        "code": "hug",
+        "code": "emotes:hug",
         "quantityframes": 28,
         "onActivityStopped": "EaseOut",
         "onAnimationEnd": "Hold",
@@ -13782,7 +13782,7 @@
       },
       {
         "name": "Kiss",
-        "code": "kiss",
+        "code": "emotes:kiss",
         "quantityframes": 25,
         "onActivityStopped": "EaseOut",
         "onAnimationEnd": "Hold",
@@ -13973,7 +13973,7 @@
       },
       {
         "name": "HugFriendly",
-        "code": "hugfriendly",
+        "code": "emotes:hugfriendly",
         "quantityframes": 27,
         "onActivityStopped": "EaseOut",
         "onAnimationEnd": "Hold",
@@ -14283,7 +14283,7 @@
       },
       {
         "name": "Smooch",
-        "code": "smooch",
+        "code": "emotes:smooch",
         "quantityframes": 25,
         "onActivityStopped": "EaseOut",
         "onAnimationEnd": "Hold",
@@ -14490,7 +14490,7 @@
       },
       {
         "name": "HandshakeDouble",
-        "code": "handshakedouble",
+        "code": "emotes:handshakedouble",
         "quantityframes": 30,
         "onActivityStopped": "EaseOut",
         "onAnimationEnd": "Hold",
@@ -14751,7 +14751,7 @@
       },
       {
         "name": "HandHolding",
-        "code": "handholding",
+        "code": "emotes:handholding",
         "quantityframes": 17,
         "onActivityStopped": "EaseOut",
         "onAnimationEnd": "Hold",
@@ -14896,7 +14896,7 @@
       },
       {
         "name": "HandHoldingIntimate",
-        "code": "handholdingintimate",
+        "code": "emotes:handholdingintimate",
         "quantityframes": 17,
         "onActivityStopped": "EaseOut",
         "onAnimationEnd": "Hold",
@@ -15059,7 +15059,7 @@
       },
       {
         "name": "SittingRested",
-        "code": "sittingrested",
+        "code": "emotes:sittingrested",
         "quantityframes": 40,
         "onActivityStopped": "EaseOut",
         "onAnimationEnd": "Hold",
@@ -15522,7 +15522,7 @@
       },
       {
         "name": "SittingIntrovert",
-        "code": "sittingintrovert",
+        "code": "emotes:sittingintrovert",
         "quantityframes": 33,
         "onActivityStopped": "EaseOut",
         "onAnimationEnd": "Hold",
@@ -15945,7 +15945,7 @@
       },
       {
         "name": "LeaningSimple",
-        "code": "leaningsimple",
+        "code": "emotes:leaningsimple",
         "quantityframes": 40,
         "onActivityStopped": "EaseOut",
         "onAnimationEnd": "Hold",
@@ -16131,35 +16131,500 @@
       },
       {
         "name": "LeaningOverSimple",
-        "code": "leaningoversimple",
+        "code": "emotes:leaningoversimple",
         "quantityframes": 25,
         "onActivityStopped": "EaseOut",
         "onAnimationEnd": "Hold",
         "keyframes": [
-          { "frame": 0, "elements": { "UpperTorso": {"rotationX": 0, "rotationY": 0, "rotationZ": 0, "offsetX": 0, "offsetY": 0, "offsetZ": 0}, "LowerTorso": {"rotationX": 0, "rotationY": 0, "rotationZ": 0, "offsetX": 0, "offsetY": 0, "offsetZ": 0}, "UpperArmR": {"rotationX": 0, "rotationY": 0, "rotationZ": 0}, "LowerArmR": {"rotationX": 0, "rotationY": 0, "rotationZ": 0}, "UpperArmL": {"rotationX": 0, "rotationY": 0, "rotationZ": 0}, "LowerArmL": {"rotationX": 0, "rotationY": 0, "rotationZ": 0}, "Head": {"rotationX": 0, "rotationY": 0, "rotationZ": 0}, "UpperFootL": {"rotationX": 0, "rotationY": 0, "rotationZ": 0}, "LowerFootL": {"rotationX": 0, "rotationY": 0, "rotationZ": 0}, "root": {"offsetX": 0, "offsetY": 0, "offsetZ": 0}, "UpperFootR": {"rotationX": 0, "rotationY": 0, "rotationZ": 0}, "LowerFootR": {"rotationX": 0, "rotationY": 0, "rotationZ": 0} } },
-          { "frame": 7, "elements": { "UpperTorso": {"rotationX": 0, "rotationY": 0, "rotationZ": 1, "offsetX": 0, "offsetY": -0.1, "offsetZ": 0} } },
-          { "frame": 8, "elements": { "UpperTorso": {"rotationX": 0, "rotationY": 0, "rotationZ": 0.97, "offsetX": 0, "offsetY": -0.1, "offsetZ": 0}, "UpperArmR": {"rotationX": 0, "rotationY": 0, "rotationZ": 0}, "LowerArmR": {"rotationX": 0, "rotationY": 0, "rotationZ": 0}, "UpperArmL": {"rotationX": 0, "rotationY": 0, "rotationZ": 0}, "LowerArmL": {"rotationX": 0, "rotationY": 0, "rotationZ": 0} } },
-          { "frame": 10, "elements": { "root": {"offsetX": 0, "offsetY": 0, "offsetZ": 0} } },
-          { "frame": 16, "elements": { "UpperTorso": {"rotationX": 0, "rotationY": 0, "rotationZ": 13.47}, "LowerTorso": {"rotationX": 0, "rotationY": 0, "rotationZ": 7.5, "offsetX": -4, "offsetY": 0, "offsetZ": 0}, "UpperArmR": {"rotationX": 7.4653, "rotationY": 6.6724, "rotationZ": -47.9358}, "LowerArmR": {"rotationX": 55.7818, "rotationY": 25.8645, "rotationZ": -75.865}, "UpperArmL": {"rotationX": 0.3933, "rotationY": -4.9846, "rotationZ": -44.9829}, "LowerArmL": {"rotationX": -61.9501, "rotationY": -24.4572, "rotationZ": -75.9919}, "Head": {"rotationX": -2.2278, "rotationY": 1.1347, "rotationZ": -17.4779}, "UpperFootL": {"rotationX": 0, "rotationY": 2.5, "rotationZ": 2.5}, "LowerFootL": {"rotationX": 0, "rotationY": 0, "rotationZ": 5}, "root": {"offsetX": -1, "offsetY": 0, "offsetZ": 0}, "UpperFootR": {"rotationX": -1.2971, "rotationY": -4.8293, "rotationZ": -10.0547}, "LowerFootR": {"rotationX": 0, "rotationY": 0, "rotationZ": 10} } },
-          { "frame": 24, "elements": { "UpperTorso": {"rotationX": 0, "rotationY": 0, "rotationZ": 13.47, "offsetX": 0, "offsetY": -0.1, "offsetZ": 0}, "LowerTorso": {"rotationX": 0, "rotationY": 0, "rotationZ": 7.5, "offsetX": -4, "offsetY": 0, "offsetZ": 0}, "UpperArmR": {"rotationX": 7.4653, "rotationY": 6.6724, "rotationZ": -40.4358}, "LowerArmR": {"rotationX": 55.7818, "rotationY": 25.8645, "rotationZ": -75.865}, "UpperArmL": {"rotationX": 0.3933, "rotationY": -4.9846, "rotationZ": -37.4829}, "LowerArmL": {"rotationX": -61.9501, "rotationY": -24.4572, "rotationZ": -75.9919}, "Head": {"rotationX": -2.2278, "rotationY": 1.1347, "rotationZ": -17.4779}, "UpperFootL": {"rotationX": 0, "rotationY": 2.5, "rotationZ": 2.5}, "LowerFootL": {"rotationX": 0, "rotationY": 0, "rotationZ": 5}, "UpperFootR": {"rotationX": -1.2971, "rotationY": -4.8293, "rotationZ": -10.0547}, "LowerFootR": {"rotationX": 0, "rotationY": 0, "rotationZ": 10} } }
+          {
+            "frame": 0,
+            "elements": {
+              "UpperTorso": {
+                "rotationX": 0,
+                "rotationY": 0,
+                "rotationZ": 0,
+                "offsetX": 0,
+                "offsetY": 0,
+                "offsetZ": 0
+              },
+              "LowerTorso": {
+                "rotationX": 0,
+                "rotationY": 0,
+                "rotationZ": 0,
+                "offsetX": 0,
+                "offsetY": 0,
+                "offsetZ": 0
+              },
+              "UpperArmR": {
+                "rotationX": 0,
+                "rotationY": 0,
+                "rotationZ": 0
+              },
+              "LowerArmR": {
+                "rotationX": 0,
+                "rotationY": 0,
+                "rotationZ": 0
+              },
+              "UpperArmL": {
+                "rotationX": 0,
+                "rotationY": 0,
+                "rotationZ": 0
+              },
+              "LowerArmL": {
+                "rotationX": 0,
+                "rotationY": 0,
+                "rotationZ": 0
+              },
+              "Head": {
+                "rotationX": 0,
+                "rotationY": 0,
+                "rotationZ": 0
+              },
+              "UpperFootL": {
+                "rotationX": 0,
+                "rotationY": 0,
+                "rotationZ": 0
+              },
+              "LowerFootL": {
+                "rotationX": 0,
+                "rotationY": 0,
+                "rotationZ": 0
+              },
+              "root": {
+                "offsetX": 0,
+                "offsetY": 0,
+                "offsetZ": 0
+              },
+              "UpperFootR": {
+                "rotationX": 0,
+                "rotationY": 0,
+                "rotationZ": 0
+              },
+              "LowerFootR": {
+                "rotationX": 0,
+                "rotationY": 0,
+                "rotationZ": 0
+              }
+            }
+          },
+          {
+            "frame": 7,
+            "elements": {
+              "UpperTorso": {
+                "rotationX": 0,
+                "rotationY": 0,
+                "rotationZ": 1,
+                "offsetX": 0,
+                "offsetY": -0.1,
+                "offsetZ": 0
+              }
+            }
+          },
+          {
+            "frame": 8,
+            "elements": {
+              "UpperTorso": {
+                "rotationX": 0,
+                "rotationY": 0,
+                "rotationZ": 0.97,
+                "offsetX": 0,
+                "offsetY": -0.1,
+                "offsetZ": 0
+              },
+              "UpperArmR": {
+                "rotationX": 0,
+                "rotationY": 0,
+                "rotationZ": 0
+              },
+              "LowerArmR": {
+                "rotationX": 0,
+                "rotationY": 0,
+                "rotationZ": 0
+              },
+              "UpperArmL": {
+                "rotationX": 0,
+                "rotationY": 0,
+                "rotationZ": 0
+              },
+              "LowerArmL": {
+                "rotationX": 0,
+                "rotationY": 0,
+                "rotationZ": 0
+              }
+            }
+          },
+          {
+            "frame": 10,
+            "elements": {
+              "root": {
+                "offsetX": 0,
+                "offsetY": 0,
+                "offsetZ": 0
+              }
+            }
+          },
+          {
+            "frame": 16,
+            "elements": {
+              "UpperTorso": {
+                "rotationX": 0,
+                "rotationY": 0,
+                "rotationZ": 13.47
+              },
+              "LowerTorso": {
+                "rotationX": 0,
+                "rotationY": 0,
+                "rotationZ": 7.5,
+                "offsetX": -4,
+                "offsetY": 0,
+                "offsetZ": 0
+              },
+              "UpperArmR": {
+                "rotationX": 7.4653,
+                "rotationY": 6.6724,
+                "rotationZ": -47.9358
+              },
+              "LowerArmR": {
+                "rotationX": 55.7818,
+                "rotationY": 25.8645,
+                "rotationZ": -75.865
+              },
+              "UpperArmL": {
+                "rotationX": 0.3933,
+                "rotationY": -4.9846,
+                "rotationZ": -44.9829
+              },
+              "LowerArmL": {
+                "rotationX": -61.9501,
+                "rotationY": -24.4572,
+                "rotationZ": -75.9919
+              },
+              "Head": {
+                "rotationX": -2.2278,
+                "rotationY": 1.1347,
+                "rotationZ": -17.4779
+              },
+              "UpperFootL": {
+                "rotationX": 0,
+                "rotationY": 2.5,
+                "rotationZ": 2.5
+              },
+              "LowerFootL": {
+                "rotationX": 0,
+                "rotationY": 0,
+                "rotationZ": 5
+              },
+              "root": {
+                "offsetX": -1,
+                "offsetY": 0,
+                "offsetZ": 0
+              },
+              "UpperFootR": {
+                "rotationX": -1.2971,
+                "rotationY": -4.8293,
+                "rotationZ": -10.0547
+              },
+              "LowerFootR": {
+                "rotationX": 0,
+                "rotationY": 0,
+                "rotationZ": 10
+              }
+            }
+          },
+          {
+            "frame": 24,
+            "elements": {
+              "UpperTorso": {
+                "rotationX": 0,
+                "rotationY": 0,
+                "rotationZ": 13.47,
+                "offsetX": 0,
+                "offsetY": -0.1,
+                "offsetZ": 0
+              },
+              "LowerTorso": {
+                "rotationX": 0,
+                "rotationY": 0,
+                "rotationZ": 7.5,
+                "offsetX": -4,
+                "offsetY": 0,
+                "offsetZ": 0
+              },
+              "UpperArmR": {
+                "rotationX": 7.4653,
+                "rotationY": 6.6724,
+                "rotationZ": -40.4358
+              },
+              "LowerArmR": {
+                "rotationX": 55.7818,
+                "rotationY": 25.8645,
+                "rotationZ": -75.865
+              },
+              "UpperArmL": {
+                "rotationX": 0.3933,
+                "rotationY": -4.9846,
+                "rotationZ": -37.4829
+              },
+              "LowerArmL": {
+                "rotationX": -61.9501,
+                "rotationY": -24.4572,
+                "rotationZ": -75.9919
+              },
+              "Head": {
+                "rotationX": -2.2278,
+                "rotationY": 1.1347,
+                "rotationZ": -17.4779
+              },
+              "UpperFootL": {
+                "rotationX": 0,
+                "rotationY": 2.5,
+                "rotationZ": 2.5
+              },
+              "LowerFootL": {
+                "rotationX": 0,
+                "rotationY": 0,
+                "rotationZ": 5
+              },
+              "UpperFootR": {
+                "rotationX": -1.2971,
+                "rotationY": -4.8293,
+                "rotationZ": -10.0547
+              },
+              "LowerFootR": {
+                "rotationX": 0,
+                "rotationY": 0,
+                "rotationZ": 10
+              }
+            }
+          }
         ]
       },
       {
         "name": "LeaningOverConfident",
-        "code": "leaningoverconfident",
+        "code": "emotes:leaningoverconfident",
         "quantityframes": 17,
         "onActivityStopped": "EaseOut",
         "onAnimationEnd": "Hold",
         "keyframes": [
-          { "frame": 0, "elements": { "UpperTorso": {"rotationX": 0, "rotationY": 0, "rotationZ": 0, "offsetX": 0, "offsetY": 0, "offsetZ": 0}, "LowerTorso": {"rotationX": 0, "rotationY": 0, "rotationZ": 0, "offsetX": 0, "offsetY": 0, "offsetZ": 0}, "UpperArmR": {"rotationX": 0, "rotationY": 0, "rotationZ": 0, "offsetX": 0, "offsetY": 0, "offsetZ": 0}, "LowerArmR": {"rotationX": 0, "rotationY": 0, "rotationZ": 0, "offsetX": 0, "offsetY": 0, "offsetZ": 0}, "UpperArmL": {"rotationX": 0, "rotationY": 0, "rotationZ": 0, "offsetX": 0, "offsetY": 0, "offsetZ": 0}, "LowerArmL": {"rotationX": 0, "rotationY": 0, "rotationZ": 0, "offsetX": 0, "offsetY": 0, "offsetZ": 0}, "Head": {"rotationX": 0, "rotationY": 0, "rotationZ": 0}, "UpperFootL": {"rotationX": 0, "rotationY": 0, "rotationZ": 0}, "LowerFootL": {"rotationX": 0, "rotationY": 0, "rotationZ": 0}, "root": {"offsetX": 0, "offsetY": 0, "offsetZ": 0}, "UpperFootR": {"rotationX": 0, "rotationY": 0, "rotationZ": 0}, "LowerFootR": {"rotationX": 0, "rotationY": 0, "rotationZ": 0} } },
-          { "frame": 9, "elements": { "UpperTorso": {"rotationX": 0, "rotationY": 0, "rotationZ": 1, "offsetX": 0, "offsetY": -0.1, "offsetZ": 0} } },
-          { "frame": 10, "elements": { "UpperTorso": {"rotationX": 0, "rotationY": 0, "rotationZ": 0.97, "offsetX": 0, "offsetY": -0.1, "offsetZ": 0}, "UpperArmR": {"rotationX": 0, "rotationY": 0, "rotationZ": 0}, "LowerArmR": {"rotationX": 0, "rotationY": 0, "rotationZ": 0}, "UpperArmL": {"rotationX": 0, "rotationY": 0, "rotationZ": 0}, "LowerArmL": {"rotationX": 0, "rotationY": 0, "rotationZ": 0}, "root": {"offsetX": 0, "offsetY": 0, "offsetZ": 0} } },
-          { "frame": 16, "elements": { "UpperTorso": {"rotationX": 0, "rotationY": 0, "rotationZ": 13.47}, "LowerTorso": {"rotationX": 0, "rotationY": 0, "rotationZ": 7.5, "offsetX": -4, "offsetY": 0, "offsetZ": 0}, "UpperArmR": {"rotationX": 4.5553, "rotationY": -1.2576, "rotationZ": -63.1231, "offsetX": 1, "offsetY": 2, "offsetZ": 0}, "LowerArmR": {"rotationX": -34.3335, "rotationY": -67.5641, "rotationZ": -32.4092, "offsetX": 0, "offsetY": 1, "offsetZ": 0}, "UpperArmL": {"rotationX": -6.9779, "rotationY": 4.4637, "rotationZ": -61.7009, "offsetX": 1, "offsetY": 2, "offsetZ": 0}, "LowerArmL": {"rotationX": 17.2204, "rotationY": 63.8432, "rotationZ": -18.0552, "offsetX": 0, "offsetY": 1, "offsetZ": 0}, "Head": {"rotationX": -2.2278, "rotationY": 1.1347, "rotationZ": -17.4779}, "UpperFootL": {"rotationX": 0, "rotationY": 2.5, "rotationZ": 2.5}, "LowerFootL": {"rotationX": 0, "rotationY": 0, "rotationZ": 5}, "root": {"offsetX": 0, "offsetY": 0, "offsetZ": 0}, "UpperFootR": {"rotationX": -1.2971, "rotationY": -4.8293, "rotationZ": -10.0547}, "LowerFootR": {"rotationX": 0, "rotationY": 0, "rotationZ": 10} } }
+          {
+            "frame": 0,
+            "elements": {
+              "UpperTorso": {
+                "rotationX": 0,
+                "rotationY": 0,
+                "rotationZ": 0,
+                "offsetX": 0,
+                "offsetY": 0,
+                "offsetZ": 0
+              },
+              "LowerTorso": {
+                "rotationX": 0,
+                "rotationY": 0,
+                "rotationZ": 0,
+                "offsetX": 0,
+                "offsetY": 0,
+                "offsetZ": 0
+              },
+              "UpperArmR": {
+                "rotationX": 0,
+                "rotationY": 0,
+                "rotationZ": 0,
+                "offsetX": 0,
+                "offsetY": 0,
+                "offsetZ": 0
+              },
+              "LowerArmR": {
+                "rotationX": 0,
+                "rotationY": 0,
+                "rotationZ": 0,
+                "offsetX": 0,
+                "offsetY": 0,
+                "offsetZ": 0
+              },
+              "UpperArmL": {
+                "rotationX": 0,
+                "rotationY": 0,
+                "rotationZ": 0,
+                "offsetX": 0,
+                "offsetY": 0,
+                "offsetZ": 0
+              },
+              "LowerArmL": {
+                "rotationX": 0,
+                "rotationY": 0,
+                "rotationZ": 0,
+                "offsetX": 0,
+                "offsetY": 0,
+                "offsetZ": 0
+              },
+              "Head": {
+                "rotationX": 0,
+                "rotationY": 0,
+                "rotationZ": 0
+              },
+              "UpperFootL": {
+                "rotationX": 0,
+                "rotationY": 0,
+                "rotationZ": 0
+              },
+              "LowerFootL": {
+                "rotationX": 0,
+                "rotationY": 0,
+                "rotationZ": 0
+              },
+              "root": {
+                "offsetX": 0,
+                "offsetY": 0,
+                "offsetZ": 0
+              },
+              "UpperFootR": {
+                "rotationX": 0,
+                "rotationY": 0,
+                "rotationZ": 0
+              },
+              "LowerFootR": {
+                "rotationX": 0,
+                "rotationY": 0,
+                "rotationZ": 0
+              }
+            }
+          },
+          {
+            "frame": 9,
+            "elements": {
+              "UpperTorso": {
+                "rotationX": 0,
+                "rotationY": 0,
+                "rotationZ": 1,
+                "offsetX": 0,
+                "offsetY": -0.1,
+                "offsetZ": 0
+              }
+            }
+          },
+          {
+            "frame": 10,
+            "elements": {
+              "UpperTorso": {
+                "rotationX": 0,
+                "rotationY": 0,
+                "rotationZ": 0.97,
+                "offsetX": 0,
+                "offsetY": -0.1,
+                "offsetZ": 0
+              },
+              "UpperArmR": {
+                "rotationX": 0,
+                "rotationY": 0,
+                "rotationZ": 0
+              },
+              "LowerArmR": {
+                "rotationX": 0,
+                "rotationY": 0,
+                "rotationZ": 0
+              },
+              "UpperArmL": {
+                "rotationX": 0,
+                "rotationY": 0,
+                "rotationZ": 0
+              },
+              "LowerArmL": {
+                "rotationX": 0,
+                "rotationY": 0,
+                "rotationZ": 0
+              },
+              "root": {
+                "offsetX": 0,
+                "offsetY": 0,
+                "offsetZ": 0
+              }
+            }
+          },
+          {
+            "frame": 16,
+            "elements": {
+              "UpperTorso": {
+                "rotationX": 0,
+                "rotationY": 0,
+                "rotationZ": 13.47
+              },
+              "LowerTorso": {
+                "rotationX": 0,
+                "rotationY": 0,
+                "rotationZ": 7.5,
+                "offsetX": -4,
+                "offsetY": 0,
+                "offsetZ": 0
+              },
+              "UpperArmR": {
+                "rotationX": 4.5553,
+                "rotationY": -1.2576,
+                "rotationZ": -63.1231,
+                "offsetX": 1,
+                "offsetY": 2,
+                "offsetZ": 0
+              },
+              "LowerArmR": {
+                "rotationX": -34.3335,
+                "rotationY": -67.5641,
+                "rotationZ": -32.4092,
+                "offsetX": 0,
+                "offsetY": 1,
+                "offsetZ": 0
+              },
+              "UpperArmL": {
+                "rotationX": -6.9779,
+                "rotationY": 4.4637,
+                "rotationZ": -61.7009,
+                "offsetX": 1,
+                "offsetY": 2,
+                "offsetZ": 0
+              },
+              "LowerArmL": {
+                "rotationX": 17.2204,
+                "rotationY": 63.8432,
+                "rotationZ": -18.0552,
+                "offsetX": 0,
+                "offsetY": 1,
+                "offsetZ": 0
+              },
+              "Head": {
+                "rotationX": -2.2278,
+                "rotationY": 1.1347,
+                "rotationZ": -17.4779
+              },
+              "UpperFootL": {
+                "rotationX": 0,
+                "rotationY": 2.5,
+                "rotationZ": 2.5
+              },
+              "LowerFootL": {
+                "rotationX": 0,
+                "rotationY": 0,
+                "rotationZ": 5
+              },
+              "root": {
+                "offsetX": 0,
+                "offsetY": 0,
+                "offsetZ": 0
+              },
+              "UpperFootR": {
+                "rotationX": -1.2971,
+                "rotationY": -4.8293,
+                "rotationZ": -10.0547
+              },
+              "LowerFootR": {
+                "rotationX": 0,
+                "rotationY": 0,
+                "rotationZ": 10
+              }
+            }
+          }
         ]
       },
       {
         "name": "Prone",
-        "code": "prone",
+        "code": "emotes:prone",
         "quantityframes": 14,
         "onActivityStopped": "EaseOut",
         "onAnimationEnd": "Hold",
@@ -16496,6 +16961,116 @@
                 "rotationX": -7.3275,
                 "rotationY": -12.2762,
                 "rotationZ": 13.8712,
+                "offsetX": 0,
+                "offsetY": 0,
+                "offsetZ": 0
+              }
+            }
+          }
+        ]
+      },
+      {
+        "name": "Play Dead",
+        "code": "emotes:playdead",
+        "quantityframes": 2,
+        "onActivityStopped": "EaseOut",
+        "onAnimationEnd": "Repeat",
+        "keyframes": [
+          {
+            "frame": 0,
+            "elements": {
+              "LowerTorso": {
+                "rotationX": 2.4814,
+                "rotationY": -0.3046,
+                "rotationZ": 80.0066,
+                "offsetX": -13,
+                "offsetY": 0,
+                "offsetZ": 0
+              },
+              "UpperTorso": {
+                "rotationX": 3.0217,
+                "rotationY": -24.8283,
+                "rotationZ": 13.1653,
+                "offsetX": 0,
+                "offsetY": 0,
+                "offsetZ": 0
+              },
+              "UpperArmR": {
+                "rotationX": -12.1645,
+                "rotationY": -12.7087,
+                "rotationZ": -57.7234,
+                "offsetX": 0,
+                "offsetY": 0,
+                "offsetZ": 0
+              },
+              "LowerArmR": {
+                "rotationX": -5.9122,
+                "rotationY": 32.1796,
+                "rotationZ": -117.84,
+                "offsetX": 0,
+                "offsetY": 0,
+                "offsetZ": 0
+              },
+              "UpperArmL": {
+                "rotationX": 20.2333,
+                "rotationY": 21.3012,
+                "rotationZ": -175.9767,
+                "offsetX": -1,
+                "offsetY": 1,
+                "offsetZ": 0
+              },
+              "LowerArmL": {
+                "rotationX": -116.3212,
+                "rotationY": -78.2413,
+                "rotationZ": -130.2535,
+                "offsetX": 0,
+                "offsetY": 0,
+                "offsetZ": 0
+              },
+              "Neck": {
+                "rotationX": 0,
+                "rotationY": 0,
+                "rotationZ": -22.5,
+                "offsetX": 0,
+                "offsetY": 0,
+                "offsetZ": 0
+              },
+              "Head": {
+                "rotationX": -4.3421,
+                "rotationY": -1.867,
+                "rotationZ": 0.4057,
+                "offsetX": 0,
+                "offsetY": 0,
+                "offsetZ": 0
+              },
+              "UpperFootL": {
+                "rotationX": -3.6369,
+                "rotationY": 25.2068,
+                "rotationZ": -0.8992,
+                "offsetX": -1,
+                "offsetY": 0,
+                "offsetZ": 1
+              },
+              "LowerFootL": {
+                "rotationX": 3.1091,
+                "rotationY": 5.1589,
+                "rotationZ": 10.6899,
+                "offsetX": 0,
+                "offsetY": 0,
+                "offsetZ": 0
+              },
+              "UpperFootR": {
+                "rotationX": 25.677,
+                "rotationY": -18.6532,
+                "rotationZ": -2.1118,
+                "offsetX": -1,
+                "offsetY": 0,
+                "offsetZ": -1
+              },
+              "LowerFootR": {
+                "rotationX": -36.4637,
+                "rotationY": -0.9171,
+                "rotationZ": 14.2438,
                 "offsetX": 0,
                 "offsetY": 0,
                 "offsetZ": 0

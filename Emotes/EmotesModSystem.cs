@@ -20,315 +20,320 @@ public class EmotesModSystem : ModSystem
     {
         ["seiza"] = new CustomEmote
         {
-            Code = "seiza", Name = "Seiza", DisplayName = "Sit (Seiza)", Animation = "seiza", StopOnMovement = true,
+            Code = "seiza", Name = "Seiza", DisplayName = "Sit (Seiza)", Animation = "emotes:seiza", StopOnMovement = true,
             StopOnDamage = true
         },
         ["kneel"] = new CustomEmote
         {
-            Code = "kneel", Name = "Kneel", DisplayName = "Kneel", Animation = "kneel", StopOnMovement = true,
+            Code = "kneel", Name = "Kneel", DisplayName = "Kneel", Animation = "emotes:kneel", StopOnMovement = true,
             StopOnDamage = true
         },
         ["layingdown"] = new CustomEmote
         {
-            Code = "layingdown", Name = "LayingDown", DisplayName = "Lay Down", Animation = "layingdown",
+            Code = "layingdown", Name = "LayingDown", DisplayName = "Lay Down", Animation = "emotes:layingdown",
             StopOnMovement = true, StopOnDamage = true
         },
         ["prone"] = new CustomEmote
         {
-            Code = "prone", Name = "Prone", DisplayName = "Prone", Animation = "prone",
+            Code = "prone", Name = "Prone", DisplayName = "Prone", Animation = "emotes:prone",
+            StopOnMovement = true, StopOnDamage = true
+        },
+        ["playdead"] = new CustomEmote
+        {
+            Code = "playdead", Name = "PlayDead", DisplayName = "Play Dead", Animation = "emotes:playdead",
             StopOnMovement = true, StopOnDamage = true
         },
         ["surrender"] = new CustomEmote
         {
-            Code = "surrender", Name = "Surrender", DisplayName = "Surrender", Animation = "surrender",
+            Code = "surrender", Name = "Surrender", DisplayName = "Surrender", Animation = "emotes:surrender",
             StopOnMovement = true, StopOnDamage = false
         },
         ["atease"] = new CustomEmote
         {
-            Code = "atease", Name = "AtEase", DisplayName = "At Ease", Animation = "atease", StopOnMovement = false,
+            Code = "atease", Name = "AtEase", DisplayName = "At Ease", Animation = "emotes:atease", StopOnMovement = false,
             StopOnDamage = true
         },
         ["pointing"] = new CustomEmote
         {
-            Code = "pointing", Name = "Pointing", DisplayName = "Point", Animation = "pointing", StopOnMovement = true,
+            Code = "pointing", Name = "Pointing", DisplayName = "Point", Animation = "emotes:pointing", StopOnMovement = true,
             StopOnDamage = true
         },
         ["leaningcrossed"] = new CustomEmote
         {
             Code = "leaningcrossed", Name = "LeaningCrossed", DisplayName = "Lean (Arms Crossed)",
-            Animation = "leaningcrossed", StopOnMovement = true, StopOnDamage = true
+            Animation = "emotes:leaningcrossed", StopOnMovement = true, StopOnDamage = true
         },
         ["leaninghips"] = new CustomEmote
         {
-            Code = "leaninghips", Name = "LeaningHips", DisplayName = "Lean (Hips)", Animation = "leaninghips",
+            Code = "leaninghips", Name = "LeaningHips", DisplayName = "Lean (Hips)", Animation = "emotes:leaninghips",
             StopOnMovement = true, StopOnDamage = true
         },
         ["leaninghandshead"] = new CustomEmote
         {
             Code = "leaninghandshead", Name = "LeaningHandsHead", DisplayName = "Lean (Hands on Head)",
-            Animation = "leaninghandshead", StopOnMovement = true, StopOnDamage = true
+            Animation = "emotes:leaninghandshead", StopOnMovement = true, StopOnDamage = true
         },
         ["flippingoff"] = new CustomEmote
         {
-            Code = "flippingoff", Name = "FlippingOff", DisplayName = "Flip Off", Animation = "flippingoff",
+            Code = "flippingoff", Name = "FlippingOff", DisplayName = "Flip Off", Animation = "emotes:flippingoff",
             StopOnMovement = true, StopOnDamage = true, StopAfterAnimation = true
         },
         ["crossedarmsthinking"] = new CustomEmote
         {
             Code = "crossedarmsthinking", Name = "CrossedArmsThinking", DisplayName = "Think",
-            Animation = "crossedarmsthinking", StopOnMovement = true, StopOnDamage = true
+            Animation = "emotes:crossedarmsthinking", StopOnMovement = true, StopOnDamage = true
         },
         ["sittingcool"] = new CustomEmote
         {
-            Code = "sittingcool", Name = "SittingCool", DisplayName = "Sit (Cool)", Animation = "sittingcool",
+            Code = "sittingcool", Name = "SittingCool", DisplayName = "Sit (Cool)", Animation = "emotes:sittingcool",
             StopOnMovement = true, StopOnDamage = true
         },
         ["blowkiss"] = new CustomEmote
         {
-            Code = "blowkiss", Name = "Blowkiss", DisplayName = "Blow Kiss", Animation = "blowkiss",
+            Code = "blowkiss", Name = "Blowkiss", DisplayName = "Blow Kiss", Animation = "emotes:blowkiss",
             StopOnMovement = true, StopOnDamage = true, StopAfterAnimation = true
         },
         ["chestthump"] = new CustomEmote
         {
-            Code = "chestthump", Name = "ChestThump", DisplayName = "Chest Thump", Animation = "chestthump",
+            Code = "chestthump", Name = "ChestThump", DisplayName = "Chest Thump", Animation = "emotes:chestthump",
             StopOnMovement = true, StopOnDamage = true, StopAfterAnimation = true
         },
         ["clapping"] = new CustomEmote
         {
-            Code = "clapping", Name = "Clapping", DisplayName = "Clap", Animation = "clapping", StopOnMovement = true,
+            Code = "clapping", Name = "Clapping", DisplayName = "Clap", Animation = "emotes:clapping", StopOnMovement = true,
             StopOnDamage = true, StopAfterAnimation = true
         },
         ["crossedarms"] = new CustomEmote
         {
-            Code = "crossedarms", Name = "CrossedArms", DisplayName = "Cross Arms", Animation = "crossedarms",
+            Code = "crossedarms", Name = "CrossedArms", DisplayName = "Cross Arms", Animation = "emotes:crossedarms",
             StopOnMovement = true, StopOnDamage = true
         },
         ["handshake"] = new CustomEmote
         {
-            Code = "handshake", Name = "Handshake", DisplayName = "Handshake", Animation = "handshake",
+            Code = "handshake", Name = "Handshake", DisplayName = "Handshake", Animation = "emotes:handshake",
             StopOnMovement = true, StopOnDamage = true, RequiresTarget = true,
             PairDistance = 0.75f
         },
         ["layingback"] = new CustomEmote
         {
-            Code = "layingback", Name = "LayingBack", DisplayName = "Lay Back", Animation = "layingback",
+            Code = "layingback", Name = "LayingBack", DisplayName = "Lay Back", Animation = "emotes:layingback",
             StopOnMovement = true, StopOnDamage = true
         },
         ["refinedsalute"] = new CustomEmote
         {
             Code = "refinedsalute", Name = "RefinedSalute", DisplayName = "Salute (Refined)",
-            Animation = "refinedsalute",
+            Animation = "emotes:refinedsalute",
             StopOnMovement = true, StopOnDamage = true
         },
         ["salute"] = new CustomEmote
         {
-            Code = "salute", Name = "Salute", DisplayName = "Salute", Animation = "salute", StopOnMovement = true,
+            Code = "salute", Name = "Salute", DisplayName = "Salute", Animation = "emotes:salute", StopOnMovement = true,
             StopOnDamage = true
         },
         ["scanning"] = new CustomEmote
         {
-            Code = "scanning", Name = "Scanning", DisplayName = "Scan", Animation = "scanning", StopOnMovement = true,
+            Code = "scanning", Name = "Scanning", DisplayName = "Scan", Animation = "emotes:scanning", StopOnMovement = true,
             StopOnDamage = true
         },
         ["squatting"] = new CustomEmote
         {
-            Code = "squatting", Name = "Squatting", DisplayName = "Squat", Animation = "squatting",
+            Code = "squatting", Name = "Squatting", DisplayName = "Squat", Animation = "emotes:squatting",
             StopOnMovement = true, StopOnDamage = true
         },
         ["thinkinghard"] = new CustomEmote
         {
-            Code = "thinkinghard", Name = "ThinkingHard", DisplayName = "Think Hard", Animation = "thinkinghard",
+            Code = "thinkinghard", Name = "ThinkingHard", DisplayName = "Think Hard", Animation = "emotes:thinkinghard",
             StopOnMovement = true, StopOnDamage = true
         },
         ["bringiton"] = new CustomEmote
         {
-            Code = "bringiton", Name = "BringItOn", DisplayName = "Bring It On", Animation = "bringiton",
+            Code = "bringiton", Name = "BringItOn", DisplayName = "Bring It On", Animation = "emotes:bringiton",
             StopOnMovement = true, StopOnDamage = true
         },
         ["slitthroat"] = new CustomEmote
         {
-            Code = "slitthroat", Name = "SlitThroat", DisplayName = "Slit Throat", Animation = "slitthroat",
+            Code = "slitthroat", Name = "SlitThroat", DisplayName = "Slit Throat", Animation = "emotes:slitthroat",
             StopOnMovement = true, StopOnDamage = true, StopAfterAnimation = true
         },
         ["prayer"] = new CustomEmote
         {
-            Code = "prayer", Name = "Prayer", DisplayName = "Prayer", Animation = "prayer",
+            Code = "prayer", Name = "Prayer", DisplayName = "Prayer", Animation = "emotes:prayer",
             StopOnMovement = true, StopOnDamage = true
         },
         ["handup"] = new CustomEmote
         {
-            Code = "handup", Name = "HandUp", DisplayName = "Hand Up", Animation = "handup",
+            Code = "handup", Name = "HandUp", DisplayName = "Hand Up", Animation = "emotes:handup",
             StopOnMovement = true, StopOnDamage = true
         },
         ["victory"] = new CustomEmote
         {
-            Code = "victory", Name = "Victory", DisplayName = "Victory", Animation = "victory",
+            Code = "victory", Name = "Victory", DisplayName = "Victory", Animation = "emotes:victory",
             StopOnMovement = true, StopOnDamage = true
         },
         ["handrub"] = new CustomEmote
         {
-            Code = "handrub", Name = "HandRub", DisplayName = "Rub Hands", Animation = "handrub",
+            Code = "handrub", Name = "HandRub", DisplayName = "Rub Hands", Animation = "emotes:handrub",
             StopOnMovement = true, StopOnDamage = true, StopAfterAnimation = true
         },
         ["engarde"] = new CustomEmote
         {
-            Code = "engarde", Name = "EnGarde", DisplayName = "En Garde", Animation = "engarde",
+            Code = "engarde", Name = "EnGarde", DisplayName = "En Garde", Animation = "emotes:engarde",
             StopOnMovement = true, StopOnDamage = true
         },
         ["dapup"] = new CustomEmote
         {
-            Code = "dapup", Name = "DapUp", DisplayName = "Dap Up", Animation = "dapup",
+            Code = "dapup", Name = "DapUp", DisplayName = "Dap Up", Animation = "emotes:dapup",
             StopOnMovement = true, StopOnDamage = true, RequiresTarget = true, StopAfterAnimation = false,
             PairDistance = 0.9f
         },
         ["politebow"] = new CustomEmote
         {
-            Code = "politebow", Name = "PoliteBow", DisplayName = "Polite Bow", Animation = "politebow",
+            Code = "politebow", Name = "PoliteBow", DisplayName = "Polite Bow", Animation = "emotes:politebow",
             StopOnMovement = true, StopOnDamage = true
         },
         ["prayerstanding"] = new CustomEmote
         {
             Code = "prayerstanding", Name = "PrayerStanding", DisplayName = "Prayer (Standing)",
-            Animation = "prayerstanding",
+            Animation = "emotes:prayerstanding",
             StopOnMovement = true, StopOnDamage = true
         },
         ["kisshand"] = new CustomEmote
         {
-            Code = "kisshand", Name = "KissHand", DisplayName = "Kiss Hand", Animation = "kisshand",
+            Code = "kisshand", Name = "KissHand", DisplayName = "Kiss Hand", Animation = "emotes:kisshand",
             StopOnMovement = true, StopOnDamage = true
         },
         ["knocking"] = new CustomEmote
         {
-            Code = "knocking", Name = "Knocking", DisplayName = "Knock", Animation = "knocking",
+            Code = "knocking", Name = "Knocking", DisplayName = "Knock", Animation = "emotes:knocking",
             StopOnMovement = true, StopOnDamage = true, StopAfterAnimation = true
         },
         ["martialarts"] = new CustomEmote
         {
-            Code = "martialarts", Name = "MartialArts", DisplayName = "Martial Arts", Animation = "martialarts",
+            Code = "martialarts", Name = "MartialArts", DisplayName = "Martial Arts", Animation = "emotes:martialarts",
             StopOnMovement = true, StopOnDamage = true
         },
         ["noblesalute"] = new CustomEmote
         {
-            Code = "noblesalute", Name = "NobleSalute", DisplayName = "Salute (Noble)", Animation = "noblesalute",
+            Code = "noblesalute", Name = "NobleSalute", DisplayName = "Salute (Noble)", Animation = "emotes:noblesalute",
             StopOnMovement = true, StopOnDamage = true
         },
         ["crackingknuckles"] = new CustomEmote
         {
             Code = "crackingknuckles", Name = "CrackingKnuckles", DisplayName = "Crack Knuckles",
-            Animation = "crackingknuckles",
+            Animation = "emotes:crackingknuckles",
             StopOnMovement = true, StopOnDamage = true
         },
         ["sittingchill"] = new CustomEmote
         {
-            Code = "sittingchill", Name = "SittingChill", DisplayName = "Sit (Chill)", Animation = "sittingchill",
+            Code = "sittingchill", Name = "SittingChill", DisplayName = "Sit (Chill)", Animation = "emotes:sittingchill",
             StopOnMovement = true, StopOnDamage = true
         },
         ["sittingrelaxed"] = new CustomEmote
         {
             Code = "sittingrelaxed", Name = "SittingRelaxed", DisplayName = "Sit (Relaxed)",
-            Animation = "sittingrelaxed",
+            Animation = "emotes:sittingrelaxed",
             StopOnMovement = true, StopOnDamage = true
         },
         ["sittingrefined"] = new CustomEmote
         {
             Code = "sittingrefined", Name = "SittingRefined", DisplayName = "Sit (Refined)",
-            Animation = "sittingrefined",
+            Animation = "emotes:sittingrefined",
             StopOnMovement = true, StopOnDamage = true
         },
         ["sittingcalm"] = new CustomEmote
         {
-            Code = "sittingcalm", Name = "SittingCalm", DisplayName = "Sit (Calm)", Animation = "sittingcalm",
+            Code = "sittingcalm", Name = "SittingCalm", DisplayName = "Sit (Calm)", Animation = "emotes:sittingcalm",
             StopOnMovement = true, StopOnDamage = true
         },
         ["sittinginnocent"] = new CustomEmote
         {
             Code = "sittinginnocent", Name = "SittingInnocent", DisplayName = "Sit (Innocent)",
-            Animation = "sittinginnocent",
+            Animation = "emotes:sittinginnocent",
             StopOnMovement = true, StopOnDamage = true
         },
         ["laydownsensual"] = new CustomEmote
         {
             Code = "laydownsensual", Name = "LayDownSensual", DisplayName = "Lay Down (Sensual)",
-            Animation = "laydownsensual",
+            Animation = "emotes:laydownsensual",
             StopOnMovement = true, StopOnDamage = true
         },
         ["handships"] = new CustomEmote
         {
-            Code = "handships", Name = "HandsHips", DisplayName = "Hands on Hips", Animation = "handships",
+            Code = "handships", Name = "HandsHips", DisplayName = "Hands on Hips", Animation = "emotes:handships",
             StopOnMovement = true, StopOnDamage = true
         },
         ["hug"] = new CustomEmote
         {
-            Code = "hug", Name = "Hug", DisplayName = "Hug (Friendly)", Animation = "hug",
+            Code = "hug", Name = "Hug", DisplayName = "Hug (Friendly)", Animation = "emotes:hug",
             StopOnMovement = true, StopOnDamage = true, StopAfterAnimation = false, RequiresTarget = true,
             PairDistance = 0.1f
         },
         ["kiss"] = new CustomEmote
         {
-            Code = "kiss", Name = "Kiss", DisplayName = "Kiss (Intimate)", Animation = "kiss",
+            Code = "kiss", Name = "Kiss", DisplayName = "Kiss (Intimate)", Animation = "emotes:kiss",
             StopOnMovement = true, StopOnDamage = true, StopAfterAnimation = true, RequiresTarget = true,
             PairDistance = 0.2f
         },
         ["hugfriendly"] = new CustomEmote
         {
-            Code = "hugfriendly", Name = "HugFriendly", DisplayName = "Hug (Intimate)", Animation = "hugfriendly",
+            Code = "hugfriendly", Name = "HugFriendly", DisplayName = "Hug (Intimate)", Animation = "emotes:hugfriendly",
             StopOnMovement = true, StopOnDamage = true, StopAfterAnimation = false, RequiresTarget = true,
             PairDistance = 0.15f
         },
         ["smooch"] = new CustomEmote
         {
-            Code = "smooch", Name = "Smooch", DisplayName = "Smooch", Animation = "smooch",
+            Code = "smooch", Name = "Smooch", DisplayName = "Smooch", Animation = "emotes:smooch",
             StopOnMovement = true, StopOnDamage = true, StopAfterAnimation = true, RequiresTarget = true,
             PairDistance = 0.38f
         },
         ["handshakedouble"] = new CustomEmote
         {
             Code = "handshakedouble", Name = "HandshakeDouble", DisplayName = "Handshake (Double)",
-            Animation = "handshakedouble",
+            Animation = "emotes:handshakedouble",
             StopOnMovement = true, StopOnDamage = true, StopAfterAnimation = true, RequiresTarget = true,
             PairDistance = 0.75f
         },
         ["handholding"] = new CustomEmote
         {
-            Code = "handholding", Name = "HandHolding", DisplayName = "Hold Hands", Animation = "handholding",
+            Code = "handholding", Name = "HandHolding", DisplayName = "Hold Hands", Animation = "emotes:handholding",
             StopOnMovement = true, StopOnDamage = true, RequiresTarget = true,
             PairDistance = 0.65f
         },
         ["handholdingintimate"] = new CustomEmote
         {
             Code = "handholdingintimate", Name = "HandHoldingIntimate", DisplayName = "Hold Hands (Intimate)",
-            Animation = "handholdingintimate",
+            Animation = "emotes:handholdingintimate",
             StopOnMovement = true, StopOnDamage = true, RequiresTarget = true,
             PairDistance = 0.35f
         },
         ["sittingrested"] = new CustomEmote
         {
             Code = "sittingrested", Name = "SittingRested", DisplayName = "Sit (Rested)",
-            Animation = "sittingrested",
+            Animation = "emotes:sittingrested",
             StopOnMovement = true, StopOnDamage = true
         },
         ["sittingintrovert"] = new CustomEmote
         {
             Code = "sittingintrovert", Name = "SittingIntrovert", DisplayName = "Sit (Introvert)",
-            Animation = "sittingintrovert",
+            Animation = "emotes:sittingintrovert",
             StopOnMovement = true, StopOnDamage = true
         },
         ["leaningsimple"] = new CustomEmote
         {
             Code = "leaningsimple", Name = "LeaningSimple", DisplayName = "Lean (Simple)",
-            Animation = "leaningsimple",
+            Animation = "emotes:leaningsimple",
             StopOnMovement = true, StopOnDamage = true
         },
         ["leaningoversimple"] = new CustomEmote
         {
             Code = "leaningoversimple", Name = "LeaningOverSimple", DisplayName = "Lean Over (Simple)",
-            Animation = "leaningoversimple",
+            Animation = "emotes:leaningoversimple",
             StopOnMovement = true, StopOnDamage = true
         },
         ["leaningoverconfident"] = new CustomEmote
         {
             Code = "leaningoverconfident", Name = "LeaningOverConfident", DisplayName = "Lean Over (Confident)",
-            Animation = "leaningoverconfident",
+            Animation = "emotes:leaningoverconfident",
             StopOnMovement = true, StopOnDamage = true
         }
     };

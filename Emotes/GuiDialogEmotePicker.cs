@@ -24,7 +24,7 @@ public class GuiDialogEmotePicker : GuiDialog
     private static readonly (string LangKey, string[] Codes)[] NamedCategories =
     {
         ("cat-sitting",    new[] { "seiza", "prayer", "sittingcool", "sittingchill", "sittingrelaxed", "sittingrefined", "sittingcalm", "sittinginnocent", "squatting", "kneel", "sittingrested", "sittingintrovert" }),
-        ("cat-laying",     new[] { "layingdown", "prone", "layingback", "laydownsensual" }),
+        ("cat-laying",     new[] { "layingdown", "prone", "playdead", "layingback", "laydownsensual" }),
         ("cat-friendly",   new[] { "blowkiss", "clapping", "kisshand", "politebow", "victory" }),
         ("cat-idle",       new[] { "atease", "crossedarms", "handships", "leaningcrossed", "leaninghandshead", "leaninghips", "leaningsimple", "leaningoversimple", "leaningoverconfident" }),
         ("cat-neutral",    new[] { "crossedarmsthinking", "handrub", "handup", "knocking", "martialarts", "noblesalute", "pointing", "prayerstanding", "refinedsalute", "salute", "scanning", "surrender", "thinkinghard", "crackingknuckles" }),
@@ -66,6 +66,20 @@ public class GuiDialogEmotePicker : GuiDialog
         base.OnKeyDown(args);
     }
 
+    private string[] GetVanillaEmoteCodes()
+    {
+        var attr = capi.World.Player?.Entity?.Properties?.Attributes?["emotes"];
+        var codes = attr?.AsArray<string>()?.Where(c => !string.IsNullOrEmpty(c)).ToArray();
+        return codes is { Length: > 0 } ? codes : VanillaEmoteCodes;
+    }
+
+    private static string GetVanillaEmoteName(string code)
+    {
+        var key = "emotes:emote-" + code;
+        if (Lang.HasTranslation(key)) return Lang.Get(key);
+        return char.ToUpperInvariant(code[0]) + code.Substring(1);
+    }
+
     private GuiTab[] BuildTabs()
     {
         var tabs = new GuiTab[TabCount];
@@ -96,8 +110,8 @@ public class GuiDialogEmotePicker : GuiDialog
         string[] codes, names;
         if (isVanilla)
         {
-            codes = VanillaEmoteCodes;
-            names = codes.Select(c => Lang.Get("emotes:emote-" + c)).ToArray();
+            codes = GetVanillaEmoteCodes();
+            names = codes.Select(GetVanillaEmoteName).ToArray();
         }
         else
         {
