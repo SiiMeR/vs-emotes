@@ -5,6 +5,7 @@ using Vintagestory.API.Client;
 using Vintagestory.API.Common;
 using Vintagestory.API.Common.Entities;
 using Vintagestory.API.Config;
+using Vintagestory.API.Datastructures;
 using Vintagestory.API.MathTools;
 using Vintagestory.API.Server;
 using Vintagestory.GameContent;
@@ -15,331 +16,6 @@ public class EmotesModSystem : ModSystem
 {
     private const string ChannelName = "emotes";
     private const string ConsentKey = "emotesConsent";
-
-    private static readonly Dictionary<string, CustomEmote> Emotes = new()
-    {
-        ["seiza"] = new CustomEmote
-        {
-            Code = "seiza", Name = "Seiza", DisplayName = "Sit (Seiza)", Animation = "emotes:seiza", StopOnMovement = true,
-            StopOnDamage = true
-        },
-        ["kneel"] = new CustomEmote
-        {
-            Code = "kneel", Name = "Kneel", DisplayName = "Kneel", Animation = "emotes:kneel", StopOnMovement = true,
-            StopOnDamage = true
-        },
-        ["layingdown"] = new CustomEmote
-        {
-            Code = "layingdown", Name = "LayingDown", DisplayName = "Lay Down", Animation = "emotes:layingdown",
-            StopOnMovement = true, StopOnDamage = true
-        },
-        ["prone"] = new CustomEmote
-        {
-            Code = "prone", Name = "Prone", DisplayName = "Prone", Animation = "emotes:prone",
-            StopOnMovement = true, StopOnDamage = true
-        },
-        ["playdead"] = new CustomEmote
-        {
-            Code = "playdead", Name = "PlayDead", DisplayName = "Play Dead", Animation = "emotes:playdead",
-            StopOnMovement = true, StopOnDamage = true
-        },
-        ["surrender"] = new CustomEmote
-        {
-            Code = "surrender", Name = "Surrender", DisplayName = "Surrender", Animation = "emotes:surrender",
-            StopOnMovement = true, StopOnDamage = false
-        },
-        ["atease"] = new CustomEmote
-        {
-            Code = "atease", Name = "AtEase", DisplayName = "At Ease", Animation = "emotes:atease", StopOnMovement = false,
-            StopOnDamage = true
-        },
-        ["pointing"] = new CustomEmote
-        {
-            Code = "pointing", Name = "Pointing", DisplayName = "Point", Animation = "emotes:pointing", StopOnMovement = true,
-            StopOnDamage = true
-        },
-        ["leaningcrossed"] = new CustomEmote
-        {
-            Code = "leaningcrossed", Name = "LeaningCrossed", DisplayName = "Lean (Arms Crossed)",
-            Animation = "emotes:leaningcrossed", StopOnMovement = true, StopOnDamage = true
-        },
-        ["leaninghips"] = new CustomEmote
-        {
-            Code = "leaninghips", Name = "LeaningHips", DisplayName = "Lean (Hips)", Animation = "emotes:leaninghips",
-            StopOnMovement = true, StopOnDamage = true
-        },
-        ["leaninghandshead"] = new CustomEmote
-        {
-            Code = "leaninghandshead", Name = "LeaningHandsHead", DisplayName = "Lean (Hands on Head)",
-            Animation = "emotes:leaninghandshead", StopOnMovement = true, StopOnDamage = true
-        },
-        ["flippingoff"] = new CustomEmote
-        {
-            Code = "flippingoff", Name = "FlippingOff", DisplayName = "Flip Off", Animation = "emotes:flippingoff",
-            StopOnMovement = true, StopOnDamage = true, StopAfterAnimation = true
-        },
-        ["crossedarmsthinking"] = new CustomEmote
-        {
-            Code = "crossedarmsthinking", Name = "CrossedArmsThinking", DisplayName = "Think",
-            Animation = "emotes:crossedarmsthinking", StopOnMovement = true, StopOnDamage = true
-        },
-        ["sittingcool"] = new CustomEmote
-        {
-            Code = "sittingcool", Name = "SittingCool", DisplayName = "Sit (Cool)", Animation = "emotes:sittingcool",
-            StopOnMovement = true, StopOnDamage = true
-        },
-        ["blowkiss"] = new CustomEmote
-        {
-            Code = "blowkiss", Name = "Blowkiss", DisplayName = "Blow Kiss", Animation = "emotes:blowkiss",
-            StopOnMovement = true, StopOnDamage = true, StopAfterAnimation = true
-        },
-        ["chestthump"] = new CustomEmote
-        {
-            Code = "chestthump", Name = "ChestThump", DisplayName = "Chest Thump", Animation = "emotes:chestthump",
-            StopOnMovement = true, StopOnDamage = true, StopAfterAnimation = true
-        },
-        ["clapping"] = new CustomEmote
-        {
-            Code = "clapping", Name = "Clapping", DisplayName = "Clap", Animation = "emotes:clapping", StopOnMovement = true,
-            StopOnDamage = true, StopAfterAnimation = true
-        },
-        ["crossedarms"] = new CustomEmote
-        {
-            Code = "crossedarms", Name = "CrossedArms", DisplayName = "Cross Arms", Animation = "emotes:crossedarms",
-            StopOnMovement = true, StopOnDamage = true
-        },
-        ["handshake"] = new CustomEmote
-        {
-            Code = "handshake", Name = "Handshake", DisplayName = "Handshake", Animation = "emotes:handshake",
-            StopOnMovement = true, StopOnDamage = true, RequiresTarget = true,
-            PairDistance = 0.75f
-        },
-        ["layingback"] = new CustomEmote
-        {
-            Code = "layingback", Name = "LayingBack", DisplayName = "Lay Back", Animation = "emotes:layingback",
-            StopOnMovement = true, StopOnDamage = true
-        },
-        ["refinedsalute"] = new CustomEmote
-        {
-            Code = "refinedsalute", Name = "RefinedSalute", DisplayName = "Salute (Refined)",
-            Animation = "emotes:refinedsalute",
-            StopOnMovement = true, StopOnDamage = true
-        },
-        ["salute"] = new CustomEmote
-        {
-            Code = "salute", Name = "Salute", DisplayName = "Salute", Animation = "emotes:salute", StopOnMovement = true,
-            StopOnDamage = true
-        },
-        ["scanning"] = new CustomEmote
-        {
-            Code = "scanning", Name = "Scanning", DisplayName = "Scan", Animation = "emotes:scanning", StopOnMovement = true,
-            StopOnDamage = true
-        },
-        ["squatting"] = new CustomEmote
-        {
-            Code = "squatting", Name = "Squatting", DisplayName = "Squat", Animation = "emotes:squatting",
-            StopOnMovement = true, StopOnDamage = true
-        },
-        ["thinkinghard"] = new CustomEmote
-        {
-            Code = "thinkinghard", Name = "ThinkingHard", DisplayName = "Think Hard", Animation = "emotes:thinkinghard",
-            StopOnMovement = true, StopOnDamage = true
-        },
-        ["bringiton"] = new CustomEmote
-        {
-            Code = "bringiton", Name = "BringItOn", DisplayName = "Bring It On", Animation = "emotes:bringiton",
-            StopOnMovement = true, StopOnDamage = true
-        },
-        ["slitthroat"] = new CustomEmote
-        {
-            Code = "slitthroat", Name = "SlitThroat", DisplayName = "Slit Throat", Animation = "emotes:slitthroat",
-            StopOnMovement = true, StopOnDamage = true, StopAfterAnimation = true
-        },
-        ["prayer"] = new CustomEmote
-        {
-            Code = "prayer", Name = "Prayer", DisplayName = "Prayer", Animation = "emotes:prayer",
-            StopOnMovement = true, StopOnDamage = true
-        },
-        ["handup"] = new CustomEmote
-        {
-            Code = "handup", Name = "HandUp", DisplayName = "Hand Up", Animation = "emotes:handup",
-            StopOnMovement = true, StopOnDamage = true
-        },
-        ["victory"] = new CustomEmote
-        {
-            Code = "victory", Name = "Victory", DisplayName = "Victory", Animation = "emotes:victory",
-            StopOnMovement = true, StopOnDamage = true
-        },
-        ["handrub"] = new CustomEmote
-        {
-            Code = "handrub", Name = "HandRub", DisplayName = "Rub Hands", Animation = "emotes:handrub",
-            StopOnMovement = true, StopOnDamage = true, StopAfterAnimation = true
-        },
-        ["engarde"] = new CustomEmote
-        {
-            Code = "engarde", Name = "EnGarde", DisplayName = "En Garde", Animation = "emotes:engarde",
-            StopOnMovement = true, StopOnDamage = true
-        },
-        ["dapup"] = new CustomEmote
-        {
-            Code = "dapup", Name = "DapUp", DisplayName = "Dap Up", Animation = "emotes:dapup",
-            StopOnMovement = true, StopOnDamage = true, RequiresTarget = true, StopAfterAnimation = false,
-            PairDistance = 0.9f
-        },
-        ["politebow"] = new CustomEmote
-        {
-            Code = "politebow", Name = "PoliteBow", DisplayName = "Polite Bow", Animation = "emotes:politebow",
-            StopOnMovement = true, StopOnDamage = true
-        },
-        ["prayerstanding"] = new CustomEmote
-        {
-            Code = "prayerstanding", Name = "PrayerStanding", DisplayName = "Prayer (Standing)",
-            Animation = "emotes:prayerstanding",
-            StopOnMovement = true, StopOnDamage = true
-        },
-        ["kisshand"] = new CustomEmote
-        {
-            Code = "kisshand", Name = "KissHand", DisplayName = "Kiss Hand", Animation = "emotes:kisshand",
-            StopOnMovement = true, StopOnDamage = true
-        },
-        ["knocking"] = new CustomEmote
-        {
-            Code = "knocking", Name = "Knocking", DisplayName = "Knock", Animation = "emotes:knocking",
-            StopOnMovement = true, StopOnDamage = true, StopAfterAnimation = true
-        },
-        ["martialarts"] = new CustomEmote
-        {
-            Code = "martialarts", Name = "MartialArts", DisplayName = "Martial Arts", Animation = "emotes:martialarts",
-            StopOnMovement = true, StopOnDamage = true
-        },
-        ["noblesalute"] = new CustomEmote
-        {
-            Code = "noblesalute", Name = "NobleSalute", DisplayName = "Salute (Noble)", Animation = "emotes:noblesalute",
-            StopOnMovement = true, StopOnDamage = true
-        },
-        ["crackingknuckles"] = new CustomEmote
-        {
-            Code = "crackingknuckles", Name = "CrackingKnuckles", DisplayName = "Crack Knuckles",
-            Animation = "emotes:crackingknuckles",
-            StopOnMovement = true, StopOnDamage = true
-        },
-        ["sittingchill"] = new CustomEmote
-        {
-            Code = "sittingchill", Name = "SittingChill", DisplayName = "Sit (Chill)", Animation = "emotes:sittingchill",
-            StopOnMovement = true, StopOnDamage = true
-        },
-        ["sittingrelaxed"] = new CustomEmote
-        {
-            Code = "sittingrelaxed", Name = "SittingRelaxed", DisplayName = "Sit (Relaxed)",
-            Animation = "emotes:sittingrelaxed",
-            StopOnMovement = true, StopOnDamage = true
-        },
-        ["sittingrefined"] = new CustomEmote
-        {
-            Code = "sittingrefined", Name = "SittingRefined", DisplayName = "Sit (Refined)",
-            Animation = "emotes:sittingrefined",
-            StopOnMovement = true, StopOnDamage = true
-        },
-        ["sittingcalm"] = new CustomEmote
-        {
-            Code = "sittingcalm", Name = "SittingCalm", DisplayName = "Sit (Calm)", Animation = "emotes:sittingcalm",
-            StopOnMovement = true, StopOnDamage = true
-        },
-        ["sittinginnocent"] = new CustomEmote
-        {
-            Code = "sittinginnocent", Name = "SittingInnocent", DisplayName = "Sit (Innocent)",
-            Animation = "emotes:sittinginnocent",
-            StopOnMovement = true, StopOnDamage = true
-        },
-        ["laydownsensual"] = new CustomEmote
-        {
-            Code = "laydownsensual", Name = "LayDownSensual", DisplayName = "Lay Down (Sensual)",
-            Animation = "emotes:laydownsensual",
-            StopOnMovement = true, StopOnDamage = true
-        },
-        ["handships"] = new CustomEmote
-        {
-            Code = "handships", Name = "HandsHips", DisplayName = "Hands on Hips", Animation = "emotes:handships",
-            StopOnMovement = true, StopOnDamage = true
-        },
-        ["hug"] = new CustomEmote
-        {
-            Code = "hug", Name = "Hug", DisplayName = "Hug (Friendly)", Animation = "emotes:hug",
-            StopOnMovement = true, StopOnDamage = true, StopAfterAnimation = false, RequiresTarget = true,
-            PairDistance = 0.1f
-        },
-        ["kiss"] = new CustomEmote
-        {
-            Code = "kiss", Name = "Kiss", DisplayName = "Kiss (Intimate)", Animation = "emotes:kiss",
-            StopOnMovement = true, StopOnDamage = true, StopAfterAnimation = true, RequiresTarget = true,
-            PairDistance = 0.2f
-        },
-        ["hugfriendly"] = new CustomEmote
-        {
-            Code = "hugfriendly", Name = "HugFriendly", DisplayName = "Hug (Intimate)", Animation = "emotes:hugfriendly",
-            StopOnMovement = true, StopOnDamage = true, StopAfterAnimation = false, RequiresTarget = true,
-            PairDistance = 0.15f
-        },
-        ["smooch"] = new CustomEmote
-        {
-            Code = "smooch", Name = "Smooch", DisplayName = "Smooch", Animation = "emotes:smooch",
-            StopOnMovement = true, StopOnDamage = true, StopAfterAnimation = true, RequiresTarget = true,
-            PairDistance = 0.38f
-        },
-        ["handshakedouble"] = new CustomEmote
-        {
-            Code = "handshakedouble", Name = "HandshakeDouble", DisplayName = "Handshake (Double)",
-            Animation = "emotes:handshakedouble",
-            StopOnMovement = true, StopOnDamage = true, StopAfterAnimation = true, RequiresTarget = true,
-            PairDistance = 0.75f
-        },
-        ["handholding"] = new CustomEmote
-        {
-            Code = "handholding", Name = "HandHolding", DisplayName = "Hold Hands", Animation = "emotes:handholding",
-            StopOnMovement = true, StopOnDamage = true, RequiresTarget = true,
-            PairDistance = 0.65f
-        },
-        ["handholdingintimate"] = new CustomEmote
-        {
-            Code = "handholdingintimate", Name = "HandHoldingIntimate", DisplayName = "Hold Hands (Intimate)",
-            Animation = "emotes:handholdingintimate",
-            StopOnMovement = true, StopOnDamage = true, RequiresTarget = true,
-            PairDistance = 0.35f
-        },
-        ["sittingrested"] = new CustomEmote
-        {
-            Code = "sittingrested", Name = "SittingRested", DisplayName = "Sit (Rested)",
-            Animation = "emotes:sittingrested",
-            StopOnMovement = true, StopOnDamage = true
-        },
-        ["sittingintrovert"] = new CustomEmote
-        {
-            Code = "sittingintrovert", Name = "SittingIntrovert", DisplayName = "Sit (Introvert)",
-            Animation = "emotes:sittingintrovert",
-            StopOnMovement = true, StopOnDamage = true
-        },
-        ["leaningsimple"] = new CustomEmote
-        {
-            Code = "leaningsimple", Name = "LeaningSimple", DisplayName = "Lean (Simple)",
-            Animation = "emotes:leaningsimple",
-            StopOnMovement = true, StopOnDamage = true
-        },
-        ["leaningoversimple"] = new CustomEmote
-        {
-            Code = "leaningoversimple", Name = "LeaningOverSimple", DisplayName = "Lean Over (Simple)",
-            Animation = "emotes:leaningoversimple",
-            StopOnMovement = true, StopOnDamage = true
-        },
-        ["leaningoverconfident"] = new CustomEmote
-        {
-            Code = "leaningoverconfident", Name = "LeaningOverConfident", DisplayName = "Lean Over (Confident)",
-            Animation = "emotes:leaningoverconfident",
-            StopOnMovement = true, StopOnDamage = true
-        }
-    };
-
-    private static readonly HashSet<string> LeanEmotes = new()
-        { "leaningcrossed", "leaninghips", "leaninghandshead", "leaningsimple" };
 
     private static readonly (BlockFacing facing, float yaw)[] HorizontalFacings =
     {
@@ -360,9 +36,119 @@ public class EmotesModSystem : ModSystem
     private ICoreServerAPI serverApi;
     private IServerNetworkChannel serverChannel;
 
-    public static IReadOnlyDictionary<string, CustomEmote> GetEmotes()
+    private IReadOnlyDictionary<string, CustomEmote> emotes =
+        new Dictionary<string, CustomEmote>(StringComparer.OrdinalIgnoreCase);
+
+    private Animation[] injectedAnimations = Array.Empty<Animation>();
+
+    private readonly HashSet<string> warned = new();
+
+    public IReadOnlyDictionary<string, CustomEmote> Emotes => emotes;
+
+    public bool MarkWarned(string key)
     {
-        return Emotes;
+        lock (warned)
+        {
+            return warned.Add(key);
+        }
+    }
+
+    public Animation[] InjectedAnimations => injectedAnimations;
+
+    public override void AssetsLoaded(ICoreAPI api)
+    {
+        base.AssetsLoaded(api);
+
+        var result = EmoteLoader.Load(api, Mod.Logger);
+        emotes = result.Emotes;
+        injectedAnimations = result.InjectedAnimations;
+
+        Mod.Logger.Notification("Loaded {0} emotes from {1} files. Skipped: {2}. Animations injected: {3}",
+            result.Emotes.Count, result.FileCount, result.SkippedCount, result.InjectedAnimations.Length);
+    }
+
+    public string GetEmoteName(CustomEmote emote)
+    {
+        if (emote == null) return "";
+
+        if (!string.IsNullOrEmpty(emote.Name))
+        {
+            if (!emote.Name.Contains(':')) return emote.Name;
+            if (Lang.HasTranslation(emote.Name)) return Lang.Get(emote.Name);
+        }
+
+        var domainKey = emote.Domain + ":emote-" + emote.Code;
+        if (Lang.HasTranslation(domainKey)) return Lang.Get(domainKey);
+
+        var fallbackKey = "emotes:emote-" + emote.Code;
+        if (Lang.HasTranslation(fallbackKey)) return Lang.Get(fallbackKey);
+
+        return Capitalize(emote.Code);
+    }
+
+    public string GetEmoteName(string code)
+    {
+        if (emotes.TryGetValue(code, out var emote)) return GetEmoteName(emote);
+
+        var key = "emotes:emote-" + code;
+        return Lang.HasTranslation(key) ? Lang.Get(key) : Capitalize(code);
+    }
+
+    private void ReportMissingTranslations()
+    {
+        foreach (var emote in emotes.Values)
+        {
+            if (GetEmoteName(emote) != Capitalize(emote.Code)) continue;
+            Mod.Logger.Notification("Emote '{0}' from {1} has no display name, add lang key \"{2}\"",
+                emote.Code, emote.Source, emote.Domain + ":emote-" + emote.Code);
+        }
+
+        foreach (var group in emotes.Values.GroupBy(e => e.Category))
+        {
+            if (GetCategoryName(group.Key) != Capitalize(group.Key)) continue;
+            Mod.Logger.Notification("Category '{0}' has no display name, add lang key \"{1}\"",
+                group.Key, group.First().Domain + ":cat-" + group.Key);
+        }
+    }
+
+    public string GetCategoryName(string category)
+    {
+        if (string.IsNullOrEmpty(category)) return "";
+
+        var members = emotes.Values.Where(e => e.Category == category).ToArray();
+
+        var declared = members.Select(e => e.CategoryName)
+            .Where(n => !string.IsNullOrEmpty(n))
+            .Distinct(StringComparer.Ordinal)
+            .OrderBy(n => n, StringComparer.Ordinal);
+
+        foreach (var name in declared)
+        {
+            if (!name.Contains(':')) return name;
+            if (Lang.HasTranslation(name)) return Lang.Get(name);
+        }
+
+        var ownKey = "emotes:cat-" + category;
+        if (Lang.HasTranslation(ownKey)) return Lang.Get(ownKey);
+
+        var domains = members.Select(e => e.Domain)
+            .Where(d => !string.IsNullOrEmpty(d))
+            .Distinct(StringComparer.Ordinal)
+            .OrderBy(d => d, StringComparer.Ordinal);
+
+        foreach (var domain in domains)
+        {
+            var key = domain + ":cat-" + category;
+            if (Lang.HasTranslation(key)) return Lang.Get(key);
+        }
+
+        return Capitalize(category);
+    }
+
+    public static string Capitalize(string text)
+    {
+        if (string.IsNullOrEmpty(text)) return "";
+        return char.ToUpperInvariant(text[0]) + text.Substring(1);
     }
 
     public bool IsEmoteDisabled(string code)
@@ -378,15 +164,31 @@ public class EmotesModSystem : ModSystem
             return false;
         }
 
-        foreach (var code in Emotes.Keys)
+        foreach (var attribute in tree)
         {
-            if (tree.GetBool(code))
+            if (attribute.Value is BoolAttribute { value: true })
             {
                 return true;
             }
         }
 
         return false;
+    }
+
+    private static void ClearEmoteBools(ITreeAttribute tree)
+    {
+        if (tree == null)
+        {
+            return;
+        }
+
+        foreach (var attribute in tree)
+        {
+            if (attribute.Value is BoolAttribute boolAttribute)
+            {
+                boolAttribute.value = false;
+            }
+        }
     }
 
     public static void SetEmoteState(EntityPlayer player, string code, bool active)
@@ -399,11 +201,7 @@ public class EmotesModSystem : ModSystem
     public static void StopAllEmotes(EntityPlayer player)
     {
         var tree = player.WatchedAttributes.GetOrAddTreeAttribute("emotes");
-        foreach (var code in Emotes.Keys)
-        {
-            tree.SetBool(code, false);
-        }
-
+        ClearEmoteBools(tree);
         tree.RemoveAttribute("leanYaw");
         player.WatchedAttributes.MarkPathDirty("emotes");
     }
@@ -456,6 +254,8 @@ public class EmotesModSystem : ModSystem
             .RegisterMessageType<DisabledEmotesPacket>()
             .SetMessageHandler<LeanSnapPacket>(OnLeanSnap)
             .SetMessageHandler<DisabledEmotesPacket>(OnDisabledEmotes);
+
+        ReportMissingTranslations();
 
         api.Input.RegisterHotKey("emotepicker", Lang.Get("emotes:hotkey-open"), GlKeys.J, shiftPressed: true);
         var dialog = new GuiDialogEmotePicker(api, this);
@@ -571,7 +371,7 @@ public class EmotesModSystem : ModSystem
         var tree = player.WatchedAttributes.GetOrAddTreeAttribute("emotes");
         var isActive = tree.GetBool(packet.Code);
 
-        if (!isActive && LeanEmotes.Contains(packet.Code))
+        if (!isActive && emoteInfo.SnapToWall)
         {
             if (!TrySnapToWall(fromPlayer))
             {
@@ -583,10 +383,7 @@ public class EmotesModSystem : ModSystem
             tree.RemoveAttribute("leanYaw");
         }
 
-        foreach (var code in Emotes.Keys)
-        {
-            tree.SetBool(code, false);
-        }
+        ClearEmoteBools(tree);
 
         if (!isActive)
         {
@@ -780,7 +577,7 @@ public class EmotesModSystem : ModSystem
         var accept = "<a href=\"command:///emotes accept\">Accept</a>";
         var refuse = "<a href=\"command:///emotes refuse\">Refuse</a>";
         targetPlayer.SendMessage(GlobalConstants.CurrentChatGroup,
-            Lang.Get("emotes:pair-request-received", initiator.GetName(), Lang.Get("emotes:emote-" + emoteCode), accept,
+            Lang.Get("emotes:pair-request-received", initiator.GetName(), GetEmoteName(emoteCode), accept,
                 refuse),
             EnumChatType.GroupInvite);
 
@@ -938,10 +735,7 @@ public class EmotesModSystem : ModSystem
 
         var tree = player.WatchedAttributes.GetOrAddTreeAttribute("emotes");
         var isActive = tree.GetBool(emote.Code);
-        foreach (var code in Emotes.Keys)
-        {
-            tree.SetBool(code, false);
-        }
+        ClearEmoteBools(tree);
 
         if (!isActive)
         {
@@ -950,7 +744,7 @@ public class EmotesModSystem : ModSystem
 
         player.WatchedAttributes.MarkPathDirty("emotes");
 
-        var displayName = Lang.Get("emotes:emote-" + emote.Code);
+        var displayName = GetEmoteName(emote);
         return TextCommandResult.Success(isActive
             ? Lang.Get("emotes:cmd-emote-stopped", displayName)
             : Lang.Get("emotes:cmd-emote-started", displayName));
@@ -960,10 +754,10 @@ public class EmotesModSystem : ModSystem
     {
         var solo = string.Join(", ",
             Emotes.Values.Where(e => !e.RequiresTarget && !disabledEmotes.Contains(e.Code))
-                .Select(e => $"{e.Code} ({Lang.Get("emotes:emote-" + e.Code)})"));
+                .Select(e => $"{e.Code} ({GetEmoteName(e)})"));
         var paired = string.Join(", ",
             Emotes.Values.Where(e => e.RequiresTarget && !disabledEmotes.Contains(e.Code))
-                .Select(e => $"{e.Code} ({Lang.Get("emotes:emote-" + e.Code)})"));
+                .Select(e => $"{e.Code} ({GetEmoteName(e)})"));
 
         var message = Lang.Get("emotes:cmd-available-emotes", solo);
         if (!string.IsNullOrEmpty(paired))
@@ -1030,11 +824,7 @@ public class EmotesModSystem : ModSystem
             }
 
             var t = player.WatchedAttributes.GetOrAddTreeAttribute("emotes");
-            foreach (var code in Emotes.Keys)
-            {
-                t.SetBool(code, false);
-            }
-
+            ClearEmoteBools(t);
             t.SetBool(codes[index], true);
             player.WatchedAttributes.MarkPathDirty("emotes");
             serverApi.Event.RegisterCallback(_ =>

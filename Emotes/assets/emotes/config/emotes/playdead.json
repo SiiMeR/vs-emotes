@@ -1,0 +1,117 @@
+{
+  "code": "playdead",
+  "category": "laying",
+  "categoryOrder": 20,
+  "animation": "emotes:playdead",
+  "eyeHeight": 0.2,
+  "animationDefinition": {
+    "name": "Play Dead",
+    "code": "emotes:playdead",
+    "quantityframes": 2,
+    "onActivityStopped": "EaseOut",
+    "onAnimationEnd": "Repeat",
+    "keyframes": [
+      {
+        "frame": 0,
+        "elements": {
+          "LowerTorso": {
+            "rotationX": 2.4814,
+            "rotationY": -0.3046,
+            "rotationZ": 80.0066,
+            "offsetX": -13,
+            "offsetY": 0,
+            "offsetZ": 0
+          },
+          "UpperTorso": {
+            "rotationX": 3.0217,
+            "rotationY": -24.8283,
+            "rotationZ": 13.1653,
+            "offsetX": 0,
+            "offsetY": 0,
+            "offsetZ": 0
+          },
+          "UpperArmR": {
+            "rotationX": -12.1645,
+            "rotationY": -12.7087,
+            "rotationZ": -57.7234,
+            "offsetX": 0,
+            "offsetY": 0,
+            "offsetZ": 0
+          },
+          "LowerArmR": {
+            "rotationX": -5.9122,
+            "rotationY": 32.1796,
+            "rotationZ": -117.84,
+            "offsetX": 0,
+            "offsetY": 0,
+            "offsetZ": 0
+          },
+          "UpperArmL": {
+            "rotationX": 20.2333,
+            "rotationY": 21.3012,
+            "rotationZ": -175.9767,
+            "offsetX": -1,
+            "offsetY": 1,
+            "offsetZ": 0
+          },
+          "LowerArmL": {
+            "rotationX": -116.3212,
+            "rotationY": -78.2413,
+            "rotationZ": -130.2535,
+            "offsetX": 0,
+            "offsetY": 0,
+            "offsetZ": 0
+          },
+          "Neck": {
+            "rotationX": 0,
+            "rotationY": 0,
+            "rotationZ": -22.5,
+            "offsetX": 0,
+            "offsetY": 0,
+            "offsetZ": 0
+          },
+          "Head": {
+            "rotationX": -4.3421,
+            "rotationY": -1.867,
+            "rotationZ": 0.4057,
+            "offsetX": 0,
+            "offsetY": 0,
+            "offsetZ": 0
+          },
+          "UpperFootL": {
+            "rotationX": -3.6369,
+            "rotationY": 25.2068,
+            "rotationZ": -0.8992,
+            "offsetX": -1,
+            "offsetY": 0,
+            "offsetZ": 1
+          },
+          "LowerFootL": {
+            "rotationX": 3.1091,
+            "rotationY": 5.1589,
+            "rotationZ": 10.6899,
+            "offsetX": 0,
+            "offsetY": 0,
+            "offsetZ": 0
+          },
+          "UpperFootR": {
+            "rotationX": 25.677,
+            "rotationY": -18.6532,
+            "rotationZ": -2.1118,
+            "offsetX": -1,
+            "offsetY": 0,
+            "offsetZ": -1
+          },
+          "LowerFootR": {
+            "rotationX": -36.4637,
+            "rotationY": -0.9171,
+            "rotationZ": 14.2438,
+            "offsetX": 0,
+            "offsetY": 0,
+            "offsetZ": 0
+          }
+        }
+      }
+    ]
+  }
+}

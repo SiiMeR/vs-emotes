@@ -1,0 +1,167 @@
+{
+  "code": "crossedarms",
+  "category": "idle",
+  "categoryOrder": 40,
+  "animation": "emotes:crossedarms",
+  "animationDefinition": {
+    "name": "CrossedArms",
+    "code": "emotes:crossedarms",
+    "quantityframes": 15,
+    "onActivityStopped": "EaseOut",
+    "onAnimationEnd": "Hold",
+    "keyframes": [
+      {
+        "frame": 0,
+        "elements": {
+          "UpperTorso": {
+            "rotationX": 0,
+            "rotationY": 0,
+            "rotationZ": 0,
+            "offsetX": 0,
+            "offsetY": 0,
+            "offsetZ": 0
+          },
+          "LowerTorso": {
+            "rotationX": 0,
+            "rotationY": 0,
+            "rotationZ": 0
+          },
+          "UpperArmR": {
+            "rotationX": 0,
+            "rotationY": 0,
+            "rotationZ": 0
+          },
+          "LowerArmR": {
+            "rotationX": 0,
+            "rotationY": 0,
+            "rotationZ": 0
+          },
+          "UpperArmL": {
+            "rotationX": 0,
+            "rotationY": 0,
+            "rotationZ": 0
+          },
+          "LowerArmL": {
+            "rotationX": 0,
+            "rotationY": 0,
+            "rotationZ": 0
+          },
+          "Head": {
+            "rotationX": 0,
+            "rotationY": 0,
+            "rotationZ": 0
+          },
+          "UpperFootL": {
+            "rotationX": 0,
+            "rotationY": 0,
+            "rotationZ": 0
+          },
+          "LowerFootL": {
+            "rotationX": 0,
+            "rotationY": 0,
+            "rotationZ": 0
+          }
+        }
+      },
+      {
+        "frame": 11,
+        "elements": {
+          "UpperTorso": {
+            "rotationX": 0,
+            "rotationY": 0,
+            "rotationZ": 1,
+            "offsetX": 0,
+            "offsetY": -0.1,
+            "offsetZ": 0
+          }
+        }
+      },
+      {
+        "frame": 12,
+        "elements": {
+          "UpperTorso": {
+            "rotationX": 0,
+            "rotationY": 0,
+            "rotationZ": 0.97,
+            "offsetX": 0,
+            "offsetY": -0.1,
+            "offsetZ": 0
+          },
+          "UpperArmR": {
+            "rotationX": -3.9968,
+            "rotationY": -3.0066,
+            "rotationZ": -60.1049
+          },
+          "LowerArmR": {
+            "rotationX": -100.132,
+            "rotationY": -2.0243,
+            "rotationZ": 4.0459
+          },
+          "UpperArmL": {
+            "rotationX": -0.843,
+            "rotationY": -1.013,
+            "rotationZ": -49.7642
+          },
+          "LowerArmL": {
+            "rotationX": 110.1578,
+            "rotationY": -0.0675,
+            "rotationZ": -6.5015
+          }
+        }
+      },
+      {
+        "frame": 14,
+        "elements": {
+          "UpperTorso": {
+            "rotationX": 0,
+            "rotationY": 0,
+            "rotationZ": 0.97,
+            "offsetX": 0,
+            "offsetY": -0.1,
+            "offsetZ": 0
+          },
+          "LowerTorso": {
+            "rotationX": 0,
+            "rotationY": 0,
+            "rotationZ": 0
+          },
+          "UpperArmR": {
+            "rotationX": -4,
+            "rotationY": -3.01,
+            "rotationZ": -60.1
+          },
+          "LowerArmR": {
+            "rotationX": -100.13,
+            "rotationY": -2.02,
+            "rotationZ": 4.05
+          },
+          "UpperArmL": {
+            "rotationX": -0.84,
+            "rotationY": -1.01,
+            "rotationZ": -49.76
+          },
+          "LowerArmL": {
+            "rotationX": 110.16,
+            "rotationY": -0.07,
+            "rotationZ": -6.5
+          },
+          "Head": {
+            "rotationX": 0,
+            "rotationY": 0,
+            "rotationZ": 0
+          },
+          "UpperFootL": {
+            "rotationX": 0,
+            "rotationY": 0,
+            "rotationZ": 0
+          },
+          "LowerFootL": {
+            "rotationX": 0,
+            "rotationY": 0,
+            "rotationZ": 0
+          }
+        }
+      }
+    ]
+  }
+}

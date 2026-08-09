@@ -6,33 +6,14 @@ using Vintagestory.API.Common;
 using Vintagestory.API.Common.Entities;
 using Vintagestory.API.Datastructures;
 using Vintagestory.API.MathTools;
+using Vintagestory.API.Util;
 
 namespace Emotes;
 
 public class BehaviorEmotes : EntityBehavior
 {
-    static readonly Dictionary<string, double> EyeHeightByEmote = new()
-    {
-        ["seiza"]          = 0.97,
-        ["kneel"]          = 1.09,
-        ["prayer"]         = 0.97,
-        ["sittingcool"]    = 0.89,
-        ["sittingchill"]   = 0.89,
-        ["sittingrelaxed"] = 0.89,
-        ["sittingrefined"] = 0.89,
-        ["sittingcalm"]    = 0.89,
-        ["sittinginnocent"]= 0.89,
-        ["sittingrested"]  = 0.89,
-        ["sittingintrovert"]= 0.89,
-        ["squatting"]      = 0.95,
-        ["layingback"]     = 0.2,
-        ["layingdown"]     = 0.2,
-        ["laydownsensual"] = 0.2,
-        ["prone"]          = 0.2,
-        ["playdead"]       = 0.2,
-    };
-
     ICoreAPI api;
+    EmotesModSystem modSystem;
     IRenderer fixYawRenderer;
     float lockedYaw;
     bool yawLocked;
@@ -47,6 +28,7 @@ public class BehaviorEmotes : EntityBehavior
     {
         base.Initialize(properties, attributes);
         api = entity.Api;
+        modSystem = api.ModLoader.GetModSystem<EmotesModSystem>();
 
         if (api.Side == EnumAppSide.Server && entity is EntityPlayer player)
         {
@@ -61,6 +43,8 @@ public class BehaviorEmotes : EntityBehavior
 
         if (entity.AnimManager != null)
             entity.AnimManager.OnAnimationStopped += OnAnimationStopped;
+
+        SyncAnimations();
     }
 
     void OnMountChanged()
@@ -76,8 +60,8 @@ public class BehaviorEmotes : EntityBehavior
         var tree = player.WatchedAttributes.GetTreeAttribute("emotes");
 
         if (string.IsNullOrEmpty(tree?.GetString("pairPartner"))) return;
-        if (EmotesModSystem.GetEmotes().Any(kv => kv.Value.RequiresTarget && tree.GetBool(kv.Key))) return;
-        api.ModLoader.GetModSystem<EmotesModSystem>()?.TryEndPair(player);
+        if (modSystem.Emotes.Any(kv => kv.Value.RequiresTarget && tree.GetBool(kv.Key))) return;
+        modSystem?.TryEndPair(player);
     }
 
     void OnAnimationStopped(string animCode)
@@ -85,14 +69,14 @@ public class BehaviorEmotes : EntityBehavior
         var capi = api as ICoreClientAPI;
         if (capi?.World.Player?.Entity?.EntityId != entity.EntityId) return;
 
-        foreach (var (code, emote) in EmotesModSystem.GetEmotes())
+        foreach (var (code, emote) in modSystem.Emotes)
         {
-            if (emote.Animation != animCode) continue;
+            if (emote.AnimationCode != animCode) continue;
             var tree = entity.WatchedAttributes.GetTreeAttribute("emotes");
             if (tree?.GetBool(code) != true) continue;
 
             if (emote.StopAfterAnimation)
-                api.ModLoader.GetModSystem<EmotesModSystem>().SendStopEmotes();
+                modSystem?.SendStopEmotes();
             break;
         }
     }
@@ -103,18 +87,18 @@ public class BehaviorEmotes : EntityBehavior
         var tpManager = (entity as EntityPlayer)?.TpAnimManager;
 
         bool anyActive = false;
-        string activeCode = null;
-        foreach (var (code, emote) in EmotesModSystem.GetEmotes())
+        CustomEmote activeEmote = null;
+        foreach (var (code, emote) in modSystem.Emotes)
         {
             bool shouldPlay = tree?.GetBool(code) ?? false;
-            bool isPlaying = (tpManager ?? entity.AnimManager)?.IsAnimationActive(emote.Animation) ?? false;
+            bool isPlaying = (tpManager ?? entity.AnimManager)?.IsAnimationActive(emote.AnimationCode) ?? false;
 
             if (shouldPlay && !isPlaying)
                 StartAnimation(emote);
             else if (!shouldPlay && isPlaying)
-                entity.AnimManager?.StopAnimation(emote.Animation);
+                entity.AnimManager?.StopAnimation(emote.AnimationCode);
 
-            if (shouldPlay) { anyActive = true; activeCode = code; }
+            if (shouldPlay) { anyActive = true; activeEmote = emote; }
         }
 
         if (anyActive && !yawLocked) LockYaw();
@@ -124,8 +108,8 @@ public class BehaviorEmotes : EntityBehavior
         if (capi.World.Player?.Entity?.EntityId != entity.EntityId) return;
         if (entity is not EntityPlayer ep) return;
 
-        if (activeCode != null && EyeHeightByEmote.TryGetValue(activeCode, out var eyeH))
-            StartEyePos(ep, eyeH);
+        if (activeEmote?.EyeHeight != null)
+            StartEyePos(ep, activeEmote.EyeHeight.Value);
         else
             StopEyePos(ep);
     }
@@ -158,7 +142,7 @@ public class BehaviorEmotes : EntityBehavior
             else
             {
                 var tree = entity.WatchedAttributes.GetTreeAttribute("emotes");
-                if (EmotesModSystem.GetEmotes().Any(kv => kv.Value.RequiresTarget && tree?.GetBool(kv.Key) == true))
+                if (modSystem.Emotes.Any(kv => kv.Value.RequiresTarget && tree?.GetBool(kv.Key) == true))
                     lockedYaw = tree.GetFloat("pairYaw");
                 else if (tree != null && tree.HasAttribute("leanYaw"))
                     lockedYaw = tree.GetFloat("leanYaw");
@@ -207,12 +191,102 @@ public class BehaviorEmotes : EntityBehavior
 
     void StartAnimation(CustomEmote emote)
     {
-        if (entity.Properties.Client?.AnimationsByMetaCode == null) return;
-        if (!entity.Properties.Client.AnimationsByMetaCode.TryGetValue(emote.Animation, out var meta)) return;
-        var clone = meta.Clone();
-        clone.ClientSide = true;
-        clone.EaseInSpeed = 999f;
-        entity.AnimManager?.StartAnimation(clone);
+        if (emote.Meta == null) return;
+        entity.AnimManager?.StartAnimation(emote.Meta.Clone());
+    }
+
+    public override void OnTesselation(ref Shape entityShape, string shapePathForLogging, ref bool shapeIsCloned,
+        ref string[] willDeleteElements)
+    {
+        base.OnTesselation(ref entityShape, shapePathForLogging, ref shapeIsCloned, ref willDeleteElements);
+
+        if (api == null || api.Side == EnumAppSide.Server) return;
+        if (entityShape == null || modSystem == null) return;
+
+        var available = modSystem.InjectedAnimations;
+        if (available == null || available.Length == 0) return;
+
+        try
+        {
+            var existing = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            foreach (var animation in entityShape.Animations ?? Array.Empty<Animation>())
+                if (animation?.Code != null)
+                    existing.Add(animation.Code);
+
+            var missing = available.Where(a => a?.Code != null && !existing.Contains(a.Code)).ToArray();
+            if (missing.Length == 0) return;
+
+            if (!shapeIsCloned)
+            {
+                entityShape = entityShape.Clone();
+                shapeIsCloned = true;
+            }
+
+            var shapeVersion = entityShape.Animations is { Length: > 0 } ? entityShape.Animations[0].Version : 0;
+            var elements = CollectElementNames(entityShape);
+
+            var added = new Animation[missing.Length];
+            for (var i = 0; i < missing.Length; i++)
+            {
+                var clone = missing[i].Clone();
+                if (clone.Version != shapeVersion)
+                {
+                    WarnOnce(clone.Code, "version",
+                        "Emote animation '{0}' has version {1} but the player shape uses version {2}, forcing {2}",
+                        clone.Code, clone.Version, shapeVersion);
+                    clone.Version = shapeVersion;
+                }
+
+                WarnUnknownElements(clone, elements);
+                added[i] = clone;
+            }
+
+            entityShape.Animations = (entityShape.Animations ?? Array.Empty<Animation>()).Append(added);
+        }
+        catch (Exception e)
+        {
+            modSystem.Mod.Logger.Error("Failed to add emote animations to {0}: {1}", shapePathForLogging, e);
+        }
+    }
+
+    static HashSet<string> CollectElementNames(Shape shape)
+    {
+        var names = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        void Walk(ShapeElement[] children)
+        {
+            foreach (var element in children ?? Array.Empty<ShapeElement>())
+            {
+                if (element?.Name == null) continue;
+                names.Add(element.Name);
+                Walk(element.Children);
+            }
+        }
+
+        Walk(shape.Elements);
+        return names;
+    }
+
+    void WarnUnknownElements(Animation animation, HashSet<string> shapeElements)
+    {
+        if (shapeElements.Count == 0) return;
+
+        var unknown = new SortedSet<string>(StringComparer.OrdinalIgnoreCase);
+        foreach (var frame in animation.KeyFrames ?? Array.Empty<AnimationKeyFrame>())
+        foreach (var name in frame?.Elements?.Keys ?? Enumerable.Empty<string>())
+            if (!shapeElements.Contains(name))
+                unknown.Add(name);
+
+        if (unknown.Count == 0) return;
+
+        WarnOnce(animation.Code, "elements",
+            "Emote animation '{0}' animates elements the player shape does not have, they will be ignored: {1}",
+            animation.Code, string.Join(", ", unknown));
+    }
+
+    void WarnOnce(string animationCode, string kind, string message, params object[] args)
+    {
+        if (!modSystem.MarkWarned(animationCode + "/" + kind)) return;
+        modSystem.Mod.Logger.Warning(message, args);
     }
 
     public override void OnGameTick(float deltaTime)
@@ -233,7 +307,7 @@ public class BehaviorEmotes : EntityBehavior
         if (tree == null) return;
 
         bool anyChanged = false;
-        foreach (var (code, emote) in EmotesModSystem.GetEmotes())
+        foreach (var (code, emote) in modSystem.Emotes)
         {
             bool shouldStop = controls.FloorSitting || (moving && emote.StopOnMovement);
             if (!shouldStop || !tree.GetBool(code)) continue;
@@ -262,7 +336,7 @@ public class BehaviorEmotes : EntityBehavior
         if (controls == null || (!controls.TriesToMove && !controls.Jump && !controls.Sneak && !controls.LeftMouseDown)) return;
 
         UnlockYaw();
-        capi.ModLoader.GetModSystem<EmotesModSystem>().SendStopEmotes();
+        modSystem?.SendStopEmotes();
     }
 
     public override void OnEntityReceiveDamage(DamageSource damageSource, ref float damage)
@@ -277,7 +351,7 @@ public class BehaviorEmotes : EntityBehavior
         if (tree == null) return;
 
         bool anyChanged = false;
-        foreach (var (code, emote) in EmotesModSystem.GetEmotes())
+        foreach (var (code, emote) in modSystem.Emotes)
         {
             if (!emote.StopOnDamage || !tree.GetBool(code)) continue;
             tree.SetBool(code, false);
@@ -301,7 +375,7 @@ public class BehaviorEmotes : EntityBehavior
     {
         base.OnEntityDespawn(despawnData);
         if (api.Side == EnumAppSide.Server && entity is EntityPlayer player)
-            api.ModLoader.GetModSystem<EmotesModSystem>()?.TryEndPair(player);
+            modSystem?.TryEndPair(player);
         UnlockYaw();
         if (entity.AnimManager != null)
             entity.AnimManager.OnAnimationStopped -= OnAnimationStopped;

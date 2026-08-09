@@ -1,9 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <VINTAGE_STORY>C:\Users\siimr\AppData\Roaming\VSLGameVersions\1.21.5</VINTAGE_STORY>
-        <VINTAGE_STORY_DATA>C:\Users\siimr\AppData\Roaming\VSLInstallations\1.21.5</VINTAGE_STORY_DATA>
-        <TargetFramework>net8.0</TargetFramework>
+        <VINTAGE_STORY>C:\Users\siimr\AppData\Roaming\VSLGameVersions\1.22.5</VINTAGE_STORY>
+        <VINTAGE_STORY_DATA>C:\Users\siimr\AppData\Roaming\VSLInstallations\1.22.5</VINTAGE_STORY_DATA>
+        <TargetFramework>net10.0</TargetFramework>
     </PropertyGroup>
 
     <PropertyGroup>
@@ -26,6 +26,10 @@
         </Reference>
         <Reference Include="VSCreativeMod">
             <HintPath>$(VINTAGE_STORY)/Mods/VSCreativeMod.dll</HintPath>
+            <Private>False</Private>
+        </Reference>
+        <Reference Include="Newtonsoft.Json">
+            <HintPath>$(VINTAGE_STORY)/Lib/Newtonsoft.Json.dll</HintPath>
             <Private>False</Private>
         </Reference>
         <Reference Include="protobuf-net">
