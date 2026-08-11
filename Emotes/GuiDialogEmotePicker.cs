@@ -47,7 +47,7 @@ public class GuiDialogEmotePicker : GuiDialog
     }
 
     public override string ToggleKeyCombinationCode => "emotepicker";
-    public override bool PrefersUngrabbedMouse => false;
+    public override bool PrefersUngrabbedMouse => capi.Settings.Bool["immersiveMouseMode"];
     public override bool ShouldReceiveKeyboardEvents() => IsOpened() && activeKey == AllKey;
 
     public override void OnKeyDown(KeyEvent args)
