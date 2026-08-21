@@ -1,7 +1,7 @@
 using System;
 using System.Linq;
+using System.Reflection;
 using HarmonyLib;
-using Vintagestory.API.Client;
 using Vintagestory.API.Common;
 using Vintagestory.API.Common.Entities;
 
@@ -12,7 +12,7 @@ public static class CombatOverhaulPatch
     private const string HarmonyId = "emotes.overhaullib";
     private static Harmony _harmony;
 
-    public static void Apply(ICoreClientAPI api)
+    public static void Apply()
     {
         var overhaulAsm = AppDomain.CurrentDomain.GetAssemblies()
             .FirstOrDefault(a => a.GetName().Name.Equals("overhaullib", StringComparison.OrdinalIgnoreCase));
@@ -21,29 +21,39 @@ public static class CombatOverhaulPatch
             return;
         }
 
-        var fpType = overhaulAsm.GetType("CombatOverhaul.Animations.FirstPersonAnimationsBehavior");
-        var tpType = overhaulAsm.GetType("CombatOverhaul.Animations.ThirdPersonAnimationsBehavior");
-        if (fpType == null && tpType == null)
+        var typeNames = new[]
         {
-            return;
-        }
+            "CombatOverhaul.Animations.FirstPersonAnimationsBehavior",
+            "CombatOverhaul.Animations.ThirdPersonAnimationsBehavior"
+        };
 
         _harmony = new Harmony(HarmonyId);
         var prefix = new HarmonyMethod(typeof(CombatOverhaulPatch), nameof(SkipIfEmotePlaying));
-        var paramTypes = new[] { typeof(Entity), typeof(ElementPose), typeof(AnimatorBase) };
 
-        var fpOnFrame = fpType?.GetMethod("OnFrame", paramTypes);
-        var tpOnFrame = tpType?.GetMethod("OnFrame", paramTypes);
-
-        if (fpOnFrame != null)
+        foreach (var typeName in typeNames)
         {
-            _harmony.Patch(fpOnFrame, prefix);
+            var type = overhaulAsm.GetType(typeName);
+            if (type == null)
+            {
+                continue;
+            }
+
+            foreach (var target in type.GetMethods(AccessTools.all).Where(IsEntityOnFrame))
+            {
+                _harmony.Patch(target, prefix);
+            }
+        }
+    }
+
+    private static bool IsEntityOnFrame(MethodInfo method)
+    {
+        if (method.Name != "OnFrame" || method.IsAbstract)
+        {
+            return false;
         }
 
-        if (tpOnFrame != null)
-        {
-            _harmony.Patch(tpOnFrame, prefix);
-        }
+        var parameters = method.GetParameters();
+        return parameters.Length > 0 && typeof(Entity).IsAssignableFrom(parameters[0].ParameterType);
     }
 
     public static void Remove()

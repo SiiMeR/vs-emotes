@@ -250,7 +250,7 @@ public class EmotesModSystem : ModSystem
         clientApi = api;
         if (api.ModLoader.IsModEnabled("overhaullib"))
         {
-            CombatOverhaulPatch.Apply(api);
+            CombatOverhaulPatch.Apply();
         }
 
         clientChannel = api.Network.RegisterChannel(ChannelName)
@@ -463,7 +463,7 @@ public class EmotesModSystem : ModSystem
             }
 
             entity.TeleportToDouble(snapX, pos.Y, snapZ);
-            entity.Pos.Yaw = yaw;
+            entity.ServerPos.Yaw = yaw;
             entity.WatchedAttributes.GetOrAddTreeAttribute("emotes").SetFloat("leanYaw", yaw);
             serverChannel.SendPacket(new LeanSnapPacket { Yaw = yaw }, player);
             return true;
@@ -518,8 +518,8 @@ public class EmotesModSystem : ModSystem
         target.TeleportToDouble(midX + normX * pairDistance, initiator.Pos.Y, midZ + normZ * pairDistance);
 
         var yaw = (float)Math.Atan2(dx, dz);
-        initiator.Pos.Yaw = yaw;
-        target.Pos.Yaw = yaw + (float)Math.PI;
+        initiator.ServerPos.Yaw = yaw;
+        target.ServerPos.Yaw = yaw + (float)Math.PI;
 
         serverChannel.SendPacket(new LeanSnapPacket { Yaw = yaw }, initiatorPlayer);
         return yaw;
