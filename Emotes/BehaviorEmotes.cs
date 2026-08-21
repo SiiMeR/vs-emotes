@@ -19,6 +19,8 @@ public class BehaviorEmotes : EntityBehavior
     bool yawLocked;
     double originalEyeHeight;
     bool eyeHeightOverrideActive;
+    Animation[] injectionSource;
+    Animation[] injectionCache;
 
     public BehaviorEmotes(Entity entity) : base(entity) { }
 
@@ -222,31 +224,49 @@ public class BehaviorEmotes : EntityBehavior
                 shapeIsCloned = true;
             }
 
-            var shapeVersion = entityShape.Animations is { Length: > 0 } ? entityShape.Animations[0].Version : 0;
-            var elements = CollectElementNames(entityShape);
-
-            var added = new Animation[missing.Length];
-            for (var i = 0; i < missing.Length; i++)
-            {
-                var clone = missing[i].Clone();
-                if (clone.Version != shapeVersion)
-                {
-                    WarnOnce(clone.Code, "version",
-                        "Emote animation '{0}' has version {1} but the player shape uses version {2}, forcing {2}",
-                        clone.Code, clone.Version, shapeVersion);
-                    clone.Version = shapeVersion;
-                }
-
-                WarnUnknownElements(clone, elements);
-                added[i] = clone;
-            }
-
+            var added = BuildInjection(available, missing, entityShape, shapePathForLogging);
             entityShape.Animations = (entityShape.Animations ?? Array.Empty<Animation>()).Append(added);
         }
         catch (Exception e)
         {
             modSystem.Mod.Logger.Error("Failed to add emote animations to {0}: {1}", shapePathForLogging, e);
         }
+    }
+
+    Animation[] BuildInjection(Animation[] available, Animation[] missing, Shape entityShape,
+        string shapePathForLogging)
+    {
+        if (injectionSource == available && injectionCache?.Length == missing.Length)
+        {
+            foreach (var cached in injectionCache)
+                cached.PrevNextKeyFrameByFrame = null;
+            return injectionCache;
+        }
+
+        var shapeVersion = entityShape.Animations is { Length: > 0 } ? entityShape.Animations[0].Version : 0;
+        var elements = modSystem.MarkShapeValidated(shapePathForLogging) ? CollectElementNames(entityShape) : null;
+
+        var added = new Animation[missing.Length];
+        for (var i = 0; i < missing.Length; i++)
+        {
+            var clone = missing[i].Clone();
+            if (clone.Version != shapeVersion)
+            {
+                WarnOnce(clone.Code, "version",
+                    "Emote animation '{0}' has version {1} but the player shape uses version {2}, forcing {2}",
+                    clone.Code, clone.Version, shapeVersion);
+                clone.Version = shapeVersion;
+            }
+
+            if (elements != null)
+                WarnUnknownElements(clone, elements);
+
+            added[i] = clone;
+        }
+
+        injectionSource = available;
+        injectionCache = added;
+        return added;
     }
 
     static HashSet<string> CollectElementNames(Shape shape)

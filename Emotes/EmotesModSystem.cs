@@ -53,6 +53,11 @@ public class EmotesModSystem : ModSystem
         }
     }
 
+    public bool MarkShapeValidated(string shapePath)
+    {
+        return MarkWarned("shape/" + shapePath);
+    }
+
     public Animation[] InjectedAnimations => injectedAnimations;
 
     public override void AssetsLoaded(ICoreAPI api)
@@ -402,6 +407,11 @@ public class EmotesModSystem : ModSystem
     {
         clientDisabledEmotes = new HashSet<string>(packet.Codes ?? Array.Empty<string>(),
             StringComparer.OrdinalIgnoreCase);
+
+        injectedAnimations = emotes.Values
+            .Where(e => e.InjectedAnimation != null && !clientDisabledEmotes.Contains(e.Code))
+            .Select(e => e.InjectedAnimation)
+            .ToArray();
     }
 
     private void OnLeanSnap(LeanSnapPacket packet)
