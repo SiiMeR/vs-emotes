@@ -75,6 +75,12 @@ public class EmotesModSystem : ModSystem
     public string GetEmoteName(CustomEmote emote)
     {
         if (emote == null) return "";
+        return ResolveEmoteName(emote) ?? Capitalize(emote.Code);
+    }
+
+    private static string ResolveEmoteName(CustomEmote emote)
+    {
+        if (emote == null) return null;
 
         if (!string.IsNullOrEmpty(emote.Name))
         {
@@ -88,7 +94,7 @@ public class EmotesModSystem : ModSystem
         var fallbackKey = "emotes:emote-" + emote.Code;
         if (Lang.HasTranslation(fallbackKey)) return Lang.Get(fallbackKey);
 
-        return Capitalize(emote.Code);
+        return null;
     }
 
     public string GetEmoteName(string code)
@@ -103,14 +109,14 @@ public class EmotesModSystem : ModSystem
     {
         foreach (var emote in emotes.Values)
         {
-            if (GetEmoteName(emote) != Capitalize(emote.Code)) continue;
+            if (ResolveEmoteName(emote) != null) continue;
             Mod.Logger.Notification("Emote '{0}' from {1} has no display name, add lang key \"{2}\"",
                 emote.Code, emote.Source, emote.Domain + ":emote-" + emote.Code);
         }
 
         foreach (var group in emotes.Values.GroupBy(e => e.Category))
         {
-            if (GetCategoryName(group.Key) != Capitalize(group.Key)) continue;
+            if (ResolveCategoryName(group.Key) != null) continue;
             Mod.Logger.Notification("Category '{0}' has no display name, add lang key \"{1}\"",
                 group.Key, group.First().Domain + ":cat-" + group.Key);
         }
@@ -119,6 +125,12 @@ public class EmotesModSystem : ModSystem
     public string GetCategoryName(string category)
     {
         if (string.IsNullOrEmpty(category)) return "";
+        return ResolveCategoryName(category) ?? Capitalize(category);
+    }
+
+    private string ResolveCategoryName(string category)
+    {
+        if (string.IsNullOrEmpty(category)) return null;
 
         var members = emotes.Values.Where(e => e.Category == category).ToArray();
 
@@ -147,7 +159,7 @@ public class EmotesModSystem : ModSystem
             if (Lang.HasTranslation(key)) return Lang.Get(key);
         }
 
-        return Capitalize(category);
+        return null;
     }
 
     public static string Capitalize(string text)
