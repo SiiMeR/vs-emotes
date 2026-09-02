@@ -53,6 +53,6 @@ public static class CombatOverhaulPatch
 
     private static bool SkipIfEmotePlaying(Entity __0)
     {
-        return !EmotesModSystem.IsEntityEmoting(__0);
+        return !EmoteState.IsEmoting(__0);
     }
 }

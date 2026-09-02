@@ -34,8 +34,10 @@ public class BehaviorEmotes : EntityBehavior
 
         if (api.Side == EnumAppSide.Server && entity is EntityPlayer player)
         {
-            EmotesModSystem.StopAllEmotes(player);
+            EmoteState.StopAll(player);
             entity.WatchedAttributes.RegisterModifiedListener("mountedOn", OnMountChanged);
+            entity.WatchedAttributes.RegisterModifiedListener("carrying", OnCarryChanged);
+            entity.WatchedAttributes.RegisterModifiedListener("carried", OnCarryChanged);
             entity.WatchedAttributes.RegisterModifiedListener("emotes", OnEmotesChangedServer);
         }
 
@@ -53,12 +55,26 @@ public class BehaviorEmotes : EntityBehavior
     {
         if (entity is not EntityPlayer player) return;
         if (!entity.WatchedAttributes.HasAttribute("mountedOn")) return;
-        EmotesModSystem.StopAllEmotes(player);
+        EmoteState.StopAll(player);
+    }
+
+    void OnCarryChanged()
+    {
+        if (entity is not EntityPlayer player) return;
+        if (!EmoteState.InCarry(player)) return;
+        EmoteState.StopAll(player);
     }
 
     void OnEmotesChangedServer()
     {
         if (entity is not EntityPlayer player) return;
+
+        if (EmoteState.InCarry(player) && EmoteState.IsEmoting(player))
+        {
+            EmoteState.StopAll(player);
+            return;
+        }
+
         var tree = player.WatchedAttributes.GetTreeAttribute("emotes");
 
         if (string.IsNullOrEmpty(tree?.GetString("pairPartner"))) return;
@@ -336,7 +352,7 @@ public class BehaviorEmotes : EntityBehavior
         }
 
         if (anyChanged)
-            player.WatchedAttributes.MarkPathDirty("emotes");
+            EmoteState.MarkDirty(player);
     }
 
     void OnClientGameTick()
@@ -379,7 +395,7 @@ public class BehaviorEmotes : EntityBehavior
         }
 
         if (anyChanged)
-            player.WatchedAttributes.MarkPathDirty("emotes");
+            EmoteState.MarkDirty(player);
     }
 
     public override void OnEntityDeath(DamageSource damageSource)
@@ -388,7 +404,7 @@ public class BehaviorEmotes : EntityBehavior
 
         if (api.Side != EnumAppSide.Server) return;
         if (entity is not EntityPlayer player) return;
-        EmotesModSystem.StopAllEmotes(player);
+        EmoteState.StopAll(player);
     }
 
     public override void OnEntityDespawn(EntityDespawnData despawnData)
