@@ -106,6 +106,7 @@
   "emotes:pair-initiator-gone": "The requesting player is no longer online.",
   "emotes:pair-too-far": "You are too far apart.",
   "emotes:pair-carrying": "They are carrying or being carried right now.",
+  "emotes:pair-busy": "They are already busy with someone else.",
   "emotes:pair-refused": "{0} refused the emote request.",
   "emotes:consent-on": "You will now be asked before paired emotes.",
   "emotes:consent-off": "You will now auto-accept paired emote requests.",

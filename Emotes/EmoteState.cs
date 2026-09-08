@@ -1,4 +1,3 @@
-using Vintagestory.API.Common;
 using Vintagestory.API.Common.Entities;
 using Vintagestory.API.Datastructures;
 
@@ -11,10 +10,11 @@ public static class EmoteState
     public const string LeanYawKey = "leanYaw";
     public const string PairYawKey = "pairYaw";
     public const string PairPartnerKey = "pairPartner";
+    public const string PairPartnerEntityKey = "pairPartnerEntity";
 
-    public static ITreeAttribute Tree(EntityPlayer player)
+    public static ITreeAttribute Tree(Entity entity)
     {
-        return player.WatchedAttributes.GetOrAddTreeAttribute(TreeKey);
+        return entity.WatchedAttributes.GetOrAddTreeAttribute(TreeKey);
     }
 
     public static bool InCarry(Entity entity)
@@ -25,13 +25,13 @@ public static class EmoteState
         return attributes.GetBool("carrying") || attributes.GetBool("carried");
     }
 
-    public static void MarkDirty(EntityPlayer player)
+    public static void MarkDirty(Entity entity)
     {
-        if (player == null) return;
+        if (entity == null) return;
 
-        player.WatchedAttributes.MarkPathDirty(TreeKey);
-        player.WatchedAttributes.SetBool(EmotingKey, IsEmoting(player));
-        player.WatchedAttributes.MarkPathDirty(EmotingKey);
+        entity.WatchedAttributes.MarkPathDirty(TreeKey);
+        entity.WatchedAttributes.SetBool(EmotingKey, IsEmoting(entity));
+        entity.WatchedAttributes.MarkPathDirty(EmotingKey);
     }
 
     public static bool IsEmoting(Entity entity)
@@ -46,6 +46,28 @@ public static class EmoteState
         return false;
     }
 
+    public static bool HasPartner(ITreeAttribute tree)
+    {
+        if (tree == null) return false;
+
+        return !string.IsNullOrEmpty(tree.GetString(PairPartnerKey)) || tree.GetLong(PairPartnerEntityKey) != 0;
+    }
+
+    public static bool HasPartner(Entity entity)
+    {
+        return HasPartner(entity?.WatchedAttributes?.GetTreeAttribute(TreeKey));
+    }
+
+    public static void ClearPartner(Entity entity)
+    {
+        if (entity == null) return;
+
+        var tree = Tree(entity);
+        tree.SetString(PairPartnerKey, "");
+        tree.SetLong(PairPartnerEntityKey, 0);
+        entity.WatchedAttributes.MarkPathDirty(TreeKey);
+    }
+
     public static void ClearBools(ITreeAttribute tree)
     {
         if (tree == null) return;
@@ -55,43 +77,43 @@ public static class EmoteState
                 boolAttribute.value = false;
     }
 
-    public static void Set(EntityPlayer player, string code, bool active)
+    public static void Set(Entity entity, string code, bool active)
     {
-        if (player == null) return;
+        if (entity == null) return;
 
-        Tree(player).SetBool(code, active);
-        MarkDirty(player);
+        Tree(entity).SetBool(code, active);
+        MarkDirty(entity);
     }
 
-    public static void Play(EntityPlayer player, string code)
+    public static void Play(Entity entity, string code)
     {
-        if (player == null) return;
+        if (entity == null) return;
 
-        var tree = Tree(player);
+        var tree = Tree(entity);
         ClearBools(tree);
         tree.SetBool(code, true);
-        MarkDirty(player);
+        MarkDirty(entity);
     }
 
-    public static bool Toggle(EntityPlayer player, string code)
+    public static bool Toggle(Entity entity, string code)
     {
-        if (player == null) return false;
+        if (entity == null) return false;
 
-        var tree = Tree(player);
+        var tree = Tree(entity);
         var isActive = tree.GetBool(code);
         ClearBools(tree);
         if (!isActive) tree.SetBool(code, true);
-        MarkDirty(player);
+        MarkDirty(entity);
         return !isActive;
     }
 
-    public static void StopAll(EntityPlayer player)
+    public static void StopAll(Entity entity)
     {
-        if (player == null) return;
+        if (entity == null) return;
 
-        var tree = Tree(player);
+        var tree = Tree(entity);
         ClearBools(tree);
         tree.RemoveAttribute(LeanYawKey);
-        MarkDirty(player);
+        MarkDirty(entity);
     }
 }

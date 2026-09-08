@@ -13,6 +13,7 @@ public class EmotePairs
 {
     public const string ConsentKey = "emotesConsent";
 
+    private const string PartnerAttribute = "emotesPairPartner";
     private const double MaxPairDistance = 3.0;
 
     private readonly EmotesModSystem system;
@@ -29,6 +30,11 @@ public class EmotePairs
         this.config = config;
     }
 
+    public static bool IsEntityPartner(Entity entity)
+    {
+        return entity?.Properties?.Attributes?[PartnerAttribute].AsBool() == true;
+    }
+
     public TextCommandResult Initiate(string emoteCode, IServerPlayer initiatorPlayer)
     {
         if (initiatorPlayer?.Entity is not EntityPlayer initiator)
@@ -41,6 +47,9 @@ public class EmotePairs
         if (selected == null) return TextCommandResult.Error(Lang.Get("emotes:pair-no-target"));
 
         if (selected is EntityPlayerBot bot) return StartWithBot(emoteCode, emote, initiatorPlayer, initiator, bot);
+
+        if (IsEntityPartner(selected))
+            return StartWithEntity(emoteCode, emote, initiatorPlayer, initiator, selected);
 
         if (selected is not EntityPlayer target) return TextCommandResult.Error(Lang.Get("emotes:pair-no-target"));
         if (target.EntityId == initiator.EntityId) return TextCommandResult.Error(Lang.Get("emotes:pair-self"));
@@ -109,17 +118,21 @@ public class EmotePairs
         if (player == null) return;
 
         var tree = player.WatchedAttributes.GetTreeAttribute(EmoteState.TreeKey);
-        var partnerUid = tree?.GetString(EmoteState.PairPartnerKey);
-        if (string.IsNullOrEmpty(partnerUid)) return;
+        if (!EmoteState.HasPartner(tree)) return;
 
-        tree.SetString(EmoteState.PairPartnerKey, "");
-        player.WatchedAttributes.MarkPathDirty(EmoteState.TreeKey);
+        var partnerUid = tree.GetString(EmoteState.PairPartnerKey);
+        var partnerEntityId = tree.GetLong(EmoteState.PairPartnerEntityKey);
 
-        if (api.World.PlayerByUid(partnerUid) is not IServerPlayer partnerPlayer) return;
-        if (partnerPlayer.Entity is not EntityPlayer partnerEntity) return;
+        EmoteState.ClearPartner(player);
 
-        EmoteState.Tree(partnerEntity).SetString(EmoteState.PairPartnerKey, "");
-        EmoteState.StopAll(partnerEntity);
+        var partner = partnerEntityId != 0
+            ? api.World.GetEntityById(partnerEntityId)
+            : (api.World.PlayerByUid(partnerUid) as IServerPlayer)?.Entity;
+
+        if (partner == null) return;
+
+        EmoteState.ClearPartner(partner);
+        EmoteState.StopAll(partner);
     }
 
     private PairRequest PendingFor(IServerPlayer caller)
@@ -140,6 +153,37 @@ public class EmotePairs
         EmoteState.StopAll(initiator);
         EmoteState.Tree(initiator).SetFloat(EmoteState.PairYawKey, yaw.Value);
         EmoteState.Set(initiator, emoteCode, true);
+        return TextCommandResult.Success();
+    }
+
+    private TextCommandResult StartWithEntity(string emoteCode, CustomEmote emote, IServerPlayer initiatorPlayer,
+        EntityPlayer initiator, Entity target)
+    {
+        if (!target.Alive) return TextCommandResult.Error(Lang.Get("emotes:pair-no-target"));
+        if (EmoteState.InCarry(target)) return TextCommandResult.Error(Lang.Get("emotes:pair-carrying"));
+
+        var targetPartner = target.WatchedAttributes.GetTreeAttribute(EmoteState.TreeKey)
+            ?.GetString(EmoteState.PairPartnerKey);
+        if (!string.IsNullOrEmpty(targetPartner) && targetPartner != initiatorPlayer.PlayerUID)
+            return TextCommandResult.Error(Lang.Get("emotes:pair-busy"));
+
+        var yaw = SnapPositions(initiatorPlayer, initiator, target, emote.PairDistance);
+        if (yaw == null) return TextCommandResult.Error(Lang.Get("emotes:pair-too-far"));
+
+        EmoteState.StopAll(initiator);
+        EmoteState.StopAll(target);
+
+        var initiatorTree = EmoteState.Tree(initiator);
+        initiatorTree.SetLong(EmoteState.PairPartnerEntityKey, target.EntityId);
+        initiatorTree.SetFloat(EmoteState.PairYawKey, yaw.Value);
+
+        var targetTree = EmoteState.Tree(target);
+        targetTree.SetString(EmoteState.PairPartnerKey, initiatorPlayer.PlayerUID);
+        targetTree.SetFloat(EmoteState.PairYawKey, yaw.Value + (float)Math.PI);
+
+        EmoteState.Set(initiator, emoteCode, true);
+        EmoteState.Set(target, emoteCode, true);
+
         return TextCommandResult.Success();
     }
 

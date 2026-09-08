@@ -45,6 +45,7 @@ public class EmotesModSystem : ModSystem
         base.Start(api);
         api.RegisterEntityBehaviorClass("emotes", typeof(BehaviorEmotes));
         api.Event.OnEntitySpawn += OnEntitySpawn;
+        RepulsePatch.Apply();
     }
 
     public override void StartClientSide(ICoreClientAPI api)
@@ -66,6 +67,7 @@ public class EmotesModSystem : ModSystem
     public override void Dispose()
     {
         if (client != null) CombatOverhaulPatch.Remove();
+        RepulsePatch.Remove();
         base.Dispose();
     }
 

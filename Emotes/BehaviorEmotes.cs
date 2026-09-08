@@ -35,6 +35,7 @@ public class BehaviorEmotes : EntityBehavior
         if (api.Side == EnumAppSide.Server && entity is EntityPlayer player)
         {
             EmoteState.StopAll(player);
+            EmoteState.ClearPartner(player);
             entity.WatchedAttributes.RegisterModifiedListener("mountedOn", OnMountChanged);
             entity.WatchedAttributes.RegisterModifiedListener("carrying", OnCarryChanged);
             entity.WatchedAttributes.RegisterModifiedListener("carried", OnCarryChanged);
@@ -77,7 +78,7 @@ public class BehaviorEmotes : EntityBehavior
 
         var tree = player.WatchedAttributes.GetTreeAttribute("emotes");
 
-        if (string.IsNullOrEmpty(tree?.GetString("pairPartner"))) return;
+        if (!EmoteState.HasPartner(tree)) return;
         if (modSystem.Emotes.Any(kv => kv.Value.RequiresTarget && tree.GetBool(kv.Key))) return;
         modSystem?.TryEndPair(player);
     }
@@ -153,25 +154,15 @@ public class BehaviorEmotes : EntityBehavior
     {
         yawLocked = true;
 
-        if (entity is EntityPlayer ep)
+        var player = entity as EntityPlayer;
+        if (player?.BodyYawLimits != null)
         {
-            if (ep.BodyYawLimits != null)
-                lockedYaw = ep.BodyYawLimits.CenterRad;
-            else
-            {
-                var tree = entity.WatchedAttributes.GetTreeAttribute("emotes");
-                if (modSystem.Emotes.Any(kv => kv.Value.RequiresTarget && tree?.GetBool(kv.Key) == true))
-                    lockedYaw = tree.GetFloat("pairYaw");
-                else if (tree != null && tree.HasAttribute("leanYaw"))
-                    lockedYaw = tree.GetFloat("leanYaw");
-                else
-                    lockedYaw = entity.Pos.Yaw;
-                ep.BodyYawLimits = new AngleConstraint(lockedYaw, 0f);
-            }
+            lockedYaw = player.BodyYawLimits.CenterRad;
         }
         else
         {
-            lockedYaw = entity.Pos.Yaw;
+            lockedYaw = ResolveLockedYaw();
+            if (player != null) player.BodyYawLimits = new AngleConstraint(lockedYaw, 0f);
         }
 
         if (api is not ICoreClientAPI capi) return;
@@ -182,6 +173,19 @@ public class BehaviorEmotes : EntityBehavior
         var capturedYaw = lockedYaw;
         fixYawRenderer = new ActionRenderer(_ => capturedEntity.Pos.Yaw = capturedYaw);
         capi.Event.RegisterRenderer(fixYawRenderer, EnumRenderStage.Before, "emote-fix-yaw");
+    }
+
+    float ResolveLockedYaw()
+    {
+        var tree = entity.WatchedAttributes.GetTreeAttribute("emotes");
+        if (tree == null) return entity.Pos.Yaw;
+
+        if (modSystem.Emotes.Any(kv => kv.Value.RequiresTarget && tree.GetBool(kv.Key)))
+            return tree.GetFloat("pairYaw");
+
+        if (tree.HasAttribute("leanYaw")) return tree.GetFloat("leanYaw");
+
+        return entity.Pos.Yaw;
     }
 
     void UnlockYaw()
