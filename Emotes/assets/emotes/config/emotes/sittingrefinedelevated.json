@@ -1,0 +1,234 @@
+{
+  "code": "sittingrefinedelevated",
+  "category": "sittingelevated",
+  "categoryOrder": 15,
+  "animation": "emotes:sittingrefinedelevated",
+  "eyeHeight": 0.95,
+  "animationDefinition": {
+    "name": "SittingRefinedElevated",
+    "code": "emotes:sittingrefinedelevated",
+    "quantityframes": 13,
+    "onActivityStopped": "EaseOut",
+    "onAnimationEnd": "Hold",
+    "keyframes": [
+      {
+        "frame": 1,
+        "elements": {
+          "root": {
+            "rotationX": 0,
+            "rotationY": 0,
+            "rotationZ": 0,
+            "offsetX": 0,
+            "offsetY": 0,
+            "offsetZ": 0
+          },
+          "LowerTorso": {
+            "rotationX": 0,
+            "rotationY": 0,
+            "rotationZ": 0,
+            "offsetX": 0,
+            "offsetY": 0,
+            "offsetZ": 0
+          },
+          "UpperTorso": {
+            "rotationX": 0,
+            "rotationY": 0,
+            "rotationZ": 0,
+            "offsetX": 0,
+            "offsetY": 0,
+            "offsetZ": 0
+          },
+          "UpperArmR": {
+            "rotationX": 0,
+            "rotationY": 0,
+            "rotationZ": 0,
+            "offsetX": 0,
+            "offsetY": 0,
+            "offsetZ": 0
+          },
+          "LowerArmR": {
+            "rotationX": 0,
+            "rotationY": 0,
+            "rotationZ": 0,
+            "offsetX": 0,
+            "offsetY": 0,
+            "offsetZ": 0
+          },
+          "UpperArmL": {
+            "rotationX": 0,
+            "rotationY": 0,
+            "rotationZ": 0,
+            "offsetX": 0,
+            "offsetY": 0,
+            "offsetZ": 0
+          },
+          "LowerArmL": {
+            "rotationX": 0,
+            "rotationY": 0,
+            "rotationZ": 0,
+            "offsetX": 0,
+            "offsetY": 0,
+            "offsetZ": 0
+          },
+          "Neck": {
+            "rotationX": 0,
+            "rotationY": 0,
+            "rotationZ": 0,
+            "offsetX": 0,
+            "offsetY": 0,
+            "offsetZ": 0
+          },
+          "Head": {
+            "rotationX": 0,
+            "rotationY": 0,
+            "rotationZ": 0,
+            "offsetX": 0,
+            "offsetY": 0,
+            "offsetZ": 0
+          },
+          "UpperFootL": {
+            "rotationX": 0,
+            "rotationY": 0,
+            "rotationZ": 0,
+            "offsetX": 0,
+            "offsetY": 0,
+            "offsetZ": 0
+          },
+          "LowerFootL": {
+            "rotationX": 0,
+            "rotationY": 0,
+            "rotationZ": 0,
+            "offsetX": 0,
+            "offsetY": 0,
+            "offsetZ": 0
+          },
+          "UpperFootR": {
+            "rotationX": 0,
+            "rotationY": 0,
+            "rotationZ": 0,
+            "offsetX": 0,
+            "offsetY": 0,
+            "offsetZ": 0
+          },
+          "LowerFootR": {
+            "rotationX": 0,
+            "rotationY": 0,
+            "rotationZ": 0,
+            "offsetX": 0,
+            "offsetY": 0,
+            "offsetZ": 0
+          }
+        }
+      },
+      {
+        "frame": 12,
+        "elements": {
+          "root": {
+            "rotationX": 0,
+            "rotationY": 0,
+            "rotationZ": 0,
+            "offsetX": 0,
+            "offsetY": -12,
+            "offsetZ": 0
+          },
+          "LowerTorso": {
+            "rotationX": -7.2708,
+            "rotationY": -2.8299,
+            "rotationZ": -15.884,
+            "offsetX": 0,
+            "offsetY": 0,
+            "offsetZ": 0
+          },
+          "UpperTorso": {
+            "rotationX": 7.1858,
+            "rotationY": -0.4973,
+            "rotationZ": 14.1151,
+            "offsetX": 0,
+            "offsetY": 0,
+            "offsetZ": 0
+          },
+          "UpperArmR": {
+            "rotationX": -21.9097,
+            "rotationY": -53.139,
+            "rotationZ": -32.1908,
+            "offsetX": 0,
+            "offsetY": 0,
+            "offsetZ": 0
+          },
+          "LowerArmR": {
+            "rotationX": -79.0384,
+            "rotationY": -9.6492,
+            "rotationZ": -12.7388,
+            "offsetX": 0,
+            "offsetY": 0,
+            "offsetZ": 0
+          },
+          "UpperArmL": {
+            "rotationX": 8.6299,
+            "rotationY": -12.3157,
+            "rotationZ": -64.0671,
+            "offsetX": 1,
+            "offsetY": 1,
+            "offsetZ": 0
+          },
+          "LowerArmL": {
+            "rotationX": -35.3225,
+            "rotationY": -67.9611,
+            "rotationZ": -55.9308,
+            "offsetX": 0,
+            "offsetY": 1,
+            "offsetZ": 0.2
+          },
+          "Neck": {
+            "rotationX": 0,
+            "rotationY": 0,
+            "rotationZ": 0,
+            "offsetX": 0,
+            "offsetY": 0,
+            "offsetZ": 0
+          },
+          "Head": {
+            "rotationX": -2.3221,
+            "rotationY": -2.9455,
+            "rotationZ": 2.8292,
+            "offsetX": 0,
+            "offsetY": 0,
+            "offsetZ": 0
+          },
+          "UpperFootL": {
+            "rotationX": 23.9957,
+            "rotationY": -28.9091,
+            "rotationZ": -90.1843,
+            "offsetX": 0,
+            "offsetY": -2,
+            "offsetZ": 0
+          },
+          "LowerFootL": {
+            "rotationX": -9.9549,
+            "rotationY": 0.9536,
+            "rotationZ": 97.5831,
+            "offsetX": 0,
+            "offsetY": 1,
+            "offsetZ": 0
+          },
+          "UpperFootR": {
+            "rotationX": -20.0849,
+            "rotationY": 1.6431,
+            "rotationZ": -82.65,
+            "offsetX": 0,
+            "offsetY": 0,
+            "offsetZ": 0
+          },
+          "LowerFootR": {
+            "rotationX": -5.346,
+            "rotationY": 1.6315,
+            "rotationZ": 100.1853,
+            "offsetX": 1,
+            "offsetY": -1,
+            "offsetZ": 0
+          }
+        }
+      }
+    ]
+  }
+}

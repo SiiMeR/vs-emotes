@@ -321,7 +321,8 @@ public class GuiDialogEmotePicker : GuiDialog
     {
         if (modSystem.Emotes.TryGetValue(code, out var emote)
             && emote.RequiresTarget
-            && cachedEntitySelection is not EntityPlayer and not EntityPlayerBot)
+            && cachedEntitySelection is not EntityPlayer and not EntityPlayerBot
+            && !EmotePairs.IsEntityPartner(cachedEntitySelection))
         {
             capi.TriggerIngameError(this, "emote-target-required", Lang.Get("emotes:pair-requires-target"));
             TryClose();

@@ -34,8 +34,11 @@ public class BehaviorEmotes : EntityBehavior
 
         if (api.Side == EnumAppSide.Server && entity is EntityPlayer player)
         {
-            EmotesModSystem.StopAllEmotes(player);
+            EmoteState.StopAll(player);
+            EmoteState.ClearPartner(player);
             entity.WatchedAttributes.RegisterModifiedListener("mountedOn", OnMountChanged);
+            entity.WatchedAttributes.RegisterModifiedListener("carrying", OnCarryChanged);
+            entity.WatchedAttributes.RegisterModifiedListener("carried", OnCarryChanged);
             entity.WatchedAttributes.RegisterModifiedListener("emotes", OnEmotesChangedServer);
         }
 
@@ -53,15 +56,29 @@ public class BehaviorEmotes : EntityBehavior
     {
         if (entity is not EntityPlayer player) return;
         if (!entity.WatchedAttributes.HasAttribute("mountedOn")) return;
-        EmotesModSystem.StopAllEmotes(player);
+        EmoteState.StopAll(player);
+    }
+
+    void OnCarryChanged()
+    {
+        if (entity is not EntityPlayer player) return;
+        if (!EmoteState.InCarry(player)) return;
+        EmoteState.StopAll(player);
     }
 
     void OnEmotesChangedServer()
     {
         if (entity is not EntityPlayer player) return;
+
+        if (EmoteState.InCarry(player) && EmoteState.IsEmoting(player))
+        {
+            EmoteState.StopAll(player);
+            return;
+        }
+
         var tree = player.WatchedAttributes.GetTreeAttribute("emotes");
 
-        if (string.IsNullOrEmpty(tree?.GetString("pairPartner"))) return;
+        if (!EmoteState.HasPartner(tree)) return;
         if (modSystem.Emotes.Any(kv => kv.Value.RequiresTarget && tree.GetBool(kv.Key))) return;
         modSystem?.TryEndPair(player);
     }
@@ -137,10 +154,11 @@ public class BehaviorEmotes : EntityBehavior
     {
         yawLocked = true;
 
-        if (entity is EntityPlayer ep)
+        var player = entity as EntityPlayer;
+        if (player != null)
         {
-            lockedYaw = ResolveLockedYaw(ep);
-            ep.BodyYawLimits = new AngleConstraint(lockedYaw, 0f);
+            lockedYaw = ResolveLockedYaw(player);
+            player.BodyYawLimits = new AngleConstraint(lockedYaw, 0f);
         }
         else
         {
@@ -170,18 +188,18 @@ public class BehaviorEmotes : EntityBehavior
         capi.Event.RegisterRenderer(fixYawRenderer, EnumRenderStage.Before, "emote-fix-yaw");
     }
 
-    float ResolveLockedYaw(EntityPlayer ep)
+    float ResolveLockedYaw(EntityPlayer player)
     {
         var tree = entity.WatchedAttributes.GetTreeAttribute("emotes");
         if (tree != null)
         {
             if (modSystem.Emotes.Any(kv => kv.Value.RequiresTarget && tree.GetBool(kv.Key)))
                 return tree.GetFloat("pairYaw");
-            if (tree.HasAttribute("leanYaw"))
-                return tree.GetFloat("leanYaw");
+
+            if (tree.HasAttribute("leanYaw")) return tree.GetFloat("leanYaw");
         }
 
-        return ep.BodyYawLimits?.CenterRad ?? entity.Pos.Yaw;
+        return player.BodyYawLimits?.CenterRad ?? entity.Pos.Yaw;
     }
 
     void UnlockYaw()
@@ -352,7 +370,7 @@ public class BehaviorEmotes : EntityBehavior
         }
 
         if (anyChanged)
-            player.WatchedAttributes.MarkPathDirty("emotes");
+            EmoteState.MarkDirty(player);
     }
 
     void OnClientGameTick()
@@ -395,7 +413,7 @@ public class BehaviorEmotes : EntityBehavior
         }
 
         if (anyChanged)
-            player.WatchedAttributes.MarkPathDirty("emotes");
+            EmoteState.MarkDirty(player);
     }
 
     public override void OnEntityDeath(DamageSource damageSource)
@@ -404,7 +422,7 @@ public class BehaviorEmotes : EntityBehavior
 
         if (api.Side != EnumAppSide.Server) return;
         if (entity is not EntityPlayer player) return;
-        EmotesModSystem.StopAllEmotes(player);
+        EmoteState.StopAll(player);
     }
 
     public override void OnEntityDespawn(EntityDespawnData despawnData)

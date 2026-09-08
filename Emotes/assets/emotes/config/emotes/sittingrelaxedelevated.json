@@ -1,0 +1,234 @@
+{
+  "code": "sittingrelaxedelevated",
+  "category": "sittingelevated",
+  "categoryOrder": 15,
+  "animation": "emotes:sittingrelaxedelevated",
+  "eyeHeight": 0.89,
+  "animationDefinition": {
+    "name": "SittingRelaxedElevated",
+    "code": "emotes:sittingrelaxedelevated",
+    "quantityframes": 13,
+    "onActivityStopped": "EaseOut",
+    "onAnimationEnd": "Hold",
+    "keyframes": [
+      {
+        "frame": 1,
+        "elements": {
+          "root": {
+            "rotationX": 0,
+            "rotationY": 0,
+            "rotationZ": 0,
+            "offsetX": 0,
+            "offsetY": 0,
+            "offsetZ": 0
+          },
+          "LowerTorso": {
+            "rotationX": 0,
+            "rotationY": 0,
+            "rotationZ": 0,
+            "offsetX": 0,
+            "offsetY": 0,
+            "offsetZ": 0
+          },
+          "UpperTorso": {
+            "rotationX": 0,
+            "rotationY": 0,
+            "rotationZ": 0,
+            "offsetX": 0,
+            "offsetY": 0,
+            "offsetZ": 0
+          },
+          "UpperArmR": {
+            "rotationX": 0,
+            "rotationY": 0,
+            "rotationZ": 0,
+            "offsetX": 0,
+            "offsetY": 0,
+            "offsetZ": 0
+          },
+          "LowerArmR": {
+            "rotationX": 0,
+            "rotationY": 0,
+            "rotationZ": 0,
+            "offsetX": 0,
+            "offsetY": 0,
+            "offsetZ": 0
+          },
+          "UpperArmL": {
+            "rotationX": 0,
+            "rotationY": 0,
+            "rotationZ": 0,
+            "offsetX": 0,
+            "offsetY": 0,
+            "offsetZ": 0
+          },
+          "LowerArmL": {
+            "rotationX": 0,
+            "rotationY": 0,
+            "rotationZ": 0,
+            "offsetX": 0,
+            "offsetY": 0,
+            "offsetZ": 0
+          },
+          "Neck": {
+            "rotationX": 0,
+            "rotationY": 0,
+            "rotationZ": 0,
+            "offsetX": 0,
+            "offsetY": 0,
+            "offsetZ": 0
+          },
+          "Head": {
+            "rotationX": 0,
+            "rotationY": 0,
+            "rotationZ": 0,
+            "offsetX": 0,
+            "offsetY": 0,
+            "offsetZ": 0
+          },
+          "UpperFootL": {
+            "rotationX": 0,
+            "rotationY": 0,
+            "rotationZ": 0,
+            "offsetX": 0,
+            "offsetY": 0,
+            "offsetZ": 0
+          },
+          "LowerFootL": {
+            "rotationX": 0,
+            "rotationY": 0,
+            "rotationZ": 0,
+            "offsetX": 0,
+            "offsetY": 0,
+            "offsetZ": 0
+          },
+          "UpperFootR": {
+            "rotationX": 0,
+            "rotationY": 0,
+            "rotationZ": 0,
+            "offsetX": 0,
+            "offsetY": 0,
+            "offsetZ": 0
+          },
+          "LowerFootR": {
+            "rotationX": 0,
+            "rotationY": 0,
+            "rotationZ": 0,
+            "offsetX": 0,
+            "offsetY": 0,
+            "offsetZ": 0
+          }
+        }
+      },
+      {
+        "frame": 12,
+        "elements": {
+          "root": {
+            "rotationX": 0,
+            "rotationY": 0,
+            "rotationZ": 0,
+            "offsetX": 0,
+            "offsetY": -13,
+            "offsetZ": 0
+          },
+          "LowerTorso": {
+            "rotationX": -4.8522,
+            "rotationY": 1.208,
+            "rotationZ": -16.9487,
+            "offsetX": 0,
+            "offsetY": 0,
+            "offsetZ": 0
+          },
+          "UpperTorso": {
+            "rotationX": 7.1858,
+            "rotationY": -0.4975,
+            "rotationZ": 14.1151,
+            "offsetX": 0,
+            "offsetY": 0,
+            "offsetZ": 0
+          },
+          "UpperArmR": {
+            "rotationX": 0.0411,
+            "rotationY": -6.2923,
+            "rotationZ": -8.2705,
+            "offsetX": 0,
+            "offsetY": 0,
+            "offsetZ": 0
+          },
+          "LowerArmR": {
+            "rotationX": -25.5011,
+            "rotationY": 3.9181,
+            "rotationZ": -58.1609,
+            "offsetX": 0,
+            "offsetY": 0,
+            "offsetZ": 0
+          },
+          "UpperArmL": {
+            "rotationX": -14.7396,
+            "rotationY": -6.7786,
+            "rotationZ": -13.0152,
+            "offsetX": 1,
+            "offsetY": 0,
+            "offsetZ": -1
+          },
+          "LowerArmL": {
+            "rotationX": 25.6621,
+            "rotationY": 1.5553,
+            "rotationZ": -65.6233,
+            "offsetX": 0,
+            "offsetY": 0,
+            "offsetZ": 0.2
+          },
+          "Neck": {
+            "rotationX": -3.3972,
+            "rotationY": 4.6883,
+            "rotationZ": 5.0473,
+            "offsetX": 0,
+            "offsetY": 0,
+            "offsetZ": 0
+          },
+          "Head": {
+            "rotationX": 2.6243,
+            "rotationY": -3.7305,
+            "rotationZ": 0.6174,
+            "offsetX": 0,
+            "offsetY": 0,
+            "offsetZ": 0
+          },
+          "UpperFootL": {
+            "rotationX": 24.8279,
+            "rotationY": 22.5947,
+            "rotationZ": -72.5713,
+            "offsetX": 0,
+            "offsetY": 0,
+            "offsetZ": 0
+          },
+          "LowerFootL": {
+            "rotationX": -11.4182,
+            "rotationY": -12.9109,
+            "rotationZ": 65.5122,
+            "offsetX": 0,
+            "offsetY": 0,
+            "offsetZ": 0
+          },
+          "UpperFootR": {
+            "rotationX": -3.8245,
+            "rotationY": -14.1265,
+            "rotationZ": -74.1537,
+            "offsetX": 0,
+            "offsetY": -1,
+            "offsetZ": -1
+          },
+          "LowerFootR": {
+            "rotationX": 7.5393,
+            "rotationY": 0.7939,
+            "rotationZ": 76.8737,
+            "offsetX": 0,
+            "offsetY": 0,
+            "offsetZ": 0
+          }
+        }
+      }
+    ]
+  }
+}
