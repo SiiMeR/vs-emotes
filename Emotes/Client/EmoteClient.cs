@@ -5,6 +5,7 @@ using Vintagestory.API.Common;
 using Vintagestory.API.Common.Entities;
 using Vintagestory.API.Config;
 using Vintagestory.API.MathTools;
+using Vintagestory.GameContent;
 
 namespace Emotes;
 
@@ -14,6 +15,9 @@ public class EmoteClient
     private readonly ICoreClientAPI api;
     private readonly IClientNetworkChannel channel;
     private readonly GuiDialogEmotePicker dialog;
+    private readonly EmoteFavorites favorites;
+    private readonly EmoteCatalog catalog;
+    private readonly EmoteWheel wheel;
 
     private HashSet<string> disabledEmotes = new(StringComparer.OrdinalIgnoreCase);
 
@@ -29,14 +33,57 @@ public class EmoteClient
             .SetMessageHandler<LeanSnapPacket>(OnLeanSnap)
             .SetMessageHandler<DisabledEmotesPacket>(OnDisabledEmotes);
 
+        favorites = new EmoteFavorites(api);
+        catalog = new EmoteCatalog(api, system, favorites);
+
         api.Input.RegisterHotKey("emotepicker", Lang.Get("emotes:hotkey-open"), GlKeys.J, shiftPressed: true);
-        dialog = new GuiDialogEmotePicker(api, system);
+        dialog = new GuiDialogEmotePicker(api, this, catalog, favorites);
         api.Input.SetHotKeyHandler("emotepicker", _ => ToggleDialog());
+
+        wheel = new EmoteWheel(api, this, catalog, favorites);
+        WheelMouseGrabPatch.Apply();
     }
+
+    public bool WheelOpen => wheel?.Opened == true;
+
+    public void OnWheelScroll(MouseWheelEventArgs e)
+    {
+        wheel?.OnMouseWheel(e);
+    }
+
+    public bool DialogOpen => dialog.IsOpened();
 
     public bool IsDisabled(string code)
     {
         return code != null && disabledEmotes.Contains(code);
+    }
+
+    public bool Play(string code, Entity target)
+    {
+        if (string.IsNullOrEmpty(code)) return false;
+
+        if (!system.Emotes.TryGetValue(code, out var emote))
+        {
+            if (EmoteState.IsEmoting(api.World.Player?.Entity)) SendStop();
+            api.SendChatMessage("/emote " + code);
+            return true;
+        }
+
+        if (emote.RequiresTarget
+            && target is not EntityPlayer and not EntityPlayerBot
+            && !EmotePairs.IsEntityPartner(target))
+        {
+            api.TriggerIngameError(this, "emote-target-required", Lang.Get("emotes:pair-requires-target"));
+            return false;
+        }
+
+        SendToggle(code);
+        return true;
+    }
+
+    public void Dispose()
+    {
+        wheel?.Dispose();
     }
 
     public void SendToggle(string code)
@@ -65,6 +112,7 @@ public class EmoteClient
 
     private bool ToggleDialog()
     {
+        if (WheelOpen) return true;
         if (dialog.IsOpened()) dialog.TryClose();
         else dialog.TryOpen();
         return true;
