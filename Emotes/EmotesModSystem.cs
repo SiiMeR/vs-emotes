@@ -66,10 +66,18 @@ public class EmotesModSystem : ModSystem
 
     public override void Dispose()
     {
-        if (client != null) CombatOverhaulPatch.Remove();
+        if (client != null)
+        {
+            client.Dispose();
+            CombatOverhaulPatch.Remove();
+            WheelMouseGrabPatch.Remove();
+        }
+
         RepulsePatch.Remove();
         base.Dispose();
     }
+
+    public bool WheelOpen => client?.WheelOpen ?? false;
 
     public string GetEmoteName(CustomEmote emote)
     {

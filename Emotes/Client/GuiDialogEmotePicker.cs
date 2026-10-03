@@ -5,7 +5,6 @@ using Vintagestory.API.Client;
 using Vintagestory.API.Common;
 using Vintagestory.API.Common.Entities;
 using Vintagestory.API.Config;
-using Vintagestory.GameContent;
 
 namespace Emotes;
 
@@ -21,16 +20,15 @@ public class GuiDialogEmotePicker : GuiDialog
     private const double SearchH = 30;
     private const double DropH = 30;
     private const double AllListH = 400;
+    private const double HintH = 22;
     private const int Cols = 2;
 
-    private const string AllKey = "all";
-    private const string VanillaKey = "vanilla";
-    private const string MiscKey = "misc";
+    private const string AllKey = EmoteCatalog.AllKey;
+    private const string FavoritesKey = EmoteCatalog.FavoritesKey;
 
-    private static readonly string[] VanillaEmoteCodes =
-        { "wave", "cheer", "shrug", "cry", "nod", "facepalm", "bow", "laugh", "rage" };
-
-    private readonly EmotesModSystem modSystem;
+    private readonly EmoteClient client;
+    private readonly EmoteCatalog catalog;
+    private readonly EmoteFavorites favorites;
     private string activeKey = AllKey;
     private (string Key, string Label)[] tabs = Array.Empty<(string, string)>();
     private bool useDropDown;
@@ -40,10 +38,14 @@ public class GuiDialogEmotePicker : GuiDialog
     private bool searchPending;
     private long openedMs;
     private ElementBounds allListBounds;
+    private EnumMouseButton lastButton;
 
-    public GuiDialogEmotePicker(ICoreClientAPI capi, EmotesModSystem modSystem) : base(capi)
+    public GuiDialogEmotePicker(ICoreClientAPI capi, EmoteClient client, EmoteCatalog catalog,
+        EmoteFavorites favorites) : base(capi)
     {
-        this.modSystem = modSystem;
+        this.client = client;
+        this.catalog = catalog;
+        this.favorites = favorites;
     }
 
     public override string ToggleKeyCombinationCode => "emotepicker";
@@ -63,26 +65,20 @@ public class GuiDialogEmotePicker : GuiDialog
         base.OnKeyDown(args);
     }
 
-    private string[] GetVanillaEmoteCodes()
+    public override void OnMouseUp(MouseEvent args)
     {
-        var attr = capi.World.Player?.Entity?.Properties?.Attributes?["emotes"];
-        var codes = attr?.AsArray<string>()?.Where(c => !string.IsNullOrEmpty(c)).ToArray();
-        return codes is { Length: > 0 } ? codes : VanillaEmoteCodes;
+        lastButton = args.Button;
+        base.OnMouseUp(args);
     }
 
     private void BuildTabs()
     {
-        var categories = modSystem.Emotes.Values
-            .Where(e => !modSystem.IsEmoteDisabled(e.Code))
-            .GroupBy(e => string.IsNullOrEmpty(e.Category) ? MiscKey : e.Category)
-            .Select(g => (Key: g.Key, Label: modSystem.GetCategoryName(g.Key), Order: g.Min(e => e.CategoryOrder)))
-            .OrderBy(c => c.Key == MiscKey ? 1 : 0)
-            .ThenBy(c => c.Order)
-            .ThenBy(c => c.Label, StringComparer.CurrentCultureIgnoreCase);
-
-        var list = new List<(string Key, string Label)> { (AllKey, Lang.Get("emotes:cat-all")) };
-        list.AddRange(categories.Select(c => (c.Key, c.Label)));
-        list.Add((VanillaKey, Lang.Get("emotes:cat-vanilla")));
+        var list = new List<(string Key, string Label)>
+        {
+            (AllKey, Lang.Get("emotes:cat-all")),
+            (FavoritesKey, Lang.Get("emotes:cat-favorites"))
+        };
+        list.AddRange(catalog.Categories());
         tabs = list.ToArray();
 
         if (tabs.All(t => t.Key != activeKey)) activeKey = AllKey;
@@ -149,32 +145,15 @@ public class GuiDialogEmotePicker : GuiDialog
             return;
         }
 
-        var isVanilla = activeKey == VanillaKey;
-
-        string[] codes, names;
-        if (isVanilla)
-        {
-            codes = GetVanillaEmoteCodes();
-            names = codes.Select(modSystem.GetEmoteName).ToArray();
-        }
-        else
-        {
-            var emotes = modSystem.Emotes.Values
-                .Where(e => e.Category == activeKey && !modSystem.IsEmoteDisabled(e.Code))
-                .Select(e => (e.Code, Name: modSystem.GetEmoteName(e)))
-                .OrderBy(e => e.Name, StringComparer.CurrentCultureIgnoreCase)
-                .ToArray();
-            codes = emotes.Select(e => e.Code).ToArray();
-            names = emotes.Select(e => e.Name).ToArray();
-        }
-
-        var rows = Math.Max(1, (names.Length + Cols - 1) / Cols);
+        var entries = catalog.Entries(activeKey);
+        var rows = Math.Max(1, (entries.Count + Cols - 1) / Cols);
         var contentW = Cols * (BtnW + BtnPad);
         var topY = GuiStyle.TitleBarHeight + Pad;
         var dropBounds = ElementBounds.Fixed(0, topY, contentW, DropH);
         var gridStartY = useDropDown ? topY + DropH + 5 : topY;
+        var hintY = gridStartY + rows * (BtnH + BtnPad) + 4;
 
-        var contentBounds = ElementBounds.Fixed(0, 0, contentW, gridStartY - Pad + rows * (BtnH + BtnPad) + 8)
+        var contentBounds = ElementBounds.Fixed(0, 0, contentW, hintY - Pad + HintH + 8)
             .WithFixedPadding(Pad);
         contentBounds.BothSizing = ElementSizing.Fixed;
 
@@ -190,22 +169,26 @@ public class GuiDialogEmotePicker : GuiDialog
 
         composer = AddSelector(composer, dropBounds);
 
-        for (var i = 0; i < names.Length; i++)
+        if (entries.Count == 0 && activeKey == FavoritesKey)
+        {
+            composer.AddStaticText(Lang.Get("emotes:favorites-empty"), CairoFont.WhiteSmallText(),
+                ElementBounds.Fixed(0, gridStartY, contentW, BtnH));
+        }
+
+        for (var i = 0; i < entries.Count; i++)
         {
             var x = i % Cols * (BtnW + BtnPad);
             var y = gridStartY + i / Cols * (BtnH + BtnPad);
-            var capturedCode = codes[i];
-            composer.AddSmallButton(names[i], () =>
-            {
-                if (isVanilla)
-                    capi.SendChatMessage("/emote " + capturedCode);
-                else
-                    ActivateModdedEmote(capturedCode);
-                return true;
-            }, ElementBounds.Fixed(x, y, BtnW, BtnH), EnumButtonStyle.Normal, $"btn-{i}");
+            var code = entries[i].Code;
+            composer.AddSmallButton(favorites.Decorate(code, entries[i].Name), () => OnEmoteClicked(code),
+                ElementBounds.Fixed(x, y, BtnW, BtnH), EnumButtonStyle.Normal, $"btn-{i}");
         }
 
-        composer.EndChildElements().Compose();
+        composer
+            .AddStaticText(Lang.Get("emotes:favorites-hint"), CairoFont.WhiteDetailText(),
+                ElementBounds.Fixed(0, hintY, contentW, HintH))
+            .EndChildElements()
+            .Compose();
 
         SingleComposer = composer;
         FinishSelector(composer);
@@ -214,11 +197,8 @@ public class GuiDialogEmotePicker : GuiDialog
     private void ComposeAllTab()
     {
         var q = searchText.ToLowerInvariant().Trim();
-        var emotes = modSystem.Emotes.Values
-            .Where(e => !modSystem.IsEmoteDisabled(e.Code))
-            .Select(e => (e.Code, Name: modSystem.GetEmoteName(e)))
+        var emotes = catalog.Entries(AllKey)
             .Where(e => q.Length == 0 || e.Name.ToLowerInvariant().Contains(q) || e.Code.Contains(q))
-            .OrderBy(e => e.Name, StringComparer.CurrentCultureIgnoreCase)
             .ToArray();
 
         var topY = GuiStyle.TitleBarHeight + Pad;
@@ -227,8 +207,9 @@ public class GuiDialogEmotePicker : GuiDialog
 
         var dropBounds = ElementBounds.Fixed(0, topY, listW, DropH);
         var searchY = useDropDown ? topY + DropH + 5 : topY;
+        var hintY = searchY + SearchH + 5 + AllListH + 4;
 
-        var contentBounds = ElementBounds.Fixed(0, 0, bodyW, searchY - Pad + SearchH + 5 + AllListH + 8)
+        var contentBounds = ElementBounds.Fixed(0, 0, bodyW, hintY - Pad + HintH + 8)
             .WithFixedPadding(Pad);
         contentBounds.BothSizing = ElementSizing.Fixed;
 
@@ -251,8 +232,8 @@ public class GuiDialogEmotePicker : GuiDialog
             var font = CairoFont.SmallButtonText();
             var hoverFont = CairoFont.SmallButtonText();
             hoverFont.Color = (double[])GuiStyle.ActiveButtonTextColor.Clone();
-            var btn = new GuiElementTextButton(capi, emotes[i].Name, font, hoverFont,
-                () => { ActivateModdedEmote(code); return true; },
+            var btn = new GuiElementTextButton(capi, favorites.Decorate(code, emotes[i].Name), font, hoverFont,
+                () => OnEmoteClicked(code),
                 ElementBounds.Fixed(x, y, BtnW, BtnH), EnumButtonStyle.Normal);
             btn.SetOrientation(font.Orientation);
             container.Add(btn);
@@ -273,6 +254,8 @@ public class GuiDialogEmotePicker : GuiDialog
             .AddInteractiveElement(container, "alllist")
             .EndClip()
             .AddVerticalScrollbar(OnScrollbar, scrollbarBounds, "scrollbar")
+            .AddStaticText(Lang.Get("emotes:favorites-hint"), CairoFont.WhiteDetailText(),
+                ElementBounds.Fixed(0, hintY, listW, HintH))
             .EndChildElements()
             .Compose();
 
@@ -317,20 +300,18 @@ public class GuiDialogEmotePicker : GuiDialog
         allListBounds.CalcWorldBounds();
     }
 
-    private void ActivateModdedEmote(string code)
+    private bool OnEmoteClicked(string code)
     {
-        if (modSystem.Emotes.TryGetValue(code, out var emote)
-            && emote.RequiresTarget
-            && cachedEntitySelection is not EntityPlayer and not EntityPlayerBot
-            && !EmotePairs.IsEntityPartner(cachedEntitySelection))
+        if (lastButton == EnumMouseButton.Right)
         {
-            capi.TriggerIngameError(this, "emote-target-required", Lang.Get("emotes:pair-requires-target"));
-            TryClose();
-            return;
+            favorites.Toggle(code);
+            capi.Event.EnqueueMainThreadTask(ComposeDialog, "emotes-favorite");
+            return true;
         }
 
-        modSystem.SendToggleEmote(code);
+        client.Play(code, cachedEntitySelection);
         TryClose();
+        return true;
     }
 
     public override void OnGuiOpened()
