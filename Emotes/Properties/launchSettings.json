@@ -15,7 +15,7 @@
     "Upload Release (Build)": {
       "commandName": "Executable",
       "executablePath": "powershell",
-      "commandLineArgs": "-Command \"$changelog = Read-Host 'Changelog'; .\\build.ps1; $zip = Get-ChildItem .\\Releases\\*.zip | Sort-Object LastWriteTime | Select-Object -Last 1; vsmoduploader $zip.FullName --changelog $changelog\"",
+      "commandLineArgs": "-Command \".\\build.ps1; $zip = Get-ChildItem .\\Releases\\*.zip | Sort-Object LastWriteTime | Select-Object -Last 1; vsmoduploader $zip.FullName\"",
       "workingDirectory": "$(ProjectDir)/.."
     }
   }

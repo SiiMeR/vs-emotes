@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
-        <VINTAGE_STORY>C:\Users\siimr\AppData\Roaming\VSLGameVersions\1.22.2</VINTAGE_STORY>
+        <VINTAGE_STORY>C:\Users\siimr\AppData\Roaming\VSLGameVersions\1.22.7</VINTAGE_STORY>
         <TargetFramework>net10.0</TargetFramework>
     </PropertyGroup>
 

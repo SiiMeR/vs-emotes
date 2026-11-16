@@ -19,8 +19,6 @@ public class BehaviorEmotes : EntityBehavior
     bool yawLocked;
     double originalEyeHeight;
     bool eyeHeightOverrideActive;
-    Animation[] injectionSource;
-    Animation[] injectionCache;
 
     public BehaviorEmotes(Entity entity) : base(entity) { }
 
@@ -244,7 +242,7 @@ public class BehaviorEmotes : EntityBehavior
                 shapeIsCloned = true;
             }
 
-            var added = BuildInjection(available, missing, entityShape, shapePathForLogging);
+            var added = BuildInjection(missing, entityShape, shapePathForLogging);
             entityShape.Animations = (entityShape.Animations ?? Array.Empty<Animation>()).Append(added);
         }
         catch (Exception e)
@@ -253,16 +251,8 @@ public class BehaviorEmotes : EntityBehavior
         }
     }
 
-    Animation[] BuildInjection(Animation[] available, Animation[] missing, Shape entityShape,
-        string shapePathForLogging)
+    Animation[] BuildInjection(Animation[] missing, Shape entityShape, string shapePathForLogging)
     {
-        if (injectionSource == available && injectionCache?.Length == missing.Length)
-        {
-            foreach (var cached in injectionCache)
-                cached.PrevNextKeyFrameByFrame = null;
-            return injectionCache;
-        }
-
         var shapeVersion = entityShape.Animations is { Length: > 0 } ? entityShape.Animations[0].Version : 0;
         var elements = modSystem.MarkShapeValidated(shapePathForLogging) ? CollectElementNames(entityShape) : null;
 
@@ -284,8 +274,6 @@ public class BehaviorEmotes : EntityBehavior
             added[i] = clone;
         }
 
-        injectionSource = available;
-        injectionCache = added;
         return added;
     }
 
