@@ -46,6 +46,7 @@ public class EmotesModSystem : ModSystem
         api.RegisterEntityBehaviorClass("emotes", typeof(BehaviorEmotes));
         api.Event.OnEntitySpawn += OnEntitySpawn;
         RepulsePatch.Apply();
+        IdleSuppressionPatch.Apply();
     }
 
     public override void StartClientSide(ICoreClientAPI api)
@@ -74,6 +75,7 @@ public class EmotesModSystem : ModSystem
         }
 
         RepulsePatch.Remove();
+        IdleSuppressionPatch.Remove();
         base.Dispose();
     }
 

@@ -118,6 +118,12 @@ public class BehaviorEmotes : EntityBehavior
             if (shouldPlay) { anyActive = true; activeEmote = emote; }
         }
 
+        if (anyActive)
+        {
+            IdleSuppressionPatch.StopSuppressed(entity, entity.AnimManager);
+            IdleSuppressionPatch.StopSuppressed(entity, tpManager);
+        }
+
         if (anyActive && !yawLocked) LockYaw();
         else if (!anyActive && yawLocked) UnlockYaw();
 
